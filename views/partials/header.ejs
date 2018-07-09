@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Virtual Classroom</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="theme-color" content="#2196F3"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Google CSS -->
+    <link rel="icon" type="image/png”" href="/icons/cardboard.png"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
+    <!-- Custom CSS -->
+    <link href="/css/header.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
+</head>
+<body>
+<nav id="nav">
+    <div class="nav-wrapper">
+        <a href="/" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
+        <!--<div class="breadcrumb-container">-->
+        <!--{{#if onCoursePage}}-->
+        <!--<a href="/course/{{onCoursePage}}" class="breadcrumb">{{onCoursePage}}</a>-->
+        <!--{{/if}}-->
+        <!--{{#if onLecturePage}}-->
+        <!--<a href="/course/{{onCoursePage}}/{{onLecturePage}}" class="breadcrumb">{{onLecturePage}}</a>-->
+        <!--{{/if}}-->
+        <!--{{#if route_is "/settings"}}-->
+        <!--<a href="/Settings" class="breadcrumb">Settings</a>-->
+        <!--{{/if}}-->
+        <!--</div>-->
+        <ul id="nav-mobile" class="right">
+            <li><a href="#" id="dropdown-button" class="dropdown-button" data-target="dropdown-menu" data-beloworigin="true"
+                   data-alignment="right"><img src="/icons/setting.svg" class="spin"></a></li>
+        </ul>
+    </div>
+</nav>
+<ul id="dropdown-menu" class="dropdown-content">
+    <!--{{#if currentUser}}-->
+    <!--{{#unless route_is '/'}}-->
+    <!--<li><a href="/"><img src="/icons/profile.svg">Home</a></li>-->
+    <!--{{/unless}}-->
+    <!--{{#unless route_is '/settings'}}-->
+    <!--<li><a href="/settings"><img src="/icons/setting.svg">Settings</a></li>-->
+    <!--{{/unless}}-->
+    <!--<li><a href="#" id="logout"><img src="/icons/unlock.svg" class="menu-icon">Logout</a></li>-->
+    <!--{{else}}-->
+    <li><a class="modal-trigger" href="#login-modal" id="login-modal-trigger">Login</a></li>
+    <li><a class="modal-trigger" href="#register-modal" id="register-modal-trigger">Register</a></li>
+    <!--{{/if}}-->
+</ul>
+</body>
+<script src="/js/header.js"></script>
+</html>
