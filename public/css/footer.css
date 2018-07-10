@@ -1,0 +1,23 @@
+/*****************************************************************************/
+/* Footer: Style */
+/*****************************************************************************/
+.footer .page-footer {
+  padding: 0;
+  background-color: #2196f3;
+}
+.footer .page-footer .footer-copyright .container {
+  max-width: 760px;
+}
+.footer .page-footer .footer-copyright a img {
+  width: 25px;
+  height: 25px;
+  vertical-align: middle;
+  opacity: 0.8;
+  -webkit-transition: 0.5s ease all;
+  -moz-transition: 0.5s ease all;
+  transition: 0.5s ease all;
+}
+.footer .page-footer .footer-copyright a img:hover {
+  opacity: 1;
+}
+

@@ -1,0 +1,26 @@
+{
+  "name": "vrc",
+  "version": "1.0.0",
+  "description": "Make branches and push to them for whatever issue you're working on.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/briluong/vrc.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/briluong/vrc/issues"
+  },
+  "homepage": "https://github.com/briluong/vrc#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "materialize-css": "^0.100.2",
+    "request": "^2.87.0"
+  }
+}
