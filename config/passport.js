@@ -17,7 +17,7 @@ module.exports = function(passport) {
 
     // Local strategy for user login.
     passport.use('login', new LocalStrategy({
-        usernameField : 'username',
+        usernameField : 'email',
         passwordField : 'password',
         passReqToCallback : true
     },
@@ -26,7 +26,7 @@ module.exports = function(passport) {
     function(req, username, password, done) {
 
         // Look for a user with the same username.
-        User.findOne({'username': username}, function(err, user) {
+        User.findOne({'email': username}, function(err, user) {
             // Return any errors.
             if (err) {
                 return done(err);
@@ -50,7 +50,7 @@ module.exports = function(passport) {
 
     // Local strategy for user registration.
     passport.use('register', new LocalStrategy({
-        usernameField : 'username',
+        usernameField : 'email',
         passwordField : 'password',
         passReqToCallback : true
     },
@@ -58,9 +58,10 @@ module.exports = function(passport) {
     // Pass the username and password into a callback function.
     function(req, username, password, done) {
         // Make the registration request asynchronous.
+        console.log("Hi")
         process.nextTick(function() {
             // Look for a user with the same username.
-            User.findOne({'username': username}, function(err, user) {
+            User.findOne({'email': username}, function(err, user) {
                 // Return any errors.
                 if (err) {
                     return done(err);
@@ -74,9 +75,18 @@ module.exports = function(passport) {
                 // No users found; create a new user.
                 var newUser = new User();
                 // Set the new user's account information.
-                newUser.username = username;
+                newUser.email = username;
                 newUser.password = newUser.generateHash(password);
-                newUser.wallet = {};
+                newUser.accountType = req.body.accountType
+                newUser.firstName = req.body.firstName
+                newUser.lastName = req.body.lastName
+                if(newUser.accountType == 'instructor'){
+                    newUser.studentID = null;
+                }
+                else{
+                    newUser.studentID = req.body.studentID
+                }
+                console.log(newUser)
                 // Save the new user.
                 newUser.save(function(err) {
                     if (err) {

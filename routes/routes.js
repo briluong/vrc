@@ -1,23 +1,23 @@
 const request = require('request');
 
-module.exports = function(app) {
+module.exports = function(app, passport) {
 
     // LANDING PAGE
     app.get("/", (req, res) => {
         res.render("home");
     });
 
-    // // LOGIN
-    // app.post("/login", passport.authenticate('login', {
-    //     successRedirect : "/profile",
-    //     failureRedirect : "/",
-    // }));
-    //
-    // // REGISTER
-    // app.post("/register", passport.authenticate('register', {
-    //     successRedirect : "/profile",
-    //     failureRedirect : "/register",
-    // }));
+    // LOGIN
+    app.post("/login", passport.authenticate('login', {
+        successRedirect : "/hello",
+        failureRedirect : "/hi",
+    }));
+
+    // REGISTER
+    app.post("/register", passport.authenticate('register', {
+        successRedirect : "/profile",
+        failureRedirect : "/fail",
+    }));
     //
     // // LOGOUT
     // app.get("/logout", function(req, res) {
@@ -25,10 +25,11 @@ module.exports = function(app) {
     //     res.redirect("/");
     // });
     //
-    // // PROFILE
-    // app.get("/profile", isLoggedIn, function(req, res) {
-    //     res.render("profile", {user: req.user});
-    // });
+    // PROFILE
+    app.get("/profile", isLoggedIn, function(req, res) {
+        console.log("Registered!")
+        res.render("home", {user: req.user});
+    });
     //
     // // MARKET
     // app.get("/market", isLoggedIn, function(req, res) {
@@ -46,13 +47,13 @@ module.exports = function(app) {
     // });
     //
     // // Authentication middleware.
-    // function isLoggedIn(req, res, next) {
-    //     // Continue if the user is authenticated.
-    //     if (req.isAuthenticated()) {
-    //         return next();
-    //     }
-    //     // Redirect unauthenticated users to the home page.
-    //     res.redirect("/");
-    // }
+    function isLoggedIn(req, res, next) {
+        // Continue if the user is authenticated.
+        if (req.isAuthenticated()) {
+            return next();
+        }
+        // Redirect unauthenticated users to the home page.
+        res.redirect("/");
+    }
 
 }

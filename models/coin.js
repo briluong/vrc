@@ -24,4 +24,4 @@ var coinSchema = mongoose.Schema({
 });
 
 // Export the coin model.
-module.exports = mongoose.model('team-undefined-coin', coinSchema);
+module.exports = mongoose.model('vrc-coin', coinSchema);
