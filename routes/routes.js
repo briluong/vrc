@@ -41,11 +41,12 @@ module.exports = function (app, passport) {
             }
             else {
                 Course.find({
-                    'status': 'active', $and: [{'students': req.user._id}]
+                    'active': true, $and: [{'students': req.user.studentID}]
                 }, function (err, course) {
                     if (err) {
                         console.log(err);
                     } else {
+                        console.log(course)
                         // pass matched documents to template
                         res.render("profile", {user: req.user, course: course, route:'/profile'});
                     }
