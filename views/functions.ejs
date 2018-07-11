@@ -1,0 +1,22 @@
+<% userIsInstructor = function () {
+    if(user){
+        if(user.accountType == 'instructor'){
+            return true
+        }
+        return false
+    }
+    return false
+}%>
+
+<% courses = function () {
+    if (course === undefined || course.length == 0) {
+        return false
+    }
+    else{
+        return true
+    }
+}%>
+
+<% getCourseOwner = function(id) {
+
+}%>

@@ -24,7 +24,6 @@ module.exports = function(passport) {
 
     // Pass the username and password into a callback function.
     function(req, username, password, done) {
-
         // Look for a user with the same username.
         User.findOne({'email': username}, function(err, user) {
             // Return any errors.
@@ -58,7 +57,6 @@ module.exports = function(passport) {
     // Pass the username and password into a callback function.
     function(req, username, password, done) {
         // Make the registration request asynchronous.
-        console.log("Hi")
         process.nextTick(function() {
             // Look for a user with the same username.
             User.findOne({'email': username}, function(err, user) {
@@ -77,7 +75,7 @@ module.exports = function(passport) {
                 // Set the new user's account information.
                 newUser.email = username;
                 newUser.password = newUser.generateHash(password);
-                newUser.accountType = req.body.accountType
+                newUser.accountType = req.body.registerAccountType
                 newUser.firstName = req.body.firstName
                 newUser.lastName = req.body.lastName
                 if(newUser.accountType == 'instructor'){
@@ -86,7 +84,6 @@ module.exports = function(passport) {
                 else{
                     newUser.studentID = req.body.studentID
                 }
-                console.log(newUser)
                 // Save the new user.
                 newUser.save(function(err) {
                     if (err) {

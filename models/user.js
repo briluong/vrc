@@ -1,11 +1,10 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-const bcrypt   = require('bcrypt');
+const bcrypt   = require('bcrypt-nodejs');
 
 // USER SCHEMA
 
 var userSchema = mongoose.Schema({
-
     firstName: String,
     lastName: String,
     accountType: String,
@@ -28,4 +27,5 @@ userSchema.methods.validPassword = function(password) {
 };
 
 // Export the user model.
-module.exports = mongoose.model('vrc-user', userSchema);
+const User = mongoose.model('vrc-user', userSchema);
+module.exports = User

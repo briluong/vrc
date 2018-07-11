@@ -1,0 +1,23 @@
+.profile .parallax-container .title {
+    color: #fff;
+    font-weight: 600;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+    top: 50%;
+    margin: 0 auto;
+}
+.profile .parallax-container .parallax {
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
+}
+.profile .parallax-container .parallax img {
+    opacity: 0.6;
+}
+.profile .welcome {
+    line-height: 2;
+    font-size: 1.1em;
+}
+.profile .landing {
+    margin-top: 2em;
+}
+.profile .landing p {
+    margin: 0;
+}

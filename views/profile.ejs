@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Virtual Classroom</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="theme-color" content="#2196F3"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Google CSS -->
+    <link rel="icon" type="image/png”" href="/icons/cardboard.png"/>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+    <!-- Custom CSS -->
+    <link href="/css/main.css" rel="stylesheet">
+</head>
+
+<body>
+<%- include partials/header.ejs %>
+<div class="master-main">
+<div class="main">
+    <div class="innerMain">
+    <%- include partials/course_list.ejs %>
+</div>
+</div>
+</div>
+<%- include partials/footer.ejs %>
+</body>
+<link href="/css/header.css" rel="stylesheet">
+</html>
