@@ -48,6 +48,7 @@ app.use(passport.session());
 app.set("view engine", "ejs");
 
 // Import routes
+require("./api.js")(app);
 require("./config/passport.js")(passport);
 require("./routes/routes.js")(app, passport);
 // Listen to port 5000

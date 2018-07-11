@@ -55,11 +55,11 @@ module.exports = function (app, passport) {
         }
     );
 
-//
-// // MARKET
-// app.get("/market", isLoggedIn, function(req, res) {
-//     res.render("market", {user: req.user});
-// });
+
+    // MARKET
+    app.get("/create_new_course", isLoggedIn, function (req, res) {
+        res.render("create_new_course", {user: req.user});
+    });
 //
 // // CONTACT US
 // app.get("/contact", function(req, res) {

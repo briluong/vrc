@@ -8,7 +8,7 @@ var courseSchema = mongoose.Schema({
         type: String,
         label: 'Owner ID',
     },
-    instructors: [],
+    instructors: [String],
     title: {
         type: String,
         minlength: 1
