@@ -1,9 +1,8 @@
 const apiUtil = require('./api_util');
 const User = require('./models/user');
 const Course = require('./models/courses');
+const Lecture = require('./models/lectures');
 const Papa = require('papaparse')
-// var multer  = require('multer')
-// var upload = multer({ dest: 'uploads/' })
 
 module.exports = function (app) {
 
@@ -12,15 +11,15 @@ module.exports = function (app) {
         if (!req.body) {
             return res.sendStatus(400);
         }
-        console.log(req.body)
-        console.log(req.user)
         // Search for a user and update their wallet.
         var course = new Course();
         course.ownerId = req.user._id
-        course.instructors = [req.user._id]
+        course.instructors = [{email: req.user.email, instructorName: req.user.firstName + " " + req.user.lastName}]
         course.title = req.body.newCourseName
         course.code = req.body.newCourseCode
         course.description = req.body.newCourseDescription
+        course.instructorName = req.user.firstName + " " + req.user.lastName
+        course.lectures = []
         console.log("file" in req.body)
         if ("file" in req.body) {
             var students = req.body.file
@@ -36,7 +35,7 @@ module.exports = function (app) {
         else {
             course.students = []
         }
-        course.save(function(err, data) {
+        course.save(function (err, data) {
             if (err) {
                 throw err;
             }
@@ -45,43 +44,54 @@ module.exports = function (app) {
         });
     });
 
-
-    // API call to sell a currency.
-    app.post("/api/wallet/decrement", apiUtil.isLoggedIn, (req, res) => {
-        if (!req.body.coinID) {
-            // No coin ID to sell.
+    app.post("/api/createLecture", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body) {
             return res.sendStatus(400);
         }
-        // Search user for which to sell the currency.
-        User.findOne({username: req.user.username}, (err, user) => {
+        var lecture = new Lecture();
+        lecture.ownerId = req.user._id;
+        lecture.courseID = req.body.courseID;
+        lecture.title = req.body.lectureName;
+        lecture.active = false;
+        lecture.available = false;
+        lecture.save(function (err, data) {
             if (err) {
-                //Server error.
-                return res.sendStatus(500);
+                throw err;
             }
-
-            if (!user) {
-                // No user to sell coins.
-                return res.sendStatus(400);
+            var lectureData = {
+                "lectureID": data._id,
+                "lectureTitle": data.title,
+                "active": data.active,
+                "createdOn": data.createdOn
             }
-
-
-            if (user.wallet[req.body.coinID] > 1) {
-                // Sell a coin if there's more to sell.
-                user.wallet[req.body.coinID] -= 1;
-            } else {
-                // Remove the coin from the wallet if there's no more.
-                delete user.wallet[req.body.coinID];
-            }
-
-            // Save the changes to the document.
-            User.findOneAndUpdate({username: req.user.username}, {$set: {wallet: user.wallet}}, {new: true}, (err, newUser) => {
+            console.log(lectureData)
+            Course.findOneAndUpdate({"_id": data.courseID}, {$push: {'lectures': lectureData}}, function (err, data) {
                 if (err) {
                     return res.sendStatus(500);
                 }
-                return res.sendStatus(200);
-            });
+                else {
+                    return res.sendStatus(200);
+                }
+            })
         });
+    });
 
+
+    // API call to delete a course
+    app.delete("/api/deleteCourse", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body.courseID) {
+            // No Course ID
+            return res.sendStatus(400);
+        }
+        // Search user for which to sell the currency.
+        Course.find({_id: req.body.courseID}).remove(function (err) {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            else {
+                return res.sendStatus(200);
+            }
+        })
     });
 
     // Get a user's wallet from the database.

@@ -17,6 +17,59 @@
     }
 }%>
 
-<% getCourseOwner = function(id) {
+<% userIsInstructorOrAdmin = function() {
+    if(user){
+        if(user.accountType == 'instructor'){
+            for(var i = 0; i < course.instructors.length; i++){
+                if(course.instructors[i].email == user.email){
+                    return true
+                }
+            }
+            return false
+        }
+        console.log("\nFalse1")
+        return false
+    }
+    console.log("\nFalse2")
+    return false
+}%>
 
+<% userIsInCourse = function() {
+    if(user){
+        if(user.accountType == 'instructor'){
+            for(var i = 0; i < course.instructors.length; i++){
+                console.log(course.instructors[i].email)
+                console.log(user.email)
+                if(course.instructors[i].email == user.email){
+                    return true
+                }
+            }
+            return false
+        }
+        else if(user.accountType == 'student' && course.students.indexOf(user.studentID) >= 0){
+            return true
+        }
+        else{
+            return false
+        }
+    }
+    return false
+}%>
+
+<% currentPathName = function() {
+    console.log(window.location.pathname)
+}%>
+
+<% userIsCourseOwner = function() {
+    if(user){
+        if(user.accountType == 'instructor' && course.ownerId == user._id){
+            return true
+        }
+        return false
+    }
+    return false
+}%>
+
+<% getCourses = function () {
+    console.log(course[0].lectures[0])
 }%>

@@ -10,33 +10,29 @@ $(document).ready(function () {
 /*****************************************************************************/
 $("button.removeCourse").click(function (event) {
     event.preventDefault()
-    $("#remove-course-modal").modal('open')
-    console.log(event.target)
-    var courseID = event.target
+    var courseID = $(event.target).attr('data-course')
     $("#remove-course-cancel").click(function (event) {
-
+        $("#remove-course-modal").modal('close')
     })
-
-
     $("#confirm-remove").click(function (event) {
-
+        console.log("Hello")
+        deleteCourse(courseID)
     })
 })
-
-
-
 
 /*****************************************************************************/
 /* Function Handlers */
 /*****************************************************************************/
-function createCourse(formData) {
+function deleteCourse(courseID) {
     $.ajax({
-        url: "/api/createCourse",
-        type: "POST",
+        url: "/api/deleteCourse",
+        type: "DELETE",
         contentType: 'application/json',
-        data: JSON.stringify(formData),
+        data: JSON.stringify({"courseID": courseID}),
         success: function (resp) {
-            window.location.href = 'profile'
+            $("#remove-course-modal").modal('close')
+            $('#' + courseID).remove()
+            console.log("Completed Removal")
         },
         error: function (resp) {
             return alert("Failed to add a course");

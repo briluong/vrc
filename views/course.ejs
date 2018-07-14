@@ -13,77 +13,70 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
     <!-- Custom CSS -->
-    <link href="/css/main.css" rel="stylesheet">
+    <!--<link href="/css/main.css" rel="stylesheet">-->
+    <link href="/css/course.css" rel="stylesheet">
 </head>
-
 <body>
 <div>
+    <%- include functions.ejs %>
     <%- include partials/header.ejs %>
-    <div class=Course">
+    <div class="master-main">
         <div class="main">
             <div class="innerMain Course">
-
-                {{#if course}}
-                {{#with course}}
+                <% if(course){ %>
                 <div class="flex-container course-title-container">
                     <div class="title left-item">
-                        <p>{{code}} {{title}}</p>
-                        {{#if userIsStudent}}
-                        {{#if studentIsInCourse code}}
-                        <p class="subtitle">You are enrolled in this course</p>
-
-                        {{else}}
-                        <p class="subtitle">You have not enroll in this course</p>
-
-                        {{/if}}
-                        {{/if}}
-                        {{#if userIsCourseInstructor code}}
+                        <p><span style="text-transform: uppercase"><%= course.code %></span> <%= course.title %></p>
+                        <% if(userIsInstructor()){ %>
                         <p class="subtitle">You're the instructor of this course</p>
-                        {{/if}}
+                        <% } else { %>
+                        <p class="subtitle">You are enrolled in this course</p>
+                        <% } %>
                     </div>
-                    {{#if userIsInstructorOrAdmin}}
+                    <% if(userIsInstructorOrAdmin(course)){ %>
                     <div class="right-item course-size">
                         <a id="class-size-tooltip" class="tooltipped" data-position="top" data-delay="50"
                            data-tooltip="Class Size">
                             <img src="/icons/people.svg">
-                            <span>{{numberOfEnrolledStudent code}}</span>
+                            <span><%= course.students.length %></span>
                         </a>
                     </div>
-                    {{/if}}
+                    <% } %>
                 </div>
 
-                {{#if userIsInCourse code}}
                 <ul class="lecture-list collection with-header card">
                     <li class="collection-header">
                         <p>Lectures</p>
                     </li>
-                    {{#if lectures}}
-                    {{#each lectures}}
-                    <a href='/course/{{courseCode}}/{{title}}' class="collection-item flex-container">
-                        <div class="left-item">{{title}} {{#if lectureIsActive _id}}
-                            <span class="live-now active-blink">LIVE</span>{{/if}}
+                    <% if(course.lectures.length > 0){ %>
+                    <% for (var j = 0; j < course.lectures.length; j++) { %>
+                    <a href='/course/<%= course._id %>/<%= course.lectures[j].lectureID%>' class="collection-item flex-container">
+                        <div class="left-item" style="display: inline-block">
+                            <span><span style="text-transform: uppercase"><%= course.code %></span>: <%= course.lectures[j].lectureTitle %></span>
+                            <% if(course.lectures[j].active){ %>
+                            <span class="live-now active-blink">LIVE</span>
+                            <%}%>
                         </div>
-                        <div class="right-item">{{prettyDate createdAt}}</div>
+                        <div id="lectureDate" class="right-item"><%= course.lectures[j].createdOn.toDateString().slice(4, 10) %></div>
                     </a>
-                    {{/each}}
-                    {{else}}
+                    <% } %>
+                    <% } else{ %>
                     <li class="collection-item">No lecture available yet.</li>
-                    {{/if}}
+                    <% } %>
                 </ul>
-                {{/if}}
+
                 <div class="card-panel course-info">
-                    <span class="panel-title">Course coordinator: {{getUserNameById ownerId}}</span>
-                    <p>Instructors: {{#each instructor in instructors}}
-                        <span style="padding-right:10px">{{getUserNameById instructor}}</span>{{/each}}</p>
-                    <p>{{description}}</p>
+                    <span class="panel-title">Course coordinator: <%= course.instructorName %></span>
+                    <p>Instructors: <% for(var i = 0; i < course.instructors.length; i++){ %>
+                        <span style="padding-right:10px"><%= course.instructors[i].instructorName %></span><% } %>
+                    </p><p><%= course.description %></p>
                 </div>
 
-                {{#if userIsCourseOwner code}}
+                <% if(userIsCourseOwner()){ %>
                 <div class="card">
                     <form id="course-settings-form">
                         <div class="card-content">
                             <span class="card-title-small">Course Settings</span>
-
                             <div class="input-field select-field">
                                 <span class="label">Course instructors & Teaching Assistants</span>
                                 <select id="selectCourseInstructors" name="selectCourseInstructors" multiple>
@@ -110,17 +103,6 @@
                                     <input class="file-path validate" type="text">
                                 </div>
                             </div>
-                            <!--<span class="card-title-small">Group Settings</span>-->
-                            <!--<div class="input-field file-field">-->
-                            <!--<span class="label">Note: The CSV file has to contain "ID" and "Group" columns.</span>-->
-                            <!--<div class="btn">-->
-                            <!--<span>File</span>-->
-                            <!--<input id="group-csv" type="file" accept=".csv">-->
-                            <!--</div>-->
-                            <!--<div class="file-path-wrapper">-->
-                            <!--<input class="file-path validate" type="text">-->
-                            <!--</div>-->
-                            <!--</div>-->
                             {{#if groups}}
                             <table class="group-table">
                                 <thead>
@@ -157,23 +139,45 @@
                         </div>
                     </form>
                 </div>
+                <% if(userIsInstructorOrAdmin()){ %>
+                <div id="create-lecture-modal" class="modal">
+                    <form id="create-lecture-form" data-course="<%= course._id %>">
+                        <div class="modal-content">
+                            <h3>Create Lecture</h3>
+                            <div class="input-field">
+                                <input id="lectureName" name="lectureName" type="text" class="validate"
+                                       autocomplete="off">
+                                <label id="lectureName-label" for="lectureName">Lecture Title</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="waves-effect waves-teal btn-flat" id="cancel-create-lecture"
+                                    type="button">Cancel
+                            </button>
+                            <button class="waves-effect waves-teal btn-flat" type="submit">Create</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="fixed-action-btn">
+                    <a id="create-lecture-trigger" class="modal-trigger btn-floating btn-large blue"
+                       href="#create-lecture-modal">
+                        <i class="large material-icons">add</i>
+                    </a>
+                </div>
+                <% } %>
+                <% } %>
+                <% } else { %>
+                <center><h3>404 Not Found :(</h3></center>
+                <% } %>
                 {{/if}}
-
-
                 {{/with}}
                 {{else}}
                 {{> NotFound}}
-                {{/if}}
-
             </div>
         </div>
     </div>
-    <%- if(userIsCourseInstructor(code)) { %>
-        <%- include create_new_course.ejs} %>
-    <%- } %>
-    <%- include partials/footer.ejs %>
 </div>
+<%- include partials/footer.ejs %>
 </body>
-<link href="/css/home.css" rel="stylesheet">
 <script src="/js/course.js"></script>
 </html>

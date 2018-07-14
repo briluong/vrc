@@ -50,8 +50,8 @@ $("#loginSubmit").click(function (event) {
 
 $("#loginCancel").click(function (event) {
     // console.log(event)
-    // resetLoginInput
-    // $('#login-modal').modal('close')
+    resetLoginInput()
+    $('#login-modal').modal('close')
 });
 
 $("#registerSubmit").click(function (event) {
