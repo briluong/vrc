@@ -435,3 +435,16 @@ video {
 table tbody tr td {
   padding: 10px 5px;
 }
+
+.btn-small {
+  font-weight: 500;
+  height: 27px;
+  line-height: 27px;
+  padding: 0 0.5rem;
+  margin-top: 0.9rem;
+  background-color: #2196f3;
+}
+
+.btn-small:hover, .btn-small:focus {
+  background-color: #2196f3;
+}

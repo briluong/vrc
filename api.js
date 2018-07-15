@@ -76,6 +76,41 @@ module.exports = function (app) {
         });
     });
 
+    app.post("/api/addInstructor", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body) {
+            console.log("Hi1")
+            return res.sendStatus(400);
+        }
+        User.findOne({
+            'email': req.body.instructorEmail, $and: [{'accountType': 'instructor'}]
+        }, (function (err, data) {
+            if (err) {
+                console.log("Hi2")
+                throw err;
+            }
+            if(req.user.email == req.body.instructorEmail){
+                console.log("Hi3")
+                return res.sendStatus(400);
+            }
+            console.log("Hi4")
+            var instructorData = {
+                "email": data.email,
+                "instructorName": data.firstName + " " + data.lastName
+            }
+            console.log("Hi5")
+            console.log(instructorData)
+            Course.findOneAndUpdate({"_id": req.body.courseID}, {$push: {'instructors': instructorData}}, function (err, data) {
+                if (err) {
+                    console.log("Hi6")
+                    return res.sendStatus(500);
+                }
+                else {
+                    return res.sendStatus(200);
+                }
+            })
+        }));
+    });
+
 
     // API call to delete a course
     app.delete("/api/deleteCourse", apiUtil.isLoggedIn, (req, res) => {
@@ -92,6 +127,37 @@ module.exports = function (app) {
                 return res.sendStatus(200);
             }
         })
+    });
+
+    // API call to remove an instructor from a course
+    app.post("/api/removeInstructor", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body.email) {
+            // No Course ID
+            return res.sendStatus(400);
+        }
+        // Search user for which to sell the currency.
+        Course.findOne({_id: req.body.courseID}, (function (err, course) {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            else {
+                var instructors = course.instructors
+                for(var i = 0; i < instructors.length;i++){
+                    if(instructors[i].email == req.body.email){
+                        instructors.splice(i, 1);
+                        break;
+                    }
+                }
+                Course.findOneAndUpdate({"_id": req.body.courseID}, {$set: {'instructors': instructors}}, function (err, data) {
+                    if (err) {
+                        return res.sendStatus(500);
+                    }
+                    else {
+                        return res.sendStatus(200);
+                    }
+                })
+            }
+        }))
     });
 
     // Get a user's wallet from the database.

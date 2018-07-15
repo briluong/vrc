@@ -22,11 +22,11 @@
 <%- include ../functions.ejs %>
 <div class="active-lecture-list">
     <ul class="lecture-list collection with-header card">
+        <% for (var i = 0; i < course.length; i++) { %>
+        <% if(course[i].lectures.length > 0){ %>
         <li class="collection-header">
             <p>On-going Lectures</p>
         </li>
-        <% for (var i = 0; i < course.length; i++) { %>
-        <% if(course[i].lectures.length > 0){ %>
         <% for (var j = 0; j < course[i].lectures.length; j++) { %>
         <%if(course[i].lectures[j].active){%>
         <a href='/course/<%=course[i]._id%>/<%=course[i].lectures[j].lectureID%>' class="collection-item flex-container">

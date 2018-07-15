@@ -31,12 +31,8 @@ module.exports = function (app, passport) {
             console.log(req.user)
             if (req.user.accountType == 'instructor') {
                 Course.find({
-                    'ownerId': req.user._id, $or: [{
-                        instructors: {
-                            $elemMatch: {'email': req.user.email}
-                        }
-                    }]
-                }, function (err, course) {
+                        "instructors.email": req.user.email}
+                , function (err, course) {
                     if (err) {
                         console.log(err);
                     } else {
