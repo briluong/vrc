@@ -73,3 +73,19 @@
 <% getCourses = function () {
     console.log(course[0].lectures[0])
 }%>
+
+<% findStudentName = function (id) {
+    console.log("Hi")
+    console.log(users)
+    for(var i = 0; i < users.length; i++){
+        console.log(users[i])
+        if(users[i].accountType == 'student'){
+            console.log("Hello")
+            if(users[i].studentID == id){
+                console.log(users[i].firstName + " " + users[i].lastName)
+                return users[i].firstName + " " + users[i].lastName
+            }
+        }
+    }
+    return " "
+}%>

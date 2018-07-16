@@ -1,6 +1,7 @@
 const request = require('request');
 var Course = require('../models/courses.js');
 var Lecture = require('../models/lectures.js');
+var User = require('../models/user.js');
 module.exports = function (app, passport) {
 
     // LANDING PAGE
@@ -71,7 +72,15 @@ module.exports = function (app, passport) {
             } else {
                 // pass matched documents to template
                 console.log(course)
-                res.render("course", {user: req.user, course: course, currentPage: ''});
+                User.find(function (err, users) {
+                    if(err){
+                        console.log(err)
+                    }
+                    else{
+                        console.log(users)
+                        res.render("course", {user: req.user, course: course, users: users});
+                    }
+                })
             }
         })
 

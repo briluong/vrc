@@ -1,10 +1,10 @@
 <% include ../functions.ejs %>
 <% if(userIsInstructorOrAdmin()){ %>
 <div class="card">
-    <form id="course-settings-form">
+    <form id="instructors-form">
         <div class="card-content">
-            <span class="card-title-small">Course Settings</span>
-            <div class="input-field select-field">
+            <span class="card-title-small">Course Instructors Settings</span>
+            <div id="instructor-input-field" class="input-field select-field">
                 <span class="label">Course instructors & Teaching Assistants</span>
                 <div class="row instructor-row">
                     <% if(userIsCourseOwner()){ %>
@@ -21,66 +21,26 @@
                                         class="tiny material-icons">close</i></a></p></div>
                     <% } %>
                     <% } %>
-                </div>
-                <button href="#add-instructor-modal" class="modal-trigger btn-small">Add Instructor</button>
                 <% } else { %>
                 <% for(var i = 0; i < course.instructors.length;i++){ %>
                 <div class="instructor-box col s9 m6 l3">
                     <p><%= course.instructors[i].instructorName %></p></div>
                 <% } %>
                 <% } %>
-            </div>
-            <% if(userIsCourseOwner()){ %>
-            <span class="card-title-small">Enroll Students and Groups</span>
-            <div class="input-field file-field">
-                <span class="label">Note: The CSV file has to contain a "StudentID" and "Group" columns.</span>
-                <div class="btn">
-                    <span>File</span>
-                    <input id="student-csv" type="file" accept=".csv">
-                </div>
-                <div class="file-path-wrapper">
-                    <input class="file-path validate" type="text">
                 </div>
             </div>
-            <% } %>
-            {{#if groups}}
-            <table class="group-table">
-                <thead>
-                <tr>
-                    <th>Group</th>
-                    <th>Members</th>
-                </tr>
-                </thead>
+        </div>
 
-                <tbody>
-                {{#each group in groups}}
-                <tr>
-                    <td>{{group.name}}</td>
-                    <td>
-                        {{#each member in group.members}}
-                        <span>{{getUserNameById member}}</span>
-                        {{/each}}
-                    </td>
-                </tr>
-                {{/each}}
-                </tbody>
-            </table>
-            {{else}}
-            <p>No default group settings were given</p>
-            {{/if}}
-        </div>
-        <% if(userIsCourseOwner()){ %>
         <div class="card-action">
-            <button class="waves-effect waves-teal btn-flat" type="button"
-                    id="cancelCourseSettings">Cancel
+            <% if(userIsCourseOwner()){ %>
+            <button href="#add-instructor-modal" class="modal-trigger waves-effect waves-teal btn-flat">Add
+                Instructor
             </button>
-            <button class="waves-effect waves-teal btn-flat" type="submit"
-                    id="changeCourseSettings">Change
-            </button>
+            <% }%>
         </div>
-        <% } %>
     </form>
 </div>
+
 <div id="create-lecture-modal" class="modal">
     <form id="create-lecture-form" data-course="<%= course._id %>">
         <div class="modal-content">

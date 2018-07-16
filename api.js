@@ -22,18 +22,31 @@ module.exports = function (app) {
         course.lectures = []
         console.log("file" in req.body)
         if ("file" in req.body) {
-            var students = req.body.file
+            let students = req.body.file
             let enrolledStudents = []
+            let groups = {}
             for (let i = 0; i < students.length; i++) {
                 let entry = students[i]
-                if (entry.hasOwnProperty('StudentID')) {
+                if (entry.hasOwnProperty('StudentID') && entry.hasOwnProperty('Group')) {
+                    enrolledStudents.push(entry['StudentID'])
+                    console.log(entry['Group'])
+                    if (entry['Group'] in groups) {
+                        groups[entry['Group']].push(entry['StudentID'])
+                    }
+                    else {
+                        groups[entry['Group']] = [entry['StudentID']]
+                    }
+                }
+                else if (entry.hasOwnProperty('StudentID')) {
                     enrolledStudents.push(entry['StudentID'])
                 }
             }
             course.students = enrolledStudents;
+            course.groups = groups
         }
         else {
             course.students = []
+            course.groups = {}
         }
         course.save(function (err, data) {
             if (err) {
@@ -88,7 +101,7 @@ module.exports = function (app) {
                 console.log("Hi2")
                 throw err;
             }
-            if(req.user.email == req.body.instructorEmail){
+            if (req.user.email == req.body.instructorEmail) {
                 console.log("Hi3")
                 return res.sendStatus(400);
             }
@@ -119,12 +132,25 @@ module.exports = function (app) {
             return res.sendStatus(400);
         }
         // Search user for which to sell the currency.
-        Course.find({_id: req.body.courseID}).remove(function (err) {
+        Course.findOneAndRemove({_id: req.body.courseID}, function (err, course) {
             if (err) {
                 return res.sendStatus(500);
             }
             else {
-                return res.sendStatus(200);
+                console.log("Removing")
+                console.log(course)
+                let lectureIDs = []
+                for (var i = 0; i < course.lectures.length; i++) {
+                    lectureIDs.push(course.lectures[i].lectureID)
+                }
+                Lecture.find({_id: lectureIDs}).remove(function (err) {
+                    if(err){
+                        return res.sendStatus(500);
+                    }
+                    else{
+                        return res.sendStatus(200);
+                    }
+                })
             }
         })
     });
@@ -142,8 +168,8 @@ module.exports = function (app) {
             }
             else {
                 var instructors = course.instructors
-                for(var i = 0; i < instructors.length;i++){
-                    if(instructors[i].email == req.body.email){
+                for (var i = 0; i < instructors.length; i++) {
+                    if (instructors[i].email == req.body.email) {
                         instructors.splice(i, 1);
                         break;
                     }

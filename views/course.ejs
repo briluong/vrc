@@ -74,6 +74,66 @@
                     <p><%= course.description %></p>
                 </div>
                 <%include partials/course_settings.ejs%>
+                <div class="card">
+                    <form id="student-group-form">
+                        <div class="card-content">
+                            <% if(userIsCourseOwner()){ %>
+                            <span class="card-title-small">Enroll Students and Groups Settings</span>
+                            <%} else{%>
+                            <span class="card-title-small">Enrolled Students and Groups</span>
+                            <%}%>
+                            <% if(userIsCourseOwner()){ %>
+                            <div class="input-field file-field">
+                                <span id="student-csv-label" class="label">Note: The CSV file has to contain a "StudentID" and "Group" columns.</span>
+                                <div class="btn">
+                                    <span>File</span>
+                                    <input id="student-csv" type="file" accept=".csv">
+                                </div>
+                                <div class="file-path-wrapper">
+                                    <input class="file-path validate" type="text">
+                                </div>
+                            </div>
+                            <% } %>
+                            <% if(Object.keys(course.groups).length !== 0 && course.groups.constructor == Object){ %>
+                            <table class="group-table">
+                                <thead>
+                                <tr>
+                                    <th>Group</th>
+                                    <th>Members</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <% let groupNames = Object.keys(course.groups) %>
+                                <% for(var k = 0; k < groupNames.length; k++){ %>
+                                <% var groupStudents = course.groups[groupNames[k]] %>
+                                <tr>
+                                    <td>Group <%= groupNames[k] %></td>
+                                    <td>
+                                        <% for(var l = 0 ; l < groupStudents.length; l++){ %>
+                                        <span><%= findStudentName(groupStudents[l]) %></span>
+                                        <% } %>
+                                    </td>
+                                </tr>
+                                <% } %>
+                                </tbody>
+                            </table>
+                            <% } else { %>
+                            <p>No default group settings were given</p>
+                            <% } %>
+                        </div>
+                        <% if(userIsCourseOwner()){ %>
+                        <div class="card-action">
+                            <button class="waves-effect waves-teal btn-flat" type="button"
+                                    id="cancelCourseSettings">Cancel
+                            </button>
+                            <button class="waves-effect waves-teal btn-flat" type="submit"
+                                    id="changeCourseSettings">Change
+                            </button>
+                        </div>
+                        <% } %>
+                    </form>
+                </div>
                 <% } else { %>
                 <center><h3>404 Not Found :(</h3></center>
                 <% } %>

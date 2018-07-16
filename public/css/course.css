@@ -43,22 +43,33 @@
     padding-top: 10px;
 }
 
-.instructor-box{
-    text-align: center;
-}
 
-.instructor-box p{
+.instructor-box {
+    height: 35px;
+    text-align: center;
     background-color: #A2CFF2;
     border-style: solid;
     border-width: 1px;
     border-color: #2196f3;
-    padding-left: 5px;
-    padding-right: 5px;
+    margin-right: 1rem;
+    float:right;
 }
 
+.instructor-box p {
+    line-height: 35px;
+}
 .icon{
     display: inline-block;
+    float: right;
     text-align: center;
-    float:right;
     margin-left: 5px;
+    line-height: 35px;
+}
+
+#student-csv-label{
+     margin-bottom: 10px;
+ }
+
+#instructor-input-field{
+    margin-bottom: 0;
 }
