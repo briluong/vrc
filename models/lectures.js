@@ -7,6 +7,10 @@ var LecturesSchema = mongoose.Schema({
     title: String,
     active: Boolean,
     available: Boolean,
+    groupActive: {
+        type: Boolean,
+        default: false
+    },
     displayQuestion: {
         type: String,
         default: "",

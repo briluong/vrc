@@ -2,8 +2,7 @@
 /* Initialization Handlers */
 /*****************************************************************************/
 $(document).ready(function () {
-    if($(".live-now").attr("data-active")){
-        $("#lecture-active-input").attr("checked", "true")
+    if($(".live-now").attr("data-active") == true){
         $(".live-now").addClass("show")
     }
     else{
@@ -17,20 +16,23 @@ $(document).ready(function () {
 /*****************************************************************************/
 
 $("#lecture-active-input").on("change",function(event) {
+    var data = {}
     if($("#lecture-active-input").prop("checked")){
+        data["active"] = true
         $("#lecture-active-input").removeAttr("checked")
         $(".live-now").removeClass("hide")
         $(".live-now").addClass("show")
     }
     else{
+        data["active"] = false
         $("#lecture-active-input").attr("checked", "true")
         $(".live-now").removeClass("show")
         $(".live-now").addClass("hide")
     }
-
-    console.log(event)
-
 })
 /*****************************************************************************/
 /* Function Handlers */
 /*****************************************************************************/
+function toggleActiveLecture(data) {
+
+}

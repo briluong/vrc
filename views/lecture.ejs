@@ -35,7 +35,7 @@
                     <div class="switch toggle-lecture-active-container">
                         <span class="live-now active-blink" data-active= <%= lecture.active %>>LIVE NOW</span>
                         <% if(userIsInstructorOrAdmin()) { %>
-                            <label id="lecture-active-toggle" class="toggle-lecture-active">OFF<input id="lecture-active-input"
+                            <label id="lecture-active-toggle" class="toggle-lecture-active" data-lecture="<%=lecture._id%>">OFF<input id="lecture-active-input"
                                                                                                       type="checkbox"
                                                                                                       checked="checked">
                                 <span id="lecture-active-span" class="lever"></span>ON
