@@ -13,9 +13,9 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
     <!-- Custom CSS -->
     <link href="/css/course_list.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
@@ -45,12 +45,13 @@
     </div>
     <% } %>
     <% for (var i = 0; i < course.length; i++) { %>
-    <div class="course-card" id="<%= course[i]._id%>">
+    <div class="course-card" id="<%= course[i]._id %>">
         <div class="card">
             <div class="card-content">
                 <div class="card-title flex-container">
                     <div class="course-title">
-                        <p><span style="text-transform: uppercase"><%= course[i].code %></span>: <%= course[i].title %></p>
+                        <p><span style="text-transform: uppercase"><%= course[i].code %></span>: <%= course[i].title %>
+                        </p>
                         <p class="card-subtitle">Instructor: <%= course[i].instructorName %></p>
                     </div>
                     <% if (userIsInstructor()) { %>
@@ -66,10 +67,12 @@
                 <p><%= course[i].description %></p>
             </div>
             <div class="card-action">
-                <a class="viewCourse waves-effect waves-teal btn-flat" href="/course/<%= course[i]._id%>" data-course="<%= course[i]._id%>">View</a>
+                <a class="viewCourse waves-effect waves-teal btn-flat" href="/course/<%= course[i]._id %>"
+                   data-course="<%= course[i]._id %>">View</a>
                 <% if (userIsInstructor()) { %>
-                <button class="removeCourse waves-effect waves-teal btn-flat modal-trigger remove-course-modal-trigger" type="button"
-                        href="#remove-course-modal" data-course="<%= course[i]._id%>">Remove
+                <button class="removeCourse waves-effect waves-teal btn-flat modal-trigger remove-course-modal-trigger"
+                        type="button"
+                        href="#remove-course-modal" data-course="<%= course[i]._id %>">Remove
                 </button>
                 <% } %>
             </div>

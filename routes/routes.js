@@ -6,7 +6,7 @@ module.exports = function (app, passport) {
 
     // LANDING PAGE
     app.get("/", (req, res) => {
-        res.render("home", {user: null});
+        res.render("home", {user: null, route: null});
     });
 
     // LOGIN
@@ -39,7 +39,7 @@ module.exports = function (app, passport) {
                     } else {
                         // pass matched documents to template
                         console.log(course)
-                        res.render("profile", {user: req.user, course: course, route: '/profile'});
+                        res.render("profile", {user: req.user, course: course, route: null});
                     }
                 })
             }
@@ -52,7 +52,7 @@ module.exports = function (app, passport) {
                     } else {
                         console.log(course)
                         // pass matched documents to template
-                        res.render("profile", {user: req.user, course: course});
+                        res.render("profile", {user: req.user, course: course, route: null});
                     }
                 })
             }
@@ -78,7 +78,7 @@ module.exports = function (app, passport) {
                     }
                     else{
                         console.log(users)
-                        res.render("course", {user: req.user, course: course, users: users});
+                        res.render("course", {user: req.user, course: course, users: users, route: course.code});
                     }
                 })
             }

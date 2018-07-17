@@ -36,6 +36,9 @@ function deleteCourse(courseID) {
         },
         error: function (resp) {
             return alert("Failed to add a course");
+        },
+        complete: function () {
+            location.reload();
         }
     });
 }

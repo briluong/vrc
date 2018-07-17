@@ -11,7 +11,6 @@ module.exports = function (app) {
         if (!req.body) {
             return res.sendStatus(400);
         }
-        // Search for a user and update their wallet.
         var course = new Course();
         course.ownerId = req.user._id
         course.instructors = [{email: req.user.email, instructorName: req.user.firstName + " " + req.user.lastName}]
@@ -124,44 +123,12 @@ module.exports = function (app) {
         }));
     });
 
-
-    // API call to delete a course
-    app.delete("/api/deleteCourse", apiUtil.isLoggedIn, (req, res) => {
-        if (!req.body.courseID) {
-            // No Course ID
-            return res.sendStatus(400);
-        }
-        // Search user for which to sell the currency.
-        Course.findOneAndRemove({_id: req.body.courseID}, function (err, course) {
-            if (err) {
-                return res.sendStatus(500);
-            }
-            else {
-                console.log("Removing")
-                console.log(course)
-                let lectureIDs = []
-                for (var i = 0; i < course.lectures.length; i++) {
-                    lectureIDs.push(course.lectures[i].lectureID)
-                }
-                Lecture.find({_id: lectureIDs}).remove(function (err) {
-                    if(err){
-                        return res.sendStatus(500);
-                    }
-                    else{
-                        return res.sendStatus(200);
-                    }
-                })
-            }
-        })
-    });
-
     // API call to remove an instructor from a course
     app.post("/api/removeInstructor", apiUtil.isLoggedIn, (req, res) => {
         if (!req.body.email) {
             // No Course ID
             return res.sendStatus(400);
         }
-        // Search user for which to sell the currency.
         Course.findOne({_id: req.body.courseID}, (function (err, course) {
             if (err) {
                 return res.sendStatus(500);
@@ -184,6 +151,81 @@ module.exports = function (app) {
                 })
             }
         }))
+    });
+
+    app.post("/api/enrollStudents", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        if ("file" in req.body) {
+            let students = req.body.file
+            let enrolledStudents = []
+            let groups = {}
+            for (let i = 0; i < students.length; i++) {
+                let entry = students[i]
+                if (entry.hasOwnProperty('StudentID') && entry.hasOwnProperty('Group')) {
+                    enrolledStudents.push(entry['StudentID'])
+                    console.log(entry['Group'])
+                    if (entry['Group'] in groups) {
+                        groups[entry['Group']].push(entry['StudentID'])
+                    }
+                    else {
+                        groups[entry['Group']] = [entry['StudentID']]
+                    }
+                }
+                else if (entry.hasOwnProperty('StudentID')) {
+                    enrolledStudents.push(entry['StudentID'])
+                }
+            }
+            Course.findOneAndUpdate({"_id": req.body.courseID}, {
+                $set: {
+                    'students': enrolledStudents,
+                    'groups': groups
+                }
+            }, function (err, course) {
+                if (err) {
+                    return res.sendStatus(500);
+                }
+                else {
+                    return res.sendStatus(200);
+                }
+
+            })
+        }
+        else{
+            return res.sendStatus(200);
+        }
+    });
+
+
+    // API call to delete a course
+    app.delete("/api/deleteCourse", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body.courseID) {
+            // No Course ID
+            return res.sendStatus(400);
+        }
+        // Search user for which to sell the currency.
+        Course.findOneAndRemove({_id: req.body.courseID}, function (err, course) {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            else {
+                console.log("Removing")
+                console.log(course)
+                let lectureIDs = []
+                for (var i = 0; i < course.lectures.length; i++) {
+                    lectureIDs.push(course.lectures[i].lectureID)
+                }
+                Lecture.find({_id: lectureIDs}).remove(function (err) {
+                    if (err) {
+                        return res.sendStatus(500);
+                    }
+                    else {
+                        return res.sendStatus(200);
+                    }
+                })
+            }
+        })
     });
 
     // Get a user's wallet from the database.

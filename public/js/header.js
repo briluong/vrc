@@ -6,7 +6,7 @@
 /*****************************************************************************/
 $(document).ready(function () {
     $('.modal').modal();
-    $('#registerAccountType').material_select();
+    $('#registerAccountType').formSelect();
     $('#utoridInput').hide()
     // validate_field("#registerEmail");
     // validate_field("#registerUTORID");

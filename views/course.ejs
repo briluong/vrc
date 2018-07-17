@@ -9,9 +9,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Google CSS -->
     <link rel="icon" type="image/png”" href="/icons/cardboard.png"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.5.0/papaparse.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
     <!-- Custom CSS -->
     <!--<link href="/css/main.css" rel="stylesheet">-->
     <link href="/css/course.css" rel="stylesheet">
@@ -73,15 +74,15 @@
                         <% } %></p>
                     <p><%= course.description %></p>
                 </div>
-                <%include partials/course_settings.ejs%>
+                <% include partials/course_settings.ejs %>
                 <div class="card">
                     <form id="student-group-form">
                         <div class="card-content">
                             <% if(userIsCourseOwner()){ %>
                             <span class="card-title-small">Enroll Students and Groups Settings</span>
-                            <%} else{%>
+                            <% } else{ %>
                             <span class="card-title-small">Enrolled Students and Groups</span>
-                            <%}%>
+                            <% } %>
                             <% if(userIsCourseOwner()){ %>
                             <div class="input-field file-field">
                                 <span id="student-csv-label" class="label">Note: The CSV file has to contain a "StudentID" and "Group" columns.</span>
@@ -124,11 +125,8 @@
                         </div>
                         <% if(userIsCourseOwner()){ %>
                         <div class="card-action">
-                            <button class="waves-effect waves-teal btn-flat" type="button"
-                                    id="cancelCourseSettings">Cancel
-                            </button>
                             <button class="waves-effect waves-teal btn-flat" type="submit"
-                                    id="changeCourseSettings">Change
+                                    id="changeCourseSettings" data-course="<%=course._id%>">Enroll Students
                             </button>
                         </div>
                         <% } %>

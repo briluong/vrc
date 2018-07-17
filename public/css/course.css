@@ -46,8 +46,8 @@
 
 .instructor-box {
     height: 35px;
-    text-align: center;
-    background-color: #A2CFF2;
+    /*text-align: center;*/
+    background-color: #d8eeff;
     border-style: solid;
     border-width: 1px;
     border-color: #2196f3;
@@ -59,10 +59,7 @@
     line-height: 35px;
 }
 .icon{
-    display: inline-block;
     float: right;
-    text-align: center;
-    margin-left: 5px;
     line-height: 35px;
 }
 

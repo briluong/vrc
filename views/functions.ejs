@@ -1,27 +1,25 @@
 <% userIsInstructor = function () {
-    if(user){
-        if(user.accountType == 'instructor'){
+    if (user) {
+        if (user.accountType == 'instructor') {
             return true
         }
         return false
     }
     return false
-}%>
-
+} %>
 <% courses = function () {
     if (course === undefined || course.length == 0) {
         return false
     }
-    else{
+    else {
         return true
     }
-}%>
-
-<% userIsInstructorOrAdmin = function() {
-    if(user){
-        if(user.accountType == 'instructor'){
-            for(var i = 0; i < course.instructors.length; i++){
-                if(course.instructors[i].email == user.email){
+} %>
+<% userIsInstructorOrAdmin = function () {
+    if (user) {
+        if (user.accountType == 'instructor') {
+            for (var i = 0; i < course.instructors.length; i++) {
+                if (course.instructors[i].email == user.email) {
                     return true
                 }
             }
@@ -32,60 +30,68 @@
     }
     console.log("\nFalse2")
     return false
-}%>
-
-<% userIsInCourse = function() {
-    if(user){
-        if(user.accountType == 'instructor'){
-            for(var i = 0; i < course.instructors.length; i++){
+} %>
+<% userIsInCourse = function () {
+    if (user) {
+        if (user.accountType == 'instructor') {
+            for (var i = 0; i < course.instructors.length; i++) {
                 console.log(course.instructors[i].email)
                 console.log(user.email)
-                if(course.instructors[i].email == user.email){
+                if (course.instructors[i].email == user.email) {
                     return true
                 }
             }
             return false
         }
-        else if(user.accountType == 'student' && course.students.indexOf(user.studentID) >= 0){
+        else if (user.accountType == 'student' && course.students.indexOf(user.studentID) >= 0) {
             return true
         }
-        else{
+        else {
             return false
         }
     }
     return false
-}%>
-
-<% currentPathName = function() {
+} %>
+<% currentPathName = function () {
     console.log(window.location.pathname)
-}%>
-
-<% userIsCourseOwner = function() {
-    if(user){
-        if(user.accountType == 'instructor' && course.ownerId == user._id){
+} %>
+<% userIsCourseOwner = function () {
+    if (user) {
+        if (user.accountType == 'instructor' && course.ownerId == user._id) {
             return true
         }
         return false
     }
     return false
-}%>
-
+} %>
 <% getCourses = function () {
     console.log(course[0].lectures[0])
-}%>
-
+} %>
 <% findStudentName = function (id) {
     console.log("Hi")
     console.log(users)
-    for(var i = 0; i < users.length; i++){
+    for (var i = 0; i < users.length; i++) {
         console.log(users[i])
-        if(users[i].accountType == 'student'){
+        if (users[i].accountType == 'student') {
             console.log("Hello")
-            if(users[i].studentID == id){
+            if (users[i].studentID == id) {
                 console.log(users[i].firstName + " " + users[i].lastName)
                 return users[i].firstName + " " + users[i].lastName
             }
         }
     }
     return " "
+} %>
+
+<% checkActiveLectures = function (courses) {
+    for (var i = 0; i < courses.length; i++) {
+        if(courses[i].lectures.length > 0){
+            for (var j = 0; j < courses[i].lectures.length; j++) {
+                if(courses[i].lectures[j].active){
+                    return true
+                }
+            }
+        }
+    }
+    return false
 }%>

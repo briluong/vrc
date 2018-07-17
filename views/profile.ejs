@@ -9,21 +9,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Google CSS -->
     <link rel="icon" type="image/png”" href="/icons/cardboard.png"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
-    <!-- Custom CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>    <!-- Custom CSS -->
 </head>
 
 <body>
 <%- include partials/header.ejs %>
 <div class="master-main">
-<div class="main">
-    <div class="innerMain">
-        <%- include partials/active_lecture_list.ejs %>
-        <%- include partials/course_list.ejs %>
-</div>
-</div>
+    <div class="main">
+        <div class="innerMain">
+            <%- include partials/active_lecture_list.ejs %>
+            <%- include partials/course_list.ejs %>
+        </div>
+    </div>
 </div>
 <%- include partials/footer.ejs %>
 </body>

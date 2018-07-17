@@ -70,14 +70,42 @@ $("a#remove-instructor-trigger").click(function (event) {
     })
 })
 
+$("#student-group-form").submit(function (event) {
+    event.preventDefault()
+    var data = {}
+    var file = event.target[0].files[0]
+    data["courseID"] = $(event.target[2]).attr('data-course')
+    if (file) {
+        Papa.parse(file, {
+            header: true,
+            complete: function (results, file) {
+                console.log(results)
+                if (results.error) {
+                    M.toast({html:'CSV Parse Error: ' + results.error, displayLength: 3000})
+                } else if (results.meta.fields.indexOf('StudentID') < 0 ||
+                    results.meta.fields.indexOf('Group') < 0) {
+                    M.toast({html:'Incorrect CSV format', displayLength: 3000})
+                } else {
+                    data["file"] = results.data
+                    console.log(results.data)
+                    enrollStudents(data)
+                }
+            }
+        })
+    }
+    else{
+        M.toast({html: 'Please submit a CSV file with a \"StudentID\" column and \"Group\ column"', displayLength: 3000})
+    }
+})
+
 /*****************************************************************************/
 /* Function Handlers */
 /*****************************************************************************/
-function createLecture(formData) {
+function createLecture(data) {
     $.ajax({
         url: "/api/createLecture",
         type: "POST",
-        data: formData,
+        data: data,
         success: function (resp) {
         },
         error: function (resp) {
@@ -89,11 +117,11 @@ function createLecture(formData) {
     });
 }
 
-function addInstructor(formData){
+function addInstructor(data){
     $.ajax({
         url: "/api/addInstructor",
         type: "POST",
-        data: formData,
+        data: data,
         success: function (resp) {
             console.log(resp)
             // window.location.href = "course/" + formData.courseID
@@ -120,6 +148,25 @@ function removeInstructor(data){
         },
         error: function (resp) {
             return alert("Failed to remove instructor");
+        },
+        complete: function () {
+            location.reload();
+        }
+    });
+}
+
+function enrollStudents(data){
+    $.ajax({
+        url: "/api/enrollStudents",
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (resp) {
+            console.log("Completed Add")
+        },
+        error: function (resp) {
+            console.log(data)
+            return alert("Failed to add students");
         },
         complete: function () {
             location.reload();

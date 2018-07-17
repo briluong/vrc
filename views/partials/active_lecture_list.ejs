@@ -15,27 +15,30 @@
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
     <!-- Custom CSS -->
     <link href="/css/active_lecture_list.css" rel="stylesheet">
 </head>
 <%- include ../functions.ejs %>
 <div class="active-lecture-list">
     <ul class="lecture-list collection with-header card">
-        <% for (var i = 0; i < course.length; i++) { %>
-        <% if(course[i].lectures.length > 0){ %>
+        <% if(checkActiveLectures(course)){%>
         <li class="collection-header">
             <p>On-going Lectures</p>
         </li>
+        <% for (var i = 0; i < course.length; i++) { %>
+        <% if(course[i].lectures.length > 0){ %>
         <% for (var j = 0; j < course[i].lectures.length; j++) { %>
-        <%if(course[i].lectures[j].active){%>
-        <a href='/course/<%=course[i]._id%>/<%=course[i].lectures[j].lectureID%>' class="collection-item flex-container">
+        <% if(course[i].lectures[j].active){ %>
+        <a href='/course/<%= course[i]._id %>/<%= course[i].lectures[j].lectureID %>'
+           class="collection-item flex-container">
             <div class="left-item">
-                <span><span style="text-transform: uppercase"><%=course[i].code%></span>: <%=course[i].lectures[j].lectureTitle%></span>
+                <span><span style="text-transform: uppercase"><%= course[i].code %></span>: <%= course[i].lectures[j].lectureTitle %></span>
                 <span class="live-now active-blink">LIVE</span>
             </div>
-            <div class="right-item"><%=course[i].lectures[j].createdOn.toDateString().slice(4,10)%></div>
+            <div class="right-item"><%= course[i].lectures[j].createdOn.toDateString().slice(4, 10) %></div>
         </a>
+        <% } %>
         <% } %>
         <% } %>
         <% } %>

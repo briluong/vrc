@@ -25,7 +25,8 @@ var courseSchema = mongoose.Schema({
     description: String,
     students: [String],
     instructorName: String,
-    lectures: [{lectureID: String, lectureTitle: String, active: Boolean, createdOn: Date}]
+    lectures: [{lectureID: String, lectureTitle: String, active: Boolean, createdOn: Date}],
+    groups: {}
 });
 
 // Export the coin model.
