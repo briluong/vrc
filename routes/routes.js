@@ -32,16 +32,17 @@ module.exports = function (app, passport) {
             console.log(req.user)
             if (req.user.accountType == 'instructor') {
                 Course.find({
-                        "instructors.email": req.user.email}
-                , function (err, course) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        // pass matched documents to template
-                        console.log(course)
-                        res.render("profile", {user: req.user, course: course, route: null});
+                        "instructors.email": req.user.email
                     }
-                })
+                    , function (err, course) {
+                        if (err) {
+                            console.log(err);
+                        } else {
+                            // pass matched documents to template
+                            console.log(course)
+                            res.render("profile", {user: req.user, course: course, route: null});
+                        }
+                    })
             }
             else {
                 Course.find({
@@ -64,6 +65,7 @@ module.exports = function (app, passport) {
     app.get("/create_new_course", isLoggedIn, function (req, res) {
         res.render("create_new_course", {user: req.user});
     });
+
     app.get("/course/:id", isLoggedIn, function (req, res) {
         console.log(req.params)
         Course.findOne({'_id': req.params.id}, function (err, course) {
@@ -73,12 +75,48 @@ module.exports = function (app, passport) {
                 // pass matched documents to template
                 console.log(course)
                 User.find(function (err, users) {
-                    if(err){
+                    if (err) {
                         console.log(err)
                     }
-                    else{
+                    else {
                         console.log(users)
                         res.render("course", {user: req.user, course: course, users: users, route: course.code});
+                    }
+                })
+            }
+        })
+
+    });
+
+    app.get("/course/:id/:lectureID", isLoggedIn, function (req, res) {
+        console.log(req.params)
+        Course.findOne({'_id': req.params.id}, function (err, course) {
+            if (err) {
+                console.log(err);
+            } else {
+                // pass matched documents to template
+                console.log(course)
+                User.find(function (err, users) {
+                    if (err) {
+                        console.log(err)
+                    }
+                    else {
+                        console.log(users)
+                        Lecture.findOne({'_id': req.params.lectureID}, function (err, lecture) {
+                            if (err) {
+                                console.log(err)
+                            }
+                            else {
+                                res.render("lecture", {
+                                    user: req.user,
+                                    course: course,
+                                    users: users,
+                                    route: lecture.title,
+                                    lecture: lecture
+                                });
+
+                            }
+                        })
                     }
                 })
             }
