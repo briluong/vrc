@@ -13,9 +13,9 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
     <!-- Custom CSS -->
     <link href="/css/header.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
@@ -23,69 +23,83 @@
 <body>
 <!-- Login Modal -->
 <div id="login-modal" class="modal">
-    <div class="login modal-content">
-        <h3>Login</h3>
-        <div class="input-field">
-            <input id="loginEmail" name="loginEmail" type="email" class="validate">
-            <label id="loginEmail-label" for="loginEmail" data-error="Invalide Email Address">Email</label>
+    <form class="login-form" action="/login" method="post">
+        <div class="login modal-content">
+            <h3>Login</h3>
+            <div class="input-field">
+                <input id="loginEmail" name="email" type="email" class="validate">
+                <label id="loginEmail-label" for="email" data-error="Invalide Email Address">Email</label>
+            </div>
+            <div class="input-field">
+                <input id="loginPassword" name="password" type="password" class="validate">
+                <label id="loginPassword-label" for="password">Password</label>
+            </div>
         </div>
-        <div class="input-field">
-            <input id="loginPassword" name="loginPassword" type="password" class="validate">
-            <label id="loginPassword-label" for="loginPassword">Password</label>
+        <div class="modal-footer">
+            <button type="button" id="loginCancel" class="waves-effect waves-teal modal-action btn-flat"
+                    data-dismiss="modal">Cancel
+            </button>
+            <button type="submit" id="loginSubmit" class="waves-effect waves-teal modal-action btn-flat">Login</button>
         </div>
-    </div>
-    <div class="modal-footer">
-        <button id="loginCancel" class="waves-effect waves-teal modal-action btn-flat" >Cancel</button>
-        <button id="loginSubmit" class="waves-effect waves-teal modal-action btn-flat" >Login</button>
-    </div>
+    </form>
 </div>
 
 <!-- Register Modal -->
 <div id="register-modal" class="modal">
-    <div class="register modal-content">
-        <h3>Register</h3>
-        <div class="flex-container">
-            <div class="input-field left-item">
-                <input id="registerFirstName" name="registerFirstName" type="text" autocomplete="off">
-                <label id="registerFirstName-label" for="registerFirstName">First Name</label>
+    <form class="register-form" action="/register" method="post">
+        <div class="register modal-content">
+            <h3>Register</h3>
+            <div class="flex-container">
+                <div class="input-field left-item">
+                    <input id="registerFirstName" name="firstName" type="text" autocomplete="off">
+                    <label id="registerFirstName-label" for="firstName">First Name</label>
+                </div>
+                <div class="input-field right-item">
+                    <input id="registerLastName" name="lastName" type="text" autocomplete="off">
+                    <label id="registerLastName-label" for="lastName">Last Name</label>
+                </div>
             </div>
-            <div class="input-field right-item">
-                <input id="registerLastName" name="registerLastName" type="text" autocomplete="off">
-                <label id="registerLastName-label" for="registerLastName">Last Name</label>
+            <div class="input-field select-field">
+                <select id="registerAccountType" name="registerAccountType">
+                    <option value="" disabled selected>Choose your account type</option>
+                    <option value="student">Student</option>
+                    <option value="instructor">Instructor</option>
+                </select>
+            </div>
+            <div id="utoridInput" class="input-field">
+                <input id="registerUTORID" name="studentID" type="number" min="1">
+                <label id="registerUTORID-label" for="studentID">UTORID</label>
+            </div>
+            <div class="input-field">
+                <input id="registerEmail" name="email" type="email">
+                <label id="registerEmail-label" for="email">Email</label>
+            </div>
+            <div class="input-field">
+                <input id="registerPassword" name="password" type="password">
+                <label id="registerPassword-label" for="password">Password</label>
             </div>
         </div>
-        <div class="input-field select-field">
-            <select id="registerAccountType" name="registerAccountType">
-                <option value="" disabled selected>Choose your account type</option>
-                <option value="student">Student</option>
-                <option value="instructor">Instructor</option>
-            </select>
+        <div class="modal-footer">
+            <button class="waves-effect waves-teal modal-action btn-flat" type="button" id="registerCancel"
+                    data-dismiss="modal">Cancel
+            </button>
+            <button id="registerSubmit" class="waves-effect waves-teal modal-action btn-flat" type="submit">Register
+            </button>
         </div>
-        <div id="utoridInput" class="input-field">
-            <input id="registerUTORID" name="registerUTORID" type="number" min="1">
-            <label id="registerUTORID-label" for="registerUTORID">UTORID</label>
-        </div>
-        <div class="input-field">
-            <input id="registerEmail" name="registerEmail" type="email">
-            <label id="registerEmail-label" for="registerEmail">Email</label>
-        </div>
-        <div class="input-field">
-            <input id="registerPassword" name="registerPassword" type="password">
-            <label id="registerPassword-label" for="registerPassword">Password</label>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button class="waves-effect waves-teal modal-action btn-flat" type="button" id="registerCancel">Cancel</button>
-        <button id="registerSubmit"class="waves-effect waves-teal modal-action btn-flat" type="submit">Register</button>
-    </div>
+    </form>
 </div>
-<nav id="nav">
+<nav id="nav" style="background-color: #2196f3;">
     <div class="nav-wrapper">
+        <% if(user){ %>
+        <a href="/profile" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
+        <% } else { %>
         <a href="/" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
-        <!--<div class="breadcrumb-container">-->
-        <!--{{#if onCoursePage}}-->
-        <!--<a href="/course/{{onCoursePage}}" class="breadcrumb">{{onCoursePage}}</a>-->
-        <!--{{/if}}-->
+        <% } %>
+
+        <div class="breadcrumb-container">
+        <!--<%/* if(route){%>-->
+        <!--<a href="/course/<%=course._id%>>" class="breadcrumb"><%=route%></a>-->
+        <!--<%}*/%>-->
         <!--{{#if onLecturePage}}-->
         <!--<a href="/course/{{onCoursePage}}/{{onLecturePage}}" class="breadcrumb">{{onLecturePage}}</a>-->
         <!--{{/if}}-->
@@ -93,10 +107,18 @@
         <!--<a href="/Settings" class="breadcrumb">Settings</a>-->
         <!--{{/if}}-->
         <!--</div>-->
+        <% if(user){ %>
+        <ul id="nav-mobile" class="right hide-on-med-and-down" style="position:absolute; right:0;">
+            <li><a href="/profile">Home</a></li>
+            <li><a href="/settings">Settings</a></li>
+            <li><a href="/logout" id="logout">Logout</a></li>
+        </ul>
+        <% } else { %>
         <ul id="nav-mobile" class="right hide-on-med-and-down" style="position:absolute; right:0;">
             <li><a class="modal-trigger" href="#login-modal">Login</a></li>
             <li><a class="modal-trigger" href="#register-modal">Register</a></li>
         </ul>
+        <% } %>
     </div>
 </nav>
 </body>

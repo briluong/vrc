@@ -1,0 +1,72 @@
+.course .course-title-container .left-item {
+    flex: 1;
+    margin: 0;
+}
+
+.course .course-title-container .course-size {
+    cursor: default;
+}
+
+.course .course-title-container .course-size img {
+    width: 15px;
+    height: 15px;
+}
+
+.course .course-title-container .course-size span {
+    color: initial;
+    font-size: 0.8em;
+    vertical-align: super;
+    margin-left: -2px;
+    color: grey;
+}
+
+.course .lecture-list {
+    margin: 20px 0;
+}
+
+.course .lecture-list .collection-header p {
+    margin: 0;
+    font-weight: 300;
+}
+
+.course .lecture-list .collection-item {
+    padding: 10px 20px;
+}
+
+@media only screen and (min-width: 400px) {
+    .course .lecture-list .collection-item {
+        display: flex;
+    }
+}
+
+.instructor-row{
+    padding-top: 10px;
+}
+
+
+.instructor-box {
+    height: 35px;
+    /*text-align: center;*/
+    background-color: #d8eeff;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #2196f3;
+    margin-right: 1rem;
+    float:right;
+}
+
+.instructor-box p {
+    line-height: 35px;
+}
+.icon{
+    float: right;
+    line-height: 35px;
+}
+
+#student-csv-label{
+     margin-bottom: 10px;
+ }
+
+#instructor-input-field{
+    margin-bottom: 0;
+}

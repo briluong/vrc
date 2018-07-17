@@ -1,36 +1,15 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-// lectures SCHEMA
-var LecturesSchema = new SimpleSchema({
-    ownerId: {
-        type: String,
-        defaultValue: this.userId
-    },
-    courseTitle: {
-        type: String
-    },
-    courseCode: {
-        type: String
-    },
-    title: {
-        type: String
-    },
-    onlineStudent: {
-        type: [String],
-        defaultValue: []
-    },
-    active: {
-        type: Boolean,
-        defaultValue: false
-    },
-    others: {
-        type: String,
-        optional: true
-    },
+var LecturesSchema = mongoose.Schema({
+    ownerId: String,
+    courseID: String,
+    title: String,
+    active: Boolean,
+    available: Boolean,
     displayQuestion: {
         type: String,
-        defaultValue: "",
+        default: "",
         optional: true
     },
     mode: {
@@ -46,54 +25,10 @@ var LecturesSchema = new SimpleSchema({
         type: String,
         optional: true
     },
-    createdAt: {
+    createdOn:{
         type: Date,
-        defaultValue: new Date()
+        default: new Date()
     }
-});
+})
 
-// base function if one is needed later
-coursesSchema.methods.methodName = function(parameter) {
-    return ;
-};
-
-
-// Export the lecture model.
-module.exports = mongoose.model('vr-classromm-lectures', lecturesSchema);
-
-//from meteor
-//if (Meteor.isServer) {
-// 	Meteor.publish('Lectures', function(courseCode, title) {
-// 		if (courseCode && title) {
-// 			// return lecture with course code and lecture title
-// 			return Lectures.find({$and: [{title: title}, {courseCode:courseCode}]},{sort: {createdAt:1}})
-// 		} else if (courseCode) {
-// 			// return lectures with course code
-// 			return Lectures.find({courseCode: courseCode},{sort: {createdAt:1}})
-// 		} else {
-// 			// return active lectures
-// 			var user = Meteor.user()
-// 			if (user) {
-// 				// get list of courses that this user has enrolled in
-// 				var courses = Courses.find({
-// 					$or: [
-// 						{students: user._id},
-// 						{instructors: user._id}
-// 					]
-// 				}).fetch()
-// 				// get list of lectures that are currently active
-// 				var lectures = []
-// 				for (var i = 0; i < courses.length; i ++) {
-// 					lectures = lectures.concat(courses[i].lectures)
-// 				}
-// 				return Lectures.find({
-// 					_id: {$in: lectures}
-// 				})
-// 			}
-// 		}
-// 	})
-// 	Lectures.deny({
-// 		update() { return true },
-// 		remove() { return true }
-// 	})
-// }
+module.exports = mongoose.model('vrc-lecture', LecturesSchema);

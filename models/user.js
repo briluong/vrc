@@ -5,14 +5,12 @@ const bcrypt   = require('bcrypt-nodejs');
 // USER SCHEMA
 
 var userSchema = mongoose.Schema({
-
-    username: String,
+    firstName: String,
+    lastName: String,
+    accountType: String,
+    email: String,
+    studentID: String,
     password: String,
-
-    wallet: {
-
-    }
-
 });
 
 
@@ -29,4 +27,5 @@ userSchema.methods.validPassword = function(password) {
 };
 
 // Export the user model.
-module.exports = mongoose.model('team-undefined-user', userSchema);
+const User = mongoose.model('vrc-user', userSchema);
+module.exports = User

@@ -1,0 +1,104 @@
+<% include ../functions.ejs %>
+<% if(userIsInstructorOrAdmin()){ %>
+<div class="card">
+    <form id="instructors-form">
+        <div class="card-content">
+            <span class="card-title-small">Course Instructors Settings</span>
+            <div id="instructor-input-field" class="input-field select-field">
+                <span class="label">Course instructors & Teaching Assistants</span>
+                <div class="row instructor-row">
+                    <% if(userIsCourseOwner()){ %>
+                    <% for(var i = 0; i < course.instructors.length;i++){ %>
+                    <% if(course.instructors[i].email == user.email){ %>
+                    <div class="instructor-box col s9 m6 l3">
+                        <p><%= course.instructors[i].instructorName %></p></div>
+                    <% } else{ %>
+                    <div id="<%= course.instructors[i].email %>" class="instructor-box col s9 m6 l3">
+                        <p><%= course.instructors[i].instructorName %><a
+                                    data-instructor="<%= course.instructors[i].email %>" data-course="<%= course._id %>"
+                                    id="remove-instructor-trigger" class="icon modal-trigger"
+                                    href="#remove-instructor-modal"><i
+                                        class="tiny material-icons">close</i></a></p></div>
+                    <% } %>
+                    <% } %>
+                <% } else { %>
+                <% for(var i = 0; i < course.instructors.length;i++){ %>
+                <div class="instructor-box col s9 m6 l3">
+                    <p><%= course.instructors[i].instructorName %></p></div>
+                <% } %>
+                <% } %>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-action">
+            <% if(userIsCourseOwner()){ %>
+            <button href="#add-instructor-modal" class="modal-trigger waves-effect waves-teal btn-flat">Add
+                Instructor
+            </button>
+            <% }%>
+        </div>
+    </form>
+</div>
+
+<div id="create-lecture-modal" class="modal">
+    <form id="create-lecture-form" data-course="<%= course._id %>">
+        <div class="modal-content">
+            <h3>Create Lecture</h3>
+            <div class="input-field">
+                <input id="lectureName" name="lectureName" type="text" class="validate"
+                       autocomplete="off">
+                <label id="lectureName-label" for="lectureName">Lecture Title</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="waves-effect waves-teal btn-flat" id="cancel-create-lecture"
+                    type="button">Cancel
+            </button>
+            <button class="waves-effect waves-teal btn-flat" type="submit">Create</button>
+        </div>
+    </form>
+</div>
+<% if(userIsCourseOwner()){ %>
+<div id="add-instructor-modal" class="modal">
+    <form id="add-instructor-form" data-course="<%= course._id %>">
+        <div class="modal-content">
+            <h3>Add Instructor</h3>
+            <div class="input-field">
+                <input id="instructorEmail" name="instructorEmail" type="text" class="validate"
+                       autocomplete="off">
+                <label id="instructorEmail-label" for="instructorEmail">Instructor Email</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="waves-effect waves-teal btn-flat" id="cancel-add-instructor"
+                    type="button">Cancel
+            </button>
+            <button class="waves-effect waves-teal btn-flat" type="submit">Add Instructor</button>
+        </div>
+    </form>
+</div>
+<div id="remove-instructor-modal" class="modal">
+    <div class="modal-content">
+        <h3>Remove Instructor?</h3>
+
+        <p>Are you sure you want to remove this instructor from the course?</p>
+    </div>
+    <div class="modal-footer row button-row">
+        <button class="waves-effect waves-light modal-action btn-flat" type="button"
+                id="remove-instructor-cancel"
+                data-dismiss="modal">Cancel
+        </button>
+        <button class="waves-effect waves-light modal-action btn-flat" type="button"
+                id="confirm-remove-instructor">Confirm
+        </button>
+    </div>
+</div>
+<% } %>
+<div class="fixed-action-btn">
+    <a id="create-lecture-trigger" class="modal-trigger btn-floating btn-large blue"
+       href="#create-lecture-modal">
+        <i class="large material-icons">add</i>
+    </a>
+</div>
+<% } %>

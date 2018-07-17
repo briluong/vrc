@@ -6,7 +6,7 @@
 /*****************************************************************************/
 $(document).ready(function () {
     $('.modal').modal();
-    $('#registerAccountType').material_select();
+    $('#registerAccountType').formSelect();
     $('#utoridInput').hide()
     // validate_field("#registerEmail");
     // validate_field("#registerUTORID");
@@ -18,10 +18,10 @@ $(document).ready(function () {
 /* Event Handlers */
 /*****************************************************************************/
 $("#loginSubmit").click(function (event) {
-    event.preventDefault()
-    var email = $('#loginEmail').val()
-    var password = $('#loginPassword').val()
-    if (email != "" && password != "") {
+    // event.preventDefault()
+    // var email = $('#loginEmail').val()
+    // var password = $('#loginPassword').val()
+    // if (email != "" && password != "") {
         // Meteor.loginWithPassword(email, password, function(error) {
         // log error, otherwise dismiss modal
         // if (error) {
@@ -39,38 +39,37 @@ $("#loginSubmit").click(function (event) {
         //         $("#loginEmail-label").attr("data-error", error.reason)
         //     }
         // } else {
-        resetLoginInput()
-        console.log("Email: " + email);
-        console.log("Password: " + password)
-        $('#login-modal').modal('close')
-    }
+        // resetLoginInput()
+        // console.log("Email: " + email);
+        // console.log("Password: " + password)
+        // $('#login-modal').modal('close')
     // });
     // }});
 
 });
 
 $("#loginCancel").click(function (event) {
-    console.log(event)
-    resetLoginInput
+    // console.log(event)
+    resetLoginInput()
     $('#login-modal').modal('close')
 });
 
 $("#registerSubmit").click(function (event) {
-    event.preventDefault()
-    var firstName = $('#registerFirstName').val()
-    var lastName = $('#registerLastName').val()
-    var email = $('#registerEmail').val()
-    var password = $('#registerPassword').val()
-    var accountType = $('#registerAccountType').val()
-    var utorid = $('#registerUTORID').val()
-    resetRegisterInput()
-    console.log("First Name: " + firstName)
-    console.log("Last Name: " + lastName)
-    console.log("Email: " + email)
-    console.log("Password: " + password)
-    console.log("Account Type: " + accountType)
-    console.log("Utorid: " + utorid)
-    $('#register-modal').modal('close')
+    // event.preventDefault()
+    // var firstName = $('#registerFirstName').val()
+    // var lastName = $('#registerLastName').val()
+    // var email = $('#registerEmail').val()
+    // var password = $('#registerPassword').val()
+    // var accountType = $('#registerAccountType').val()
+    // var utorid = $('#registerUTORID').val()
+    // resetRegisterInput()
+    // console.log("First Name: " + firstName)
+    // console.log("Last Name: " + lastName)
+    // console.log("Email: " + email)
+    // console.log("Password: " + password)
+    // console.log("Account Type: " + accountType)
+    // console.log("Utorid: " + utorid)
+    // $('#register-modal').modal('close')
 
 });
 

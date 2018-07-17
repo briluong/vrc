@@ -10,40 +10,61 @@
     <!-- Google CSS -->
     <link rel="icon" type="image/png”" href="/icons/cardboard.png"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.5.0/papaparse.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
     <!-- Custom CSS -->
-    <link href="/css/header.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
-    <div class="fixed-action-btn">
-        <button id="create-lecture-trigger" class="btn-floating btn-large blue">
-            <i class="large material-icons">add</i>
-        </button>
-    </div>
-    <div id="create-lecture-modal" class="modal">
-        <form id="create-lecture-form">
-            <div class="modal-content">
-                <h3>Create Lecture</h3>
-                <div class="input-field">
-                    <input id="lectureName" name="lectureName" type="text" class="validate"
-                           autocomplete="off">
-                    <label id="lectureName-label" for="lectureName">Lecture Title</label>
+<% include partials/header.ejs %>
+<div class="master-main">
+    <div class="create-new-course main">
+        <div class="innerMain">
+            <form id="createCourseForm" class="create-new-course-form row">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-title">Create New Course</div>
+                        <div class="input-field">
+                            <input id="newCourseName" name="newCourseName" type="text" autocomplete="off">
+                            <label id="newCourseName-label" for="newCourseName">Course Title</label>
+                        </div>
+                        <div class="input-field">
+                            <input id="newCourseCode" name="newCourseCode" type="text" class="course-input"
+                                   autocomplete="off">
+                            <label id="newCourseCode-label" for="newCourseCode">Course Code</label>
+                        </div>
+                        <div class="input-field">
+                            <textarea id="newCourseDescription" name="newCourseDescription"
+                                      class="materialize-textarea"></textarea>
+                            <label for="newCourseDescription-label">Course Description</label>
+                        </div>
+                        <span class="card-title-small">Enroll Students and Groups (Optional)</span>
+                        <div class="input-field file-field">
+                            <span class="label">Note: The CSV file has to contain a "StudentID" and "Group" columns.</span>
+                            <div class="btn">
+                                <span>File</span>
+                                <input id="student-csv" type="file" accept=".csv">
+                            </div>
+                            <div class="file-path-wrapper">
+                                <input class="file-path validate" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-action">
+                        <a href="/profile" class="waves-effect waves-teal btn-flat" id="cancel">Cancel</a>
+                        <button id="submitCourse" class="waves-effect waves-teal btn-flat" type="submit">Create</button>
+                    </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="waves-effect waves-teal btn-flat" id="cancel-create-lecture"
-                        type="button">Cancel
-                </button>
-                <button class="waves-effect waves-teal btn-flat" type="submit">Create</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
+</div>
+<% include partials/footer.ejs %>
 </body>
 <script src="/js/create_new_course.js"></script>
 </html>

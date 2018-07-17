@@ -1,0 +1,15 @@
+.active-lecture-list .lecture-list {
+    margin: 20px 0;
+}
+.active-lecture-list .lecture-list .collection-header p {
+    margin: 0;
+    font-weight: 300;
+}
+.active-lecture-list .lecture-list .collection-item {
+    padding: 10px 20px;
+}
+@media only screen and (min-width: 400px) {
+    .active-lecture-list .lecture-list .collection-item {
+        display: flex;
+    }
+}
