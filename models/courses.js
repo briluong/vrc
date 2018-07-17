@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
-// CURRENCY SCHEMA
+// COURSES SCHEMA
 
 var courseSchema = mongoose.Schema({
     ownerId: {

@@ -95,30 +95,32 @@
                                 </div>
                             </div>
                             <% } %>
-                            <% if(Object.keys(course.groups).length !== 0 && course.groups.constructor == Object){ %>
-                            <table class="group-table">
-                                <thead>
-                                <tr>
-                                    <th>Group</th>
-                                    <th>Members</th>
-                                </tr>
-                                </thead>
+                            <% if(course.groups !== undefined && course.groups !== null){ %>
+                                <% if(Object.keys(course.groups).length !== 0 && course.groups.constructor == Object){ %>
+                                    <table class="group-table">
+                                        <thead>
+                                        <tr>
+                                            <th>Group</th>
+                                            <th>Members</th>
+                                        </tr>
+                                        </thead>
 
-                                <tbody>
-                                <% let groupNames = Object.keys(course.groups) %>
-                                <% for(var k = 0; k < groupNames.length; k++){ %>
-                                <% var groupStudents = course.groups[groupNames[k]] %>
-                                <tr>
-                                    <td>Group <%= groupNames[k] %></td>
-                                    <td>
-                                        <% for(var l = 0 ; l < groupStudents.length; l++){ %>
-                                        <span><%= findStudentName(groupStudents[l]) %></span>
+                                        <tbody>
+                                        <% let groupNames = Object.keys(course.groups) %>
+                                        <% for(var k = 0; k < groupNames.length; k++){ %>
+                                        <% var groupStudents = course.groups[groupNames[k]] %>
+                                        <tr>
+                                            <td>Group <%= groupNames[k] %></td>
+                                            <td>
+                                                <% for(var l = 0 ; l < groupStudents.length; l++){ %>
+                                                <span><%= findStudentName(groupStudents[l]) %></span>
+                                                <% } %>
+                                            </td>
+                                        </tr>
                                         <% } %>
-                                    </td>
-                                </tr>
-                                <% } %>
-                                </tbody>
-                            </table>
+                                        </tbody>
+                                    </table>
+                                <% }%>
                             <% } else { %>
                             <p>No default group settings were given</p>
                             <% } %>

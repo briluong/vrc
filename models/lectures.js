@@ -14,12 +14,12 @@ var LecturesSchema = mongoose.Schema({
     },
     mode: {
         type: String,
-        default: 'lecture',
-        enum: ['lecture','group']
+        defaultValue: 'lecture',
+        allowedValues: ['lecture','group']
     },
     groupSize: {
         type: Number,
-        default: 2
+        defaultValue: 2
     },
     youtube: {
         type: String,

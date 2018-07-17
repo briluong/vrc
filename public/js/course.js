@@ -2,6 +2,7 @@
 /* Initialization Handlers */
 /*****************************************************************************/
 $(document).ready(function () {
+
     $("#create-lecture-modal").modal()
     $("#add-instructor-modal").modal()
     $("#remove-instructor-modal").modal()
@@ -97,7 +98,6 @@ $("#student-group-form").submit(function (event) {
         M.toast({html: 'Please submit a CSV file with a \"StudentID\" column and \"Group\ column"', displayLength: 3000})
     }
 })
-
 /*****************************************************************************/
 /* Function Handlers */
 /*****************************************************************************/
