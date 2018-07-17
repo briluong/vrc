@@ -7,6 +7,12 @@ module.exports = function(app) {
         res.render("home");
     });
 
+     // GROUP
+     app.get("/group", (req, res) => {
+        res.render("group");
+     });
+
+
     // // LOGIN
     // app.post("/login", passport.authenticate('login', {
     //     successRedirect : "/profile",
