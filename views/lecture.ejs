@@ -57,7 +57,7 @@
                         <% if(userIsInstructorOrAdmin()) { %>
                             <div class="input-field">
                                 <input id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off"
-                                       value={{lecture.youtube}}>
+                                       value=<%lecture.youtube%>>
                                 <label id="youtubeURL-label" for="youtubeURL"
                                 >YouTube URL</label>
                             </div>
@@ -85,7 +85,38 @@
                 <% if(userIsInstructorOrAdmin()) { %>
                     <!--surround with another if block if lecture is active-->
                     <div class="card group-settings">
-
+                    <!--card-content div-->
+                        <div class="card-content">
+                            <div class="card-title flex-container">
+                                <p class="left-item">Group Mode</p>
+                                <div class="right-item switch toggle-group-active-container">
+                                    <label id="group-active-toggle" class="toggle-group-active">OFF<input id="lecture-active-input" type="checkbox" checked="checked">
+                                        <span id="lecture-active-span" class="lever"></span>ON
+                                    </label>
+                                </div>
+                                <p style="color:grey">Class size: <%numberOfEnrolledStudents()%> | Online students: <%numberOfOnlineStudents()%></p>
+                                <div class="group-settings-form">
+                                    <div class="group-range-field">
+                                        <div class="range-field">
+                                            <label class="range-field-label">Group size</label>
+                                            <input <%disableGroupSizeRange()%> type="range" id="group-size-range" value=<%getGroupSize()%> min="2" max=<%numberOfEnrolledStudents()%> />
+                                            <label>Note: group size cannot be changed while group mode is enabled.</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-field">
+                                    <textarea id="displayQuestion" name="displayQuestion" class="materialize-textarea"><%lecture.displayQuestion%></textarea>
+                                    <label id="displayQuestion-label" class=<%activeDisplayQuestion()%> for="displayQuestion-label">Question</label>
+                                    <textarea id="displayQuestion" name="displayQuestion" class="materialize-textarea">test</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <% if(groupModeIsActive()){%>
+                            <div class="card-action">
+                                <button id="update-display-question" class="waves-effect waves-teal btn-flat" type="button">Update</button>
+                                <button id="clear-display-question" class="waves-effect waves-teal btn-flat" type="button">Clear</button>
+                            </div>
+                        <% } %>
                     </div>
                 <% } %>
 

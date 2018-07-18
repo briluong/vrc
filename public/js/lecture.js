@@ -36,3 +36,4 @@ $("#lecture-active-input").on("change",function(event) {
 function toggleActiveLecture(data) {
 
 }
+
