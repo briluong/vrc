@@ -125,6 +125,16 @@
     return 'disabled';
 }%>
 
-<% blah = function () {
+<% getNumberOnlineStudents = function () {
+    var count = 0
+    for (var i = 0; i < users.length; i++) {
+        if (users.accountType == 'student' && users.online && course.students.indexOf(users.studentID) >= 0) {
+            count += 1
+        }
+    }
+    return count
+} %>
 
+<%toggleGroupSettings = function (visibleClass) {
+    $('.group-settings').addClass(visibleClass)
 }%>

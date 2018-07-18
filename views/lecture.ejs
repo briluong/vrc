@@ -26,120 +26,110 @@
     <div class="main">
         <div class="innerMain lecture">
             <% if(lecture) { %>
-                <div class="flex-container">
-                    <div class="title">
-                        <p>
-                            <%= lecture.title %>
-                        </p>
-                    </div>
-                    <div class="switch toggle-lecture-active-container">
-                        <span class="live-now active-blink" data-active= <%= lecture.active %>>LIVE NOW</span>
-                        <% if(userIsInstructorOrAdmin()) { %>
-                            <label id="lecture-active-toggle" class="toggle-lecture-active" data-lecture="<%=lecture._id%>">OFF<input id="lecture-active-input"
-                                                                                                      type="checkbox"
-                                                                                                      checked="checked">
-                                <span id="lecture-active-span" class="lever"></span>ON
-                            </label>
-
-                        <% } %>
-                    </div>
+            <div class="flex-container">
+                <div class="title">
+                    <p><%= lecture.title %></p>
                 </div>
+                <div class="switch toggle-lecture-active-container">
+                    <% if(lecture.active){ %>
+                    <span class="live-now active-blink show" data-active= <%= lecture.active %>>LIVE NOW</span>
+                    <% } else{ %>
+                    <span class="live-now active-blink hide" data-active= <%= lecture.active %>>LIVE NOW</span>
+                    <% } %>
+                    <% if(userIsInstructorOrAdmin()) { %>
+                    <% if(lecture.active){ %>
+                    <label id="lecture-active-toggle" class="toggle-lecture-active" data-course="<%= course._id %>"
+                           data-lecture="<%= lecture._id %>">OFF<input
+                                id="lecture-active-input"
+                                type="checkbox"
+                                checked="checked"
+                        >
+                        <span id="lecture-active-span" class="lever"></span>ON
+                    </label>
+                    <% } else{ %>
+                    <label id="lecture-active-toggle" class="toggle-lecture-active" data-course="<%= course._id %>"
+                           data-lecture="<%= lecture._id %>">OFF<input
+                                id="lecture-active-input"
+                                type="checkbox"
+                        >
+                        <span id="lecture-active-span" class="lever"></span>ON
+                    </label>
+                    <% } %>
 
-                <div class="card">
-                    <div class="card-content">
-                        <div class="card-title">
-                            <% if (lecture.active) {
-                                "Live"
-                            } else {
-                                "Offline"
-                            } %>
-                        </div>
-                        <% if(userIsInstructorOrAdmin()) { %>
-                            <div class="input-field">
-                                <input id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off"
-                                       value=<%lecture.youtube%>>
-                                <label id="youtubeURL-label" for="youtubeURL"
-                                >YouTube URL</label>
-                            </div>
-                        <% } %>
-                        <% if(lecture.active) { %>
-                            <% if(lecture.youtube) { %>
-                                <div class="video-container">
-                                    <iframe src=<% getLectureYouTubeURL(lecture._id) %> frameborder="0" allowfullscreen></iframe>
-                                </div>
-                            <% } else { %>
-                                <p>YouTube stream not available.</p>
-                            <% } %>
-                        <% } else { %>
-                            <p>Lecture is not active, please check again later.</p>
-                        <% } %>
+                    <% } %>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-content">
+                    <% if (lecture.active) { %>
+                    <div class="card-title">Live</div>
+                    <% } else { %>
+                    <div class="card-title">Offline</div>
+                    <% } %>
+                    <% if(userIsInstructorOrAdmin()) { %>
+                    <div class="input-field">
+                        <input id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off"
+                               value=
+                               <% lecture.youtube %>
+                        >
+                        <label id="youtubeURL-label" for="youtubeURL"
+                        >YouTube URL</label>
                     </div>
+                    <% } %>
                     <% if(lecture.active) { %>
-                        <div class="card-action">
-                            <a href="/course/<% lecture.courseCode %>/<% lecture.title %>/stream"
-                               class="waves-effect waves-teal btn-flat">Enter Stream</a>
-                        </div>
+                    <% if(lecture.youtube) { %>
+                    <div class="video-container">
+                        <iframe src=<% getLectureYouTubeURL(lecture._id) %> frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <% } else { %>
+                    <p>YouTube stream not available.</p>
+                    <% } %>
+                    <% } else { %>
+                    <p>Lecture is not active, please check again later.</p>
                     <% } %>
                 </div>
+                <% if(lecture.active) { %>
+                <div id="youtube-enter-stream show" class="card-action">
+                    <a href="/course/<% lecture.courseCode %>/<% lecture.title %>/stream"
+                       class="waves-effect waves-teal btn-flat">Enter Stream</a>
+                </div>
+                <% } else{%>
+                <div id="youtube-enter-stream hide" class="card-action">
+                    <a href="/course/<% lecture.courseCode %>/<% lecture.title %>/stream"
+                       class="waves-effect waves-teal btn-flat">Enter Stream</a>
+                </div>
+                <%}%>
+            </div>
 
-                <% if(userIsInstructorOrAdmin()) { %>
-                    <!--surround with another if block if lecture is active-->
-                    <div class="card group-settings">
-                    <!--card-content div-->
-                        <div class="card-content">
-                            <div class="card-title flex-container">
-                                <p class="left-item">Group Mode</p>
-                                <div class="right-item switch toggle-group-active-container">
-                                    <label id="group-active-toggle" class="toggle-group-active">OFF<input id="lecture-active-input" type="checkbox" checked="checked">
-                                        <span id="lecture-active-span" class="lever"></span>ON
-                                    </label>
-                                </div>
-                                <p style="color:grey">Class size: <%numberOfEnrolledStudents()%> | Online students: <%numberOfOnlineStudents()%></p>
-                                <div class="group-settings-form">
-                                    <div class="group-range-field">
-                                        <div class="range-field">
-                                            <label class="range-field-label">Group size</label>
-                                            <input <%disableGroupSizeRange()%> type="range" id="group-size-range" value=<%getGroupSize()%> min="2" max=<%numberOfEnrolledStudents()%> />
-                                            <label>Note: group size cannot be changed while group mode is enabled.</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="input-field">
-                                    <textarea id="displayQuestion" name="displayQuestion" class="materialize-textarea"><%lecture.displayQuestion%></textarea>
-                                    <label id="displayQuestion-label" class=<%activeDisplayQuestion()%> for="displayQuestion-label">Question</label>
-                                    <textarea id="displayQuestion" name="displayQuestion" class="materialize-textarea">test</textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <% if(groupModeIsActive()){%>
-                            <div class="card-action">
-                                <button id="update-display-question" class="waves-effect waves-teal btn-flat" type="button">Update</button>
-                                <button id="clear-display-question" class="waves-effect waves-teal btn-flat" type="button">Clear</button>
-                            </div>
-                        <% } %>
+            <!--surround with another if block if lecture is active-->
+            <!--card-content div-->
+            <% if(userIsInstructorOrAdmin() && lecture.active) { %>
+            <%- include partials/lecture_group_settings_show.ejs %>
+            <% } else{ %>
+            <%- include partials/lecture_group_settings_hide.ejs %>
+            <% } %>
+
+            <% if(course.groups !== undefined && course.groups !== null){ %>
+            <% if(Object.keys(course.groups).length !== 0 && course.groups.constructor == Object){ %>
+            <ul id="groups-collapsible" class="collapsible card" data-collapsible="accordion">
+                <% let groupNames = Object.keys(course.groups) %>
+                <% for(var i = 0; i < groupNames.length; i++){ %>
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">group</i>Group
+                        <%= groupNames[i] %>
                     </div>
+                    <div class="collapsible-body">
+                    </div>
+                </li>
                 <% } %>
-
-                <% if(course.groups !== undefined && course.groups !== null){ %>
-                    <% if(Object.keys(course.groups).length !== 0 && course.groups.constructor == Object){ %>
-                        <ul id="groups-collapsible" class="collapsible card" data-collapsible="accordion">
-                            <% let groupNames = Object.keys(course.groups) %>
-                            <% for(var i = 0; i < groupNames.length; i++){ %>
-                                <li>
-                                    <div class="collapsible-header">
-                                        <i class="material-icons">group</i>Group
-                                        <%= groupNames[i] %>
-                                    </div>
-                                    <div class="collapsible-body">
-                                    </div>
-                                </li>
-                            <% } %>
-                        </ul>
-                    <% } %>
-                <% } %>
+            </ul>
+            <% } %>
+            <% } %>
 
             <% } else { %>
-                <h3>404 not found :(</h3>
+            <h3>404 not found :(</h3>
             <% } %>
 
         </div>

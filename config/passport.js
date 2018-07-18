@@ -25,7 +25,7 @@ module.exports = function(passport) {
     // Pass the username and password into a callback function.
     function(req, username, password, done) {
         // Look for a user with the same username.
-        User.findOne({'email': username}, function(err, user) {
+        User.findOneAndUpdate({'email': username}, {$set: {'online': true}}, function(err, user) {
             // Return any errors.
             if (err) {
                 return done(err);
@@ -78,6 +78,7 @@ module.exports = function(passport) {
                 newUser.accountType = req.body.registerAccountType
                 newUser.firstName = req.body.firstName
                 newUser.lastName = req.body.lastName
+                newUser.online = true
                 if(newUser.accountType == 'instructor'){
                     newUser.studentID = null;
                 }

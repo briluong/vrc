@@ -23,8 +23,16 @@ module.exports = function (app, passport) {
 
     // LOGOUT
     app.get("/logout", function (req, res) {
-        req.logout();
-        res.redirect("/");
+        console.log(req.user)
+        User.findOneAndUpdate({'_id': req.user._id}, {$set: {'online': false}}, function (err, user) {
+            if(err){
+                console.log(err);
+            }
+            else{
+                req.logout();
+                res.redirect("/");
+            }
+        })
     });
 
     // PROFILE

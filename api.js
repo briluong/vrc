@@ -66,6 +66,7 @@ module.exports = function (app) {
         lecture.title = req.body.lectureName;
         lecture.active = false;
         lecture.available = false;
+        lecture.groupActive = false;
         lecture.save(function (err, data) {
             if (err) {
                 throw err;
@@ -192,11 +193,39 @@ module.exports = function (app) {
 
             })
         }
-        else{
+        else {
             return res.sendStatus(200);
         }
     });
 
+    app.post("/api/toggleActiveLecture", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        Course.findOneAndUpdate({"lectures.lectureID": req.body.lectureID}, {
+            '$set': {
+                'lectures.$.active': req.body.active,
+            }
+        }, function (err, course) {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            else {
+                Lecture.findOneAndUpdate({"_id": req.body.lectureID}, {
+                    $set: {
+                        'active': req.body.active
+                    }
+                }, function (err, lecture) {
+                    if (err) {
+                        return res.sendStatus(500);
+                    }
+                    else {
+                        return res.sendStatus(200);
+                    }
+                })
+            }
+        })
+    });
 
     // API call to delete a course
     app.delete("/api/deleteCourse", apiUtil.isLoggedIn, (req, res) => {

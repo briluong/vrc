@@ -11,6 +11,7 @@ var userSchema = mongoose.Schema({
     email: String,
     studentID: String,
     password: String,
+    online: Boolean
 });
 
 

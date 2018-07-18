@@ -1,0 +1,58 @@
+<div id="group-settings" class="show card group-settings">
+    <div class="card-content">
+        <div class="card-title flex-container">
+            <p class="left-item">Group Mode</p>
+            <div class="right-item switch toggle-group-active-container">
+                <% if(lecture.groupActive){ %>
+                <label id="lecture-group-toggle" class="toggle-group-active" data-course="<%= course._id %>"
+                       data-lecture="<%= lecture._id %>">OFF<input id="lecture-group-input" type="checkbox"
+                                                                   checked="checked">
+                    <span id="lecture-group-span" class="lever"></span>ON
+                </label>
+                <% } else{ %>
+                <label id="lecture-group-toggle" class="toggle-group-active" data-course="<%= course._id %>"
+                       data-lecture="<%= lecture._id %>">OFF<input id="lecture-group-input" type="checkbox">
+                    <span id="lecture-group-span" class="lever"></span>ON
+                </label>
+                <% } %>
+
+            </div>
+        </div>
+        <p style="color:grey">Class size: <%= course.students.length %> | Online
+            Students: <%= getNumberOnlineStudents() %></p>
+        <div class="group-settings-form">
+            <div class="group-range-field">
+                <div class="range-field">
+                    <label class="range-field-label">Group size</label>
+                    <input
+                            <% disableGroupSizeRange() %>
+                            type="range" id="group-size-range" value="<%= lecture.groupSize %>" min="2"
+                            max=<%= course.students.length %>
+                    />
+                    <label>Note: group size cannot be changed while group mode is enabled.</label>
+                </div>
+            </div>
+        </div>
+        <div class="input-field">
+                        <textarea id="displayQuestion" name="displayQuestion"
+                                  class="materialize-textarea"><%= lecture.displayQuestion %></textarea>
+            <label id="displayQuestion-label"
+                   class=<% activeDisplayQuestion() %> for="displayQuestion-label">Question</label>
+        </div>
+    </div>
+    <% if(lecture.groupActive){ %>
+    <div class="card-action show">
+        <button id="update-display-question" class="waves-effect waves-teal btn-flat" type="button">Update
+        </button>
+        <button id="clear-display-question" class="waves-effect waves-teal btn-flat" type="button">Clear
+        </button>
+    </div>
+    <% } else { %>
+    <div class="card-action hide">
+        <button id="update-display-question" class="waves-effect waves-teal btn-flat" type="button">Update
+        </button>
+        <button id="clear-display-question" class="waves-effect waves-teal btn-flat" type="button">Clear
+        </button>
+    </div>
+    <% } %>
+</div>
