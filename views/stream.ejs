@@ -1,34 +1,14 @@
 <html>
 <head>
-    <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
-    <script src="/easyrtc/easyrtc.js"></script>
-    <script src="https://unpkg.com/networked-aframe/dist/networked-aframe.min.js"></script>
-    <!--  <script src="networked-aframe-custom.js"></script> -->
-    <script src="https://unpkg.com/aframe-event-set-component@3.0.3/dist/aframe-event-set-component.min.js"></script>
-    <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize//1.0.0-beta/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-    <script src="/js/stream.js"> </script>
+    <link href="/css/recorder.css" rel="stylesheet">
     <link href="/css/group.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
-    <script>
-
-        // if (window.location.protocol == "http:") {
-        //   console.log("You are not connected with a secure connection.")
-        //   console.log("Reloading the page to a Secure Connection...")
-        //   window.location = document.URL.replace("http://", "https://");
-        // }
-        //
-        // if (window.location.protocol == "https:") {
-        //   console.log("You are connected with a secure connection.")
-        // }
-    </script>
-
 </head>
 <body>
 <div class="stream">
@@ -50,4 +30,6 @@
     </div>
 </div>
 </body>
+<script src="/js/stream.js"> </script>
+<script src="/js/recorder.js"> </script>
 </html>
