@@ -27,7 +27,8 @@ var LecturesSchema = mongoose.Schema({
     },
     youtube: {
         type: String,
-        optional: true
+        optional: true,
+        default: ""
     },
     createdOn:{
         type: Date,

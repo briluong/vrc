@@ -23,10 +23,10 @@ $("#createCourseForm").submit(function (event) {
             complete: function (results, file) {
                 console.log(results)
                 if (results.error) {
-                    M.toast('CSV Parse Error: ' + results.error)
+                    M.toast({html:'CSV Parse Error: ' + results.error, displayLength: 3000})
                 } else if (results.meta.fields.indexOf('StudentID') < 0 ||
                     results.meta.fields.indexOf('Group') < 0) {
-                    M.toast('Incorrect CSV format')
+                    M.toast({html:'Incorrect CSV format', displayLength: 3000})
                 } else {
                     data["file"] = results.data
                     console.log(results.data)

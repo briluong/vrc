@@ -130,7 +130,25 @@ module.exports = function (app, passport) {
             }
         })
 
-    });
+    })
+
+    app.get("/course/:id/:lectureID/stream", isLoggedIn, function (req, res) {
+        Lecture.findOne({'_id': req.params.lectureID}, function (err, lecture) {
+            if(err){
+                console.log(err)
+            }
+            else{
+                res.render("stream", {
+                    user: req.user,
+                    groupName: req.params.groupName,
+                    lectureID: req.params.lectureID,
+                    courseID: req.params.id,
+                    youtube: lecture.youtube
+                });
+            }
+        })
+    })
+
     app.get("/course/:id/:lectureID/:groupName", isLoggedIn, function (req, res) {
         res.render("group", {
             user: req.user,

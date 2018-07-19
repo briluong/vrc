@@ -243,7 +243,24 @@ module.exports = function (app) {
                 return res.sendStatus(200);
             }
         })
+    });
 
+    app.post("/api/updateYoutube", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        Lecture.findOneAndUpdate({"_id": req.body.lectureID}, {
+            $set: {
+                'youtube': req.body.youtube
+            }
+        }, function (err, lecture) {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            else {
+                return res.sendStatus(200);
+            }
+        })
     });
 
     // API call to delete a course
