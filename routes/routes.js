@@ -25,10 +25,10 @@ module.exports = function (app, passport) {
     app.get("/logout", function (req, res) {
         console.log(req.user)
         User.findOneAndUpdate({'_id': req.user._id}, {$set: {'online': false}}, function (err, user) {
-            if(err){
+            if (err) {
                 console.log(err);
             }
-            else{
+            else {
                 req.logout();
                 res.redirect("/");
             }
@@ -131,6 +131,14 @@ module.exports = function (app, passport) {
         })
 
     });
+    app.get("/course/:id/:lectureID/:groupName", isLoggedIn, function (req, res) {
+        res.render("group", {
+            user: req.user,
+            groupName: req.params.groupName,
+            lectureID: req.params.lectureID,
+            courseID: req.params.id
+        });
+    })
 //
 // // CONTACT US
 // app.get("/contact", function(req, res) {

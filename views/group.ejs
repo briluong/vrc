@@ -7,8 +7,15 @@
   <!--  <script src="networked-aframe-custom.js"></script> -->
     <script src="https://unpkg.com/aframe-event-set-component@3.0.3/dist/aframe-event-set-component.min.js"></script>
     <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize//1.0.0-beta/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
     <script src="/js/group.js"> </script>
-
+    <link href="/css/group.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet">
     <script>
 
     // if (window.location.protocol == "http:") {
@@ -23,10 +30,11 @@
     </script>
 
   </head>
+  <div class="stream">
   <body>
     <a-scene networked-scene="
       app: myApp;
-      room: room1;
+      room: <%=groupName%>;
       adapter: EasyRTC;
       debug: true;
       audio: true;
@@ -263,4 +271,6 @@
     });
   </script>
   </body>
+    <a href="/course/<%=courseID%>/<%=lectureID%>" id="exit-group-discussion" class="waves-light btn-flat overlay-btn-left">EXIT</a>
+  </div>
 </html>

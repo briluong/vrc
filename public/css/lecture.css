@@ -44,18 +44,13 @@
 .lecture .group-settings .group-settings-form .group-range-field .range-field-label {
     color: #2196f3;
 }
-.lecture #groups-collapsible .collapsible-header .material-icons {
+.lecture .collapsible .collapsible-header .material-icons {
     vertical-align: middle;
 }
-.lecture #groups-collapsible .group-label {
+.lecture .collapsible .group-label {
     margin-bottom: 0;
     color: grey;
 }
-
-.show{
-    visibility: visible;
-}
-
 .hidden{
     visibility: hidden;
 }

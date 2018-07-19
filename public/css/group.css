@@ -1,0 +1,67 @@
+.stream #voiceChat {
+    display: block;
+}
+.stream .overlay-btn-right {
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    top: 50px;
+    right: 80px;
+    padding: 0;
+}
+@media only screen and (max-width: 600px) {
+    .stream .overlay-btn-right {
+        top: 20px;
+        right: 40px;
+    }
+}
+.stream .overlay-btn-right img {
+    width: 35px;
+    height: 35px;
+    opacity: 0.8;
+    -webkit-transition: opacity 0.3s ease;
+    -moz-transition: opacity 0.3s ease;
+    -o-transition: opacity 0.3s ease;
+    -ms-transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease;
+}
+.stream .overlay-btn-right img:hover {
+    opacity: 1;
+}
+.stream a-scene {
+    position: inherit;
+}
+.stream .group-discussion-form #group-discussion-textarea {
+    min-height: 200px;
+}
+.stream .group-selector {
+    margin: 5em auto;
+}
+
+.stream .overlay-btn-left {
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    top: 50px;
+    left: 80px;
+    padding: 0;
+}
+@media only screen and (max-width: 600px) {
+    .stream .overlay-btn-left {
+        top: 20px;
+        right: 40px;
+    }
+}
+.stream .overlay-btn-left img {
+    width: 35px;
+    height: 35px;
+    opacity: 0.8;
+    -webkit-transition: opacity 0.3s ease;
+    -moz-transition: opacity 0.3s ease;
+    -o-transition: opacity 0.3s ease;
+    -ms-transition: opacity 0.3s ease;
+    transition: opacity 0.3s ease;
+}
+.stream .overlay-btn-left img:hover {
+    opacity: 1;
+}

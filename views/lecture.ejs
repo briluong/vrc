@@ -12,7 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize//1.0.0-beta/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
     <!-- Custom CSS -->
@@ -63,9 +63,9 @@
             <div class="card">
                 <div class="card-content">
                     <% if (lecture.active) { %>
-                    <div class="card-title">Live</div>
+                    <div id="card-title" class="card-title">Live</div>
                     <% } else { %>
-                    <div class="card-title">Offline</div>
+                    <div id="card-title" class="card-title">Offline</div>
                     <% } %>
                     <% if(userIsInstructorOrAdmin()) { %>
                     <div class="input-field">
@@ -89,17 +89,17 @@
                     <p>Lecture is not active, please check again later.</p>
                     <% } %>
                 </div>
-                <% if(lecture.active) { %>
-                <div id="youtube-enter-stream show" class="card-action">
-                    <a href="/course/<% lecture.courseCode %>/<% lecture.title %>/stream"
+                <% if(lecture.active && !(lecture.groupActive)) { %>
+                <div id="youtube-enter-stream" class="card-action">
+                    <a href="/course/<%= course._id %>/<%= lecture._id %>/stream"
                        class="waves-effect waves-teal btn-flat">Enter Stream</a>
                 </div>
-                <% } else{%>
-                <div id="youtube-enter-stream hide" class="card-action">
-                    <a href="/course/<% lecture.courseCode %>/<% lecture.title %>/stream"
+                <% } else{ %>
+                <div id="youtube-enter-stream" class="card-action hide">
+                    <a href="/course/<%= course._id %>/<%= lecture._id %>/stream"
                        class="waves-effect waves-teal btn-flat">Enter Stream</a>
                 </div>
-                <%}%>
+                <% } %>
             </div>
 
             <!--surround with another if block if lecture is active-->
@@ -112,19 +112,69 @@
 
             <% if(course.groups !== undefined && course.groups !== null){ %>
             <% if(Object.keys(course.groups).length !== 0 && course.groups.constructor == Object){ %>
-            <ul id="groups-collapsible" class="collapsible card" data-collapsible="accordion">
-                <% let groupNames = Object.keys(course.groups) %>
-                <% for(var i = 0; i < groupNames.length; i++){ %>
+            <% let groupNames = Object.keys(course.groups) %>
+            <% for(var i = 0; i < groupNames.length; i++){ %>
+            <% if(user.accountType == 'student' && course.groups[groupNames[i]].indexOf(user.studentID) >= 0){ %>
+            <ul class="collapsible card" data-collapsible="accordion">
                 <li>
                     <div class="collapsible-header">
                         <i class="material-icons">group</i>Group
                         <%= groupNames[i] %>
                     </div>
                     <div class="collapsible-body">
+                        <div class="group-content">
+                            <p class="group-label">Members</p>
+                            <% for(var k = 0; k < course.groups[groupNames[i]].length; k++){ %>
+                            <span style="padding-right:5px;"><%= findStudentName(course.groups[groupNames[i]][k])%></span>
+                            <% } %>
+                        </div>
                     </div>
+                    <% if(lecture.groupActive && course.active){ %>
+                    <div id="vr-enter-stream" class="card-action"><a
+                                href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
+                                data-value={{group._id}} class="enter-group-stream waves-effect
+                                                waves-teal btn-flat">Enter Stream</a></div>
+                    <% } else { %>
+                    <div id="vr-enter-stream hide" class="card-action"><a
+                                href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
+                                data-value={{group._id}} class="enter-group-stream waves-effect
+                                                waves-teal btn-flat">Enter Stream</a></div>
+                    <% } %>
                 </li>
-                <% } %>
             </ul>
+
+            <% } else if(user.accountType == 'instructor'){ %>
+            <ul class="collapsible card" data-collapsible="accordion">
+                <li>
+                    <div class="collapsible-header">
+                        <i class="material-icons">group</i>Group
+                        <%= groupNames[i] %>
+                    </div>
+                    <div class="collapsible-body">
+                        <div class="group-content">
+                            <p class="group-label">Members</p>
+                            <% for(var k = 0; k < course.groups[groupNames[i]].length; k++){ %>
+                            <span style="padding-right:5px;"><%= findStudentName(course.groups[groupNames[i]][k]) %></span>
+                            <% } %>
+                        </div>
+                    </div>
+                    <% if(lecture.groupActive && lecture.active){ %>
+                    <div class="vr-enter-stream card-action"><a
+                                href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
+                                data-value={{group._id}} class="enter-group-stream waves-effect
+                                                waves-teal btn-flat">Enter Stream</a></div>
+                    <% } else { %>
+                    <div class="vr-enter-stream card-action hide"><a
+                                href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
+                                data-value={{group._id}} class="enter-group-stream waves-effect
+                                                waves-teal btn-flat">Enter Stream</a></div>
+                    <% } %>
+                </li>
+
+
+            </ul>
+            <% } %>
+            <% } %>
             <% } %>
             <% } %>
 

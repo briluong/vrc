@@ -227,6 +227,25 @@ module.exports = function (app) {
         })
     });
 
+    app.post("/api/toggleGroupActiveLecture", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        Lecture.findOneAndUpdate({"_id": req.body.lectureID}, {
+            $set: {
+                'groupActive': req.body.groupActive
+            }
+        }, function (err, lecture) {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            else {
+                return res.sendStatus(200);
+            }
+        })
+
+    });
+
     // API call to delete a course
     app.delete("/api/deleteCourse", apiUtil.isLoggedIn, (req, res) => {
         if (!req.body.courseID) {
