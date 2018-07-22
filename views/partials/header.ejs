@@ -96,29 +96,31 @@
         <a href="/" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
         <% } %>
 
-        <div class="breadcrumb-container">
-        <!--<%/* if(route){%>-->
-        <!--<a href="/course/<%=course._id%>>" class="breadcrumb"><%=route%></a>-->
-        <!--<%}*/%>-->
-        <!--{{#if onLecturePage}}-->
-        <!--<a href="/course/{{onCoursePage}}/{{onLecturePage}}" class="breadcrumb">{{onLecturePage}}</a>-->
-        <!--{{/if}}-->
-        <!--{{#if route_is "/settings"}}-->
-        <!--<a href="/Settings" class="breadcrumb">Settings</a>-->
-        <!--{{/if}}-->
-        <!--</div>-->
-        <% if(user){ %>
-        <ul id="nav-mobile" class="right hide-on-med-and-down" style="position:absolute; right:0;">
-            <li><a href="/profile">Home</a></li>
-            <li><a href="/settings">Settings</a></li>
-            <li><a href="/logout" id="logout">Logout</a></li>
-        </ul>
-        <% } else { %>
-        <ul id="nav-mobile" class="right hide-on-med-and-down" style="position:absolute; right:0;">
-            <li><a class="modal-trigger" href="#login-modal">Login</a></li>
-            <li><a class="modal-trigger" href="#register-modal">Register</a></li>
-        </ul>
-        <% } %>
+        <!--<div class="breadcrumb-container>-->
+            <!--<%/* if(route){%>-->
+            <!--<a href="/course/<%=course._id%>>" class="breadcrumb"><%=route%></a>-->
+            <!--<%}*/%>-->
+            <!--{{#if onLecturePage}}-->
+            <!--<a href="/course/{{onCoursePage}}/{{onLecturePage}}" class="breadcrumb">{{onLecturePage}}</a>-->
+            <!--{{/if}}-->
+            <!--{{#if route_is "/settings"}}-->
+            <!--<a href="/Settings" class="breadcrumb">Settings</a>-->
+            <!--{{/if}}-->
+            <!--</div>-->
+        <div id="nav-links">
+            <% if(user){ %>
+            <ul id="nav-mobile" class="right" style="position:absolute; right:0;">
+                <li><a href="/profile">Home</a></li>
+                <li><a href="/settings">Settings</a></li>
+                <li><a href="/logout" id="logout">Logout</a></li>
+            </ul>
+            <% } else { %>
+            <ul id="nav-mobile" class="right" style="position:absolute; right:0;">
+                <li><a class="modal-trigger" href="#login-modal">Login</a></li>
+                <li><a class="modal-trigger" href="#register-modal">Register</a></li>
+            </ul>
+            <% } %>
+        </div>
     </div>
 </nav>
 </body>
