@@ -78,49 +78,42 @@
     }
     return " "
 } %>
-
 <% checkActiveLectures = function (courses) {
     for (var i = 0; i < courses.length; i++) {
-        if(courses[i].lectures.length > 0){
+        if (courses[i].lectures.length > 0) {
             for (var j = 0; j < courses[i].lectures.length; j++) {
-                if(courses[i].lectures[j].active){
+                if (courses[i].lectures[j].active) {
                     return true
                 }
             }
         }
     }
     return false
-}%>
+} %>
 
 <!-- TODO: implement the functions below-->
 <% groupModeIsActive = function () {
     //if (course
     return true;
-}%>
-
+} %>
 <% numberOfEnrolledStudents = function () {
     //NOT SURE WHAT I'M DOING AM TRYING TO FIGURE OUT IF THIS WORKS
     console.log("numberOfEnrolledStudents")
     //if (course && course.students) return course.students.length;
     return "2";
-}%>
-
+} %>
 <% numberOfOnlineStudents = function () {
     return 0;
-}%>
-
+} %>
 <% activeDisplayQuestion = function () {
     return "test";
-}%>
-
+} %>
 <% getGroupSize = function () {
     return 4;
-}%>
-
+} %>
 <% disableGroupSizeRange = function () {
     return 'disabled';
-}%>
-
+} %>
 <% getNumberOnlineStudents = function () {
     var count = 0
     for (var i = 0; i < users.length; i++) {
@@ -130,20 +123,37 @@
     }
     return count
 } %>
-
-<%toggleGroupSettings = function (visibleClass) {
+<% toggleGroupSettings = function (visibleClass) {
     $('.group-settings').addClass(visibleClass)
-}%>
-
+} %>
 <% embedYoutubeURL = function (url) {
-        var splitURL = url.split("watch?v=")
-        return splitURL[0] + "embed/" + splitURL[1]
-}%>
-
-<%checkYoutubeURL = function (url) {
+    var splitURL = url.split("watch?v=")
+    return splitURL[0] + "embed/" + splitURL[1]
+} %>
+<% checkYoutubeURL = function (url) {
     let regex = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/;
-    if(regex.test((url))){
+    if (regex.test((url))) {
         return true
     }
     return false
-}%>
+} %>
+
+<% getArrayBuffer = function(buf){
+    var base64 = buf.toString('base64')
+    console.log(base64)
+    return base64;
+} %>
+<% getDate = function (date) {
+    var dd = date.getDate();
+    var mm = date.getMonth()+1;
+
+    var yyyy = date.getFullYear();
+    if(dd<10){
+        dd='0'+dd;
+    }
+    if(mm<10){
+        mm='0'+mm;
+    }
+    var finalDate = dd+'/'+mm+'/'+yyyy;
+    return finalDate
+} %>

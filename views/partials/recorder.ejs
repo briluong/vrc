@@ -1,3 +1,4 @@
+<script src="/socket.io/socket.io.js"></script>
 <div class="recorder">
     <p>Please record your question</p>
     <form class="recorder-form">
@@ -9,7 +10,10 @@
         <div class="row">
             <div class="btn-flat" id="recorder-confidence">Average Confidence: 0%</div>
             <button class="waves-effect waves-light btn-flat" type="button" id="recorder-cancel">Cancel</button>
-            <button class="waves-effect waves-light btn-flat" type="button" id="recorder-submit">Submit</button>
+            <button class="waves-effect waves-light btn-flat" data-lecture="<%= lectureID %>"
+                    data-username="<%= user.firstName + " " + user.lastName %>" type="button" id="recorder-submit">
+                Submit
+            </button>
         </div>
     </form>
 </div>

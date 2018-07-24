@@ -2,6 +2,7 @@ const apiUtil = require('./api_util');
 const User = require('./models/user');
 const Course = require('./models/courses');
 const Lecture = require('./models/lectures');
+const Audio = require('./models/questions');
 const Papa = require('papaparse')
 
 module.exports = function (app) {
@@ -309,7 +310,6 @@ module.exports = function (app) {
             // Return user's wallet.
             res.status(200).send(JSON.stringify(user.wallet));
         });
-
     });
 
     function createCourse(courseData, csvData) {
