@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Google CSS -->
     <link rel="icon" type="image/png”" href="/icons/cardboard.png"/>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -105,6 +106,8 @@
                     <p>Lecture is not active, please check again later.</p>
                     <% } %>
                 </div>
+                <% console.log(lecture.groupActive)%>
+                <% console.log(lecture.active)%>
                 <% if(lecture.active && !(lecture.groupActive)) { %>
                 <div id="youtube-enter-stream" class="card-action">
                     <a href="/course/<%= course._id %>/<%= lecture._id %>/stream"
@@ -117,6 +120,36 @@
                 </div>
                 <% } %>
             </div>
+
+            <% if(userIsInstructorOrAdmin()){ %>
+            <ul class="collection with-header card">
+                <li class="collection-header flex-container">
+                    <p>Questions</p>
+                    <div class="switch">
+                        <label style="cursor:unset; padding-right:5px;">Notification</label>
+                        <label>Off<input id="instructorNotification" type="checkbox"><span
+                                    class="lever"></span>On</label>
+                    </div>
+                </li>
+                <% for(var i = 0; i < question.length; i++){ %>
+                <li class="collection-item avatar">
+                    <div class="question">
+                        <% if(question[i].questionType == 'audio'){ %>
+                        <audio crossorigin="anonymous" class ="audioPlayer" id="<%=question[i]._id%>" data-audio="<%= getArrayBuffer(question[i].data)%>"></audio>
+                        <i data-question="<%=question[i]._id%>" class="play-button material-icons circle">play_arrow</i>
+                        <% } %>
+                        <div class="title flex-container flex-container-mobile">
+                            <span class="left-item">Confidence: <%=question[i].confidence%>%</span>
+                            <div class="right-item">
+                                <span><%=getDate(question[i].createdAt)%></span>
+                            </div>
+                        </div>
+                        <p><%=question[i].text%></p>
+                    </div>
+                </li>
+                <% } %>
+            </ul>
+            <% } %>
 
             <!--surround with another if block if lecture is active-->
             <!--card-content div-->
@@ -145,13 +178,13 @@
                             <% } %>
                         </div>
                     </div>
-                    <% if(lecture.groupActive && course.active){ %>
+                    <% if(lecture.groupActive && lecture.active){ %>
                     <div id="vr-enter-stream" class="card-action"><a
                                 href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
                                 data-value={{group._id}} class="enter-group-stream waves-effect
                                                 waves-teal btn-flat">Enter Stream</a></div>
                     <% } else { %>
-                    <div id="vr-enter-stream hide" class="card-action"><a
+                    <div id="vr-enter-stream hide" class="card-action hide"><a
                                 href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
                                 data-value={{group._id}} class="enter-group-stream waves-effect
                                                 waves-teal btn-flat">Enter Stream</a></div>
@@ -186,8 +219,6 @@
                                                 waves-teal btn-flat">Enter Stream</a></div>
                     <% } %>
                 </li>
-
-
             </ul>
             <% } %>
             <% } %>

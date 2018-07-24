@@ -1,5 +1,6 @@
 const request = require('request');
 var Course = require('../models/courses.js');
+var Questions = require('../models/questions.js');
 var Lecture = require('../models/lectures.js');
 var User = require('../models/user.js');
 module.exports = function (app, passport) {
@@ -98,46 +99,52 @@ module.exports = function (app, passport) {
 
     app.get("/course/:id/:lectureID", isLoggedIn, function (req, res) {
         console.log(req.params)
-        Course.findOne({'_id': req.params.id}, function (err, course) {
+        Questions.find({'lectureID': req.params.lectureID}, function (err, questions) {
             if (err) {
                 console.log(err);
-            } else {
-                // pass matched documents to template
-                console.log(course)
-                User.find(function (err, users) {
+            }else {
+                Course.findOne({'_id': req.params.id}, function (err, course) {
                     if (err) {
-                        console.log(err)
-                    }
-                    else {
-                        console.log(users)
-                        Lecture.findOne({'_id': req.params.lectureID}, function (err, lecture) {
+                        console.log(err);
+                    } else {
+                        // pass matched documents to template
+                        console.log(course)
+                        User.find(function (err, users) {
                             if (err) {
                                 console.log(err)
                             }
                             else {
-                                res.render("lecture", {
-                                    user: req.user,
-                                    course: course,
-                                    users: users,
-                                    route: lecture.title,
-                                    lecture: lecture
-                                });
+                                console.log(users)
+                                Lecture.findOne({'_id': req.params.lectureID}, function (err, lecture) {
+                                    if (err) {
+                                        console.log(err)
+                                    }
+                                    else {
+                                        res.render("lecture", {
+                                            user: req.user,
+                                            course: course,
+                                            users: users,
+                                            route: lecture.title,
+                                            lecture: lecture,
+                                            question: questions
+                                        });
 
+                                    }
+                                })
                             }
                         })
                     }
                 })
             }
         })
-
     })
 
     app.get("/course/:id/:lectureID/stream", isLoggedIn, function (req, res) {
         Lecture.findOne({'_id': req.params.lectureID}, function (err, lecture) {
-            if(err){
+            if (err) {
                 console.log(err)
             }
-            else{
+            else {
                 res.render("stream", {
                     user: req.user,
                     groupName: req.params.groupName,

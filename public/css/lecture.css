@@ -54,3 +54,15 @@
 .hidden{
     visibility: hidden;
 }
+
+.question span {
+    font-size: 14px;
+    color: grey;
+    font-weight: 400;
+}
+.question .play-button {
+    background-color: #2196f3 !important;
+}
+.question .play-button:hover {
+    cursor: pointer;
+}

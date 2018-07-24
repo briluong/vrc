@@ -3,14 +3,21 @@
 /*****************************************************************************/
 var typingTimer;                //timer identifier
 var doneTypingInterval = 1200;  //time in ms, 1.2 secs
+let socket = io();
 $(document).ready(function () {
     $('.collapsible').collapsible();
+    var audios = document.getElementsByClassName("audioPlayer")
+    for(var i = 0; i < audios.length; i++) {
+        var audio = audios[i]
+        var base64 = $(audio).attr("data-audio")
+        var url = b64toBlob(base64, 'audio/webm');
+        $(audio).attr('src', url)
+    }
 });
 
 /*****************************************************************************/
 /* Event Handlers */
 /*****************************************************************************/
-
 $("#lecture-active-input").on("change", function (event) {
     var data = {}
     if ($("#lecture-active-input").prop("checked")) {
@@ -74,6 +81,40 @@ $('input#youtubeURL').bind("input", function (event) {
     if ($('input#youtubeURL').val()) {
         typingTimer = setTimeout(doneTyping, doneTypingInterval);
     }
+});
+
+$(".play-button").click(function (event) {
+    var questionID = $(event.target).attr("data-question")
+    var player = document.getElementById(questionID)
+    if (player.paused) {
+        var playPromise = player.play()
+        if (playPromise !== undefined) {
+            playPromise.then(function() {
+                // Automatic playback started!
+            }).catch(function(error) {
+                // Automatic playback failed.
+                console.log(error)
+                // Show a UI element to let the user manually start playback.
+            });
+        }
+    } else {
+        player.pause()
+    }
+    player.addEventListener('ended', function() {
+        console.log("ended!")
+    })
+})
+
+socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
+    console.log (data);
+    if(data.questionType = 'audio'){
+        var blob = new Blob(data.data, {type: 'audio/webm'})
+        var url = URL.createObjectURL(blob)
+        console.log(url)
+    }
+    else{
+    }
+    M.toast({html: data.Username + " sent you a question!", displayLength: 3000})
 });
 /*****************************************************************************/
 /* Function Handlers */
@@ -159,3 +200,28 @@ function checkYoutubeURL(url) {
     return false
 }
 
+function b64toBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+
+    var byteCharacters = atob(b64Data);
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        var byteArray = new Uint8Array(byteNumbers);
+
+        byteArrays.push(byteArray);
+    }
+
+    var blob = new Blob(byteArrays, {type: contentType});
+    console.log(blob)
+    var blobUrl = window.URL.createObjectURL(blob);
+    return blobUrl
+}
