@@ -88,17 +88,10 @@ $(".play-button").click(function (event) {
     var questionID = $(event.target).attr("data-question")
     var player = document.getElementById(questionID)
     if (player.paused) {
-        var playPromise = player.play()
-        if (playPromise !== undefined) {
-            playPromise.then(function () {
-                // Automatic playback started!
-            }).catch(function (error) {
-                // Automatic playback failed.
-                console.log(error)
-                // Show a UI element to let the user manually start playback.
-            });
-        }
+        $(event.target).html('pause')
+        player.play()
     } else {
+        $(event.target).html('play_arrow')
         player.pause()
     }
     player.addEventListener('ended', function () {
@@ -107,22 +100,15 @@ $(".play-button").click(function (event) {
 })
 
 socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
-    $(".play-button").click(function (event) {
+    $(document).on('click', '.play-button', function (event) {
         console.log(event)
         var questionID = $(event.target).attr("data-question")
         var player = document.getElementById(questionID)
         if (player.paused) {
-            var playPromise = player.play()
-            if (playPromise !== undefined) {
-                playPromise.then(function () {
-                    // Automatic playback started!
-                }).catch(function (error) {
-                    // Automatic playback failed.
-                    console.log(error)
-                    // Show a UI element to let the user manually start playback.
-                });
-            }
+            $(event.target).html('pause')
+            player.play()
         } else {
+            $(event.target).html('play_arrow')
             player.pause()
         }
         player.addEventListener('ended', function () {
@@ -135,7 +121,7 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
             "<div class='question'> <audio crossorigin='anonymous' class ='audioPlayer'" +
             " id=" +
             data._id +
-            "data-audio=" +
+            " data-audio=" +
             data.data +
             " src=" +
             url +
