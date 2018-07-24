@@ -20,7 +20,6 @@ module.exports = function (app) {
         course.description = req.body.newCourseDescription
         course.instructorName = req.user.firstName + " " + req.user.lastName
         course.lectures = []
-        console.log("file" in req.body)
         if ("file" in req.body) {
             let students = req.body.file
             let enrolledStudents = []
@@ -29,7 +28,6 @@ module.exports = function (app) {
                 let entry = students[i]
                 if (entry.hasOwnProperty('StudentID') && entry.hasOwnProperty('Group')) {
                     enrolledStudents.push(entry['StudentID'])
-                    console.log(entry['Group'])
                     if (entry['Group'] in groups) {
                         groups[entry['Group']].push(entry['StudentID'])
                     }
@@ -52,7 +50,6 @@ module.exports = function (app) {
             if (err) {
                 throw err;
             }
-            console.log(data)
             return res.sendStatus(200);
         });
     });
@@ -78,7 +75,6 @@ module.exports = function (app) {
                 "active": data.active,
                 "createdOn": data.createdOn
             }
-            console.log(lectureData)
             Course.findOneAndUpdate({"_id": data.courseID}, {$push: {'lectures': lectureData}}, function (err, data) {
                 if (err) {
                     return res.sendStatus(500);
@@ -92,30 +88,26 @@ module.exports = function (app) {
 
     app.post("/api/addInstructor", apiUtil.isLoggedIn, (req, res) => {
         if (!req.body) {
-            console.log("Hi1")
             return res.sendStatus(400);
         }
         User.findOne({
             'email': req.body.instructorEmail, $and: [{'accountType': 'instructor'}]
         }, (function (err, data) {
             if (err) {
-                console.log("Hi2")
-                throw err;
-            }
-            if (req.user.email == req.body.instructorEmail) {
-                console.log("Hi3")
                 return res.sendStatus(400);
             }
-            console.log("Hi4")
+            if (req.user.email == req.body.instructorEmail) {
+                return res.sendStatus(400);
+            }
+            if(!data){
+                return res.sendStatus(400);
+            }
             var instructorData = {
                 "email": data.email,
                 "instructorName": data.firstName + " " + data.lastName
             }
-            console.log("Hi5")
-            console.log(instructorData)
             Course.findOneAndUpdate({"_id": req.body.courseID}, {$push: {'instructors': instructorData}}, function (err, data) {
                 if (err) {
-                    console.log("Hi6")
                     return res.sendStatus(500);
                 }
                 else {
@@ -167,7 +159,6 @@ module.exports = function (app) {
                 let entry = students[i]
                 if (entry.hasOwnProperty('StudentID') && entry.hasOwnProperty('Group')) {
                     enrolledStudents.push(entry['StudentID'])
-                    console.log(entry['Group'])
                     if (entry['Group'] in groups) {
                         groups[entry['Group']].push(entry['StudentID'])
                     }
@@ -276,8 +267,6 @@ module.exports = function (app) {
                 return res.sendStatus(500);
             }
             else {
-                console.log("Removing")
-                console.log(course)
                 let lectureIDs = []
                 for (var i = 0; i < course.lectures.length; i++) {
                     lectureIDs.push(course.lectures[i].lectureID)
