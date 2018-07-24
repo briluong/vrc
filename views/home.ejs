@@ -16,9 +16,13 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>    <!-- Custom CSS -->
     <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/home.css" rel="stylesheet">
 </head>
 
 <body>
+<% if(errorMessage.length > 0){%>
+<p class="flashMessage"><%=errorMessage[0]%></p>
+<%}%>
 <div class="home">
     <%- include partials/header.ejs %>
     <div class="parallax-container valign-wrapper">
@@ -38,6 +42,5 @@
     <%- include partials/footer.ejs %>
 </div>
 </body>
-<link href="/css/home.css" rel="stylesheet">
 <script src="/js/home.js"></script>
 </html>

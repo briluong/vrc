@@ -7,24 +7,25 @@ module.exports = function (app, passport) {
 
     // LANDING PAGE
     app.get("/", (req, res) => {
-        res.render("home", {user: null, route: null});
+        res.render("home", {user: null, route: null, errorMessage: req.flash('message')});
     });
 
     // LOGIN
     app.post("/login", passport.authenticate('login', {
         successRedirect: "/profile",
         failureRedirect: "/",
+        failureFlash: true
     }));
 
     // REGISTER
     app.post("/register", passport.authenticate('register', {
         successRedirect: "/profile",
         failureRedirect: "/",
+        failureFlash: true
     }));
 
     // LOGOUT
     app.get("/logout", function (req, res) {
-        console.log(req.user)
         User.findOneAndUpdate({'_id': req.user._id}, {$set: {'online': false}}, function (err, user) {
             if (err) {
                 console.log(err);
@@ -38,7 +39,6 @@ module.exports = function (app, passport) {
 
     // PROFILE
     app.get("/profile", isLoggedIn, function (req, res) {
-            console.log(req.user)
             if (req.user.accountType == 'instructor') {
                 Course.find({
                         "instructors.email": req.user.email
@@ -48,7 +48,6 @@ module.exports = function (app, passport) {
                             console.log(err);
                         } else {
                             // pass matched documents to template
-                            console.log(course)
                             res.render("profile", {user: req.user, course: course, route: null});
                         }
                     })
@@ -60,7 +59,6 @@ module.exports = function (app, passport) {
                     if (err) {
                         console.log(err);
                     } else {
-                        console.log(course)
                         // pass matched documents to template
                         res.render("profile", {user: req.user, course: course, route: null});
                     }
@@ -76,19 +74,16 @@ module.exports = function (app, passport) {
     });
 
     app.get("/course/:id", isLoggedIn, function (req, res) {
-        console.log(req.params)
         Course.findOne({'_id': req.params.id}, function (err, course) {
             if (err) {
                 console.log(err);
             } else {
                 // pass matched documents to template
-                console.log(course)
                 User.find(function (err, users) {
                     if (err) {
                         console.log(err)
                     }
                     else {
-                        console.log(users)
                         res.render("course", {user: req.user, course: course, users: users, route: course.code});
                     }
                 })
@@ -98,23 +93,20 @@ module.exports = function (app, passport) {
     });
 
     app.get("/course/:id/:lectureID", isLoggedIn, function (req, res) {
-        console.log(req.params)
         Questions.find({'lectureID': req.params.lectureID}, function (err, questions) {
             if (err) {
                 console.log(err);
-            }else {
+            } else {
                 Course.findOne({'_id': req.params.id}, function (err, course) {
                     if (err) {
                         console.log(err);
                     } else {
                         // pass matched documents to template
-                        console.log(course)
                         User.find(function (err, users) {
                             if (err) {
                                 console.log(err)
                             }
                             else {
-                                console.log(users)
                                 Lecture.findOne({'_id': req.params.lectureID}, function (err, lecture) {
                                     if (err) {
                                         console.log(err)

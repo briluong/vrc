@@ -94,21 +94,21 @@ $("#registerAccountType").change(function (event) {
 
 $("#registerPassword").keyup(function (event) {
     var input = $('#registerPassword').val()
-
-    if (input.length >= 6) {
+    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    if (regex.test(input)) {
         $('#registerPassword').addClass("valid")
         $("#registerPassword").removeClass("invalid")
     } else {
         $("#registerPassword").removeClass("valid")
         $("#registerPassword").addClass("invalid")
         $("#registerPassword-label").attr("data-error",
-            "Password must be at least 6 characters long")
+            "Password must have at least eight characters, one uppercase letter, one lowercase letter and one number")
     }
 });
 
 $("#registerEmail").keyup(function (event) {
     var input = $('#registerEmail').val()
-    var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(mail.utoronto.ca)$/;
+    var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(cs.toronto.edu)|(mail.utoronto.ca)$/;
     if (regex.test(input)) {
         $('#registerEmail').addClass("valid")
         $("#registerEmail").removeClass("invalid")
@@ -116,7 +116,7 @@ $("#registerEmail").keyup(function (event) {
         $("#registerEmail").removeClass("valid")
         $("#registerEmail").addClass("invalid")
         $("#registerEmail-label").attr("data-error",
-            "Invalid Email (@mail.utoronto.ca required)")
+            "Invalid Email (@mail.utoronto.ca or @cs.toronto.edu required)")
     }
 });
 
