@@ -7,7 +7,7 @@ let socket = io();
 $(document).ready(function () {
     $('.collapsible').collapsible();
     var audios = document.getElementsByClassName("audioPlayer")
-    for(var i = 0; i < audios.length; i++) {
+    for (var i = 0; i < audios.length; i++) {
         var audio = audios[i]
         var base64 = $(audio).attr("data-audio")
         var url = b64toBlob(base64, 'audio/webm');
@@ -84,14 +84,15 @@ $('input#youtubeURL').bind("input", function (event) {
 });
 
 $(".play-button").click(function (event) {
+    console.log(event)
     var questionID = $(event.target).attr("data-question")
     var player = document.getElementById(questionID)
     if (player.paused) {
         var playPromise = player.play()
         if (playPromise !== undefined) {
-            playPromise.then(function() {
+            playPromise.then(function () {
                 // Automatic playback started!
-            }).catch(function(error) {
+            }).catch(function (error) {
                 // Automatic playback failed.
                 console.log(error)
                 // Show a UI element to let the user manually start playback.
@@ -100,20 +101,80 @@ $(".play-button").click(function (event) {
     } else {
         player.pause()
     }
-    player.addEventListener('ended', function() {
+    player.addEventListener('ended', function () {
         console.log("ended!")
     })
 })
 
 socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
-    console.log (data);
-    if(data.questionType = 'audio'){
-        var blob = new Blob(data.data, {type: 'audio/webm'})
-        var url = URL.createObjectURL(blob)
-        console.log(url)
+    $(".play-button").click(function (event) {
+        console.log(event)
+        var questionID = $(event.target).attr("data-question")
+        var player = document.getElementById(questionID)
+        if (player.paused) {
+            var playPromise = player.play()
+            if (playPromise !== undefined) {
+                playPromise.then(function () {
+                    // Automatic playback started!
+                }).catch(function (error) {
+                    // Automatic playback failed.
+                    console.log(error)
+                    // Show a UI element to let the user manually start playback.
+                });
+            }
+        } else {
+            player.pause()
+        }
+        player.addEventListener('ended', function () {
+            console.log("ended!")
+        })
+    })
+    if (data.questionType = 'audio') {
+        var url = b64toBlob(data.data, 'audio/webm');
+        var element = "<li class='collection-item avatar'>" +
+            "<div class='question'> <audio crossorigin='anonymous' class ='audioPlayer'" +
+            " id=" +
+            data._id +
+            "data-audio=" +
+            data.data +
+            " src=" +
+            url +
+            ">" +
+            "</audio><i data-question=" +
+            data._id +
+            " class='play-button material-icons circle'>play_arrow</i>" +
+            "<div class='title flex-container flex-container-mobile'>" +
+            "<span class='left-item'>" +
+            "Confidence: " +
+            data.confidence +
+            "%</span> " +
+            "<div class='right-item'> " +
+            "<span>" +
+            getDate() +
+            "</span> </div> " +
+            "</div>" +
+            "<p>" +
+            data.text +
+            "</p></div></li>"
+
     }
-    else{
+    else {
+        var element = "<div class='question'>" +
+        "<div class='title flex-container flex-container-mobile'>" +
+        "<span class='left-item'>" +
+        "Confidence: " +
+        data.confidence +
+        "%</span> " +
+        "<div class='right-item'> " +
+        "<span>" +
+        getDate() +
+        "</span> </div> " +
+        "</div>" +
+        "<p>" +
+        data.text +
+        "</p></div></li>"
     }
+    $("#questionCard").append(element)
     M.toast({html: data.Username + " sent you a question!", displayLength: 3000})
 });
 /*****************************************************************************/
@@ -224,4 +285,20 @@ function b64toBlob(b64Data, contentType, sliceSize) {
     console.log(blob)
     var blobUrl = window.URL.createObjectURL(blob);
     return blobUrl
+}
+
+function getDate() {
+    var date = new Date
+    var dd = date.getDate();
+    var mm = date.getMonth() + 1;
+
+    var yyyy = date.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    var finalDate = dd + '/' + mm + '/' + yyyy;
+    return finalDate
 }

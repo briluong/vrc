@@ -77,8 +77,12 @@ socketServer.on('connection', function (socket) {
                 if (err) {
                     throw err;
                 }
+                else{
+                    data["_id"] = audio._id
+                    data["createdAt"] = audio.createdAt
+                    socketServer.sockets.emit(data.lectureID, data);
+                }
             });
-            socketServer.sockets.emit(data.lectureID, data);
         }
         else{
             audio = new Questions()
@@ -94,8 +98,11 @@ socketServer.on('connection', function (socket) {
                 if (err) {
                     throw err;
                 }
+                else{
+                    data["_id"] = audio._id
+                    socketServer.sockets.emit(data.lectureID, data);
+                }
             });
-            socketServer.sockets.emit(data.lectureID, data)
         }
     });
 });
