@@ -16,6 +16,7 @@ var http = require("http");              // http server core module
 var serveStatic = require('serve-static');  // serve static files
 var socketIo = require("socket.io");        // web socket external module
 var easyrtc = require("easyrtc");
+var flash = require('connect-flash');
 const dbConfig = require("./config/database.js");
 
 const app = express();
@@ -25,7 +26,7 @@ mongoose.connect(dbConfig.url, {
     useNewUrlParser: true,
 });
 app.use(express.static("public"));
-
+app.use(flash());
 /*function defaultContentTypeMiddleware (req, res, next) {
  req.headers['content-type'] = req.headers['content-type'] || 'application/json';
  next();
@@ -35,7 +36,7 @@ app.use(express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 //app.use(bodyParser());
-app.use(cookieParser());
+app.use(cookieParser('secret'));
 app.use(morgan("dev"));
 
 app.use(methodOverride("_method"));
@@ -43,7 +44,8 @@ app.use(methodOverride("_method"));
 app.use(session({
     secret: "vrc",
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {maxAge: 60000}
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -160,6 +162,8 @@ var rtc = easyrtc.listen(app, socketServer, null, function (err, rtcRef) {
         appObj.events.defaultListeners.roomCreate(appObj, creatorConnectionObj, roomName, roomOptions, callback);
     });
 });
+
+
 
 const Questions = require('./models/questions');
 const apiUtil = require('./api_util');

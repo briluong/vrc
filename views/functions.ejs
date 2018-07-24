@@ -7,6 +7,7 @@
     }
     return false
 } %>
+
 <% courses = function () {
     if (course === undefined || course.length == 0) {
         return false
@@ -15,6 +16,7 @@
         return true
     }
 } %>
+
 <% userIsInstructorOrAdmin = function () {
     if (user) {
         if (user.accountType == 'instructor') {
@@ -25,18 +27,15 @@
             }
             return false
         }
-        console.log("\nFalse1")
         return false
     }
-    console.log("\nFalse2")
     return false
 } %>
+
 <% userIsInCourse = function () {
     if (user) {
         if (user.accountType == 'instructor') {
             for (var i = 0; i < course.instructors.length; i++) {
-                console.log(course.instructors[i].email)
-                console.log(user.email)
                 if (course.instructors[i].email == user.email) {
                     return true
                 }
@@ -52,9 +51,7 @@
     }
     return false
 } %>
-<% currentPathName = function () {
-    console.log(window.location.pathname)
-} %>
+
 <% userIsCourseOwner = function () {
     if (user) {
         if (user.accountType == 'instructor' && course.ownerId == user._id) {
@@ -64,11 +61,8 @@
     }
     return false
 } %>
-<% getCourses = function () {
-    console.log(course[0].lectures[0])
-} %>
+
 <% findStudentName = function (id) {
-    console.log(id)
     for (var i = 0; i < users.length; i++) {
         if (users[i].accountType == 'student') {
             if (users[i].studentID == id) {
@@ -91,20 +85,6 @@
     return false
 } %>
 
-<!-- TODO: implement the functions below-->
-<% groupModeIsActive = function () {
-    //if (course
-    return true;
-} %>
-<% numberOfEnrolledStudents = function () {
-    //NOT SURE WHAT I'M DOING AM TRYING TO FIGURE OUT IF THIS WORKS
-    console.log("numberOfEnrolledStudents")
-    //if (course && course.students) return course.students.length;
-    return "2";
-} %>
-<% numberOfOnlineStudents = function () {
-    return 0;
-} %>
 <% activeDisplayQuestion = function () {
     return "test";
 } %>
