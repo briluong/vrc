@@ -46,9 +46,6 @@
 }
 
 @media screen and (max-width: 600px) {
-    /*.topnav {*/
-        /*overflow: visible;*/
-    /*}*/
     .topnav.responsive {position: relative;}
     .topnav.responsive .icon {
         position: absolute;

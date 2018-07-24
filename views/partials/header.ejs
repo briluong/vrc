@@ -93,23 +93,12 @@
 <% if(user){ %>
 <div class="topnav" id="myTopnav" style="overflow:visible;">
     <div class="brand-logo-wrapper nav-section" id=brand-logo">
-        <% if(user){ %>
-        <!--<a href="/profile" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>-->
-            <a href="/profile" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
-        <% } else { %>
-            <!--<a href="/" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>-->
-            <a href="/" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
-        <% } %>
+        <a href="/profile" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
     </div>
     <div class="nav-section" id="nav-links">
-        <% if(user){ %>
         <a class="nav-link" href="/profile">Home</a>
         <a class="nav-link" href="/settings">Settings</a>
         <a class="nav-link" href="/logout" id="logout">Logout</a>
-        <% } else { %>
-        <a class="modal-trigger nav-link" href="#login-modal">Login</a>
-        <a class="modal-trigger nav-link" href="#register-modal">Register</a>
-        <% } %>
     </div>
     <div class="nav-section" id="nav-toggle" style="position:absolute; right:10px;">
         <a href="javascript:void(0);" class="icon" onclick="myFunction()">
@@ -120,23 +109,11 @@
 <% } else { %>
 <div class="topnav" id="myTopnav" style="overflow:hidden;">
     <div class="brand-logo-wrapper nav-section" id=brand-logo">
-        <% if(user){ %>
-        <!--<a href="/profile" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>-->
-        <a href="/profile" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
-        <% } else { %>
-        <!--<a href="/" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>-->
-        <a href="/" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
-        <% } %>
+         <a href="/" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
     </div>
     <div class="nav-section" id="nav-links">
-        <% if(user){ %>
-        <a class="nav-link" href="/profile">Home</a>
-        <a class="nav-link" href="/settings">Settings</a>
-        <a class="nav-link" href="/logout" id="logout">Logout</a>
-        <% } else { %>
         <a class="modal-trigger nav-link" href="#login-modal">Login</a>
         <a class="modal-trigger nav-link" href="#register-modal">Register</a>
-        <% } %>
     </div>
     <div class="nav-section" id="nav-toggle" style="position:absolute; right:10px;">
         <a href="javascript:void(0);" class="icon" onclick="myFunction()">
