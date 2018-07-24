@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Virtual Classroom</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="theme-color" content="#2196F3"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Google CSS -->
+    <link rel="icon" type="image/png”" href="/icons/cardboard.png"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <!-- Custom CSS -->
+    <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/settings.css" rel="stylesheet">
+</head>
+<body>
+<%- include partials/header.ejs %>
+<div class="main settings">
+    <div class="innerMain">
+        <div class="card">
+            <form class="edit-personal-information">
+                <div class="card-content">
+                    <div class="card-title">
+                        <p>Personal Information</p>
+                    </div>
+                    <div class="flex-container">
+                        <div class="input-field left-item">
+                            <input id="firstName" name="firstName" type="text" value="<%= user.firstName %>">
+                            <label id="firstName-label" class="active" for="firstName">First Name</label>
+                        </div>
+                        <div class="input-field right-item">
+                            <input id="lastName" name="lastName" type="text" value="<%= user.lastName %>">
+                            <label id="lastName-label" class="active" for="lastName">Last Name</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-action">
+                    <button href="#edit-personal-modal" class="waves-effect waves-teal btn-flat" type="button" id="confirm-modal-trigger">Change
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div id="edit-personal-modal" class="modal">
+            <div class="modal-content">
+                <p>Are you sure you want to change your personal information?</p>
+            </div>
+            <div class="modal-footer">
+                <button class="waves-effect waves-teal btn-flat" type="button" id="confirm-cancel">Cancel</button>
+                <button class="waves-effect waves-teal btn-flat" type="submit" id="confirm-change">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<%- include partials/footer.ejs %>
+</body>
+</html>

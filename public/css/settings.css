@@ -1,29 +1,26 @@
 /*****************************************************************************/
 /* Settings: Style */
 /*****************************************************************************/
-.settings {
-.edit-personal-information {
-.avatar-container {
+.settings .edit-personal-information .avatar-container {
     text-align: center;
-.avatar {
+}
+.settings .edit-personal-information .avatar-container .avatar {
     width: 35%;
     height: 35%;
     max-width: 250px;
     margin: 0 auto;
 }
-}
-.avatar-selector {
+.settings .edit-personal-information .avatar-selector {
     margin: 0 auto 10px;
-.avatar-btn {
+}
+.settings .edit-personal-information .avatar-selector .avatar-btn {
     width: 65px;
     height: 65px;
     padding: 10px;
     border-radius: 0;
-&.selected {
-     border-bottom: 1px solid #2196F3;
-     box-shadow: 0 1px 0 0 #2196F3;
- }
 }
+.settings .edit-personal-information .avatar-selector .avatar-btn.selected {
+    border-bottom: 1px solid #2196f3;
+    box-shadow: 0 1px 0 0 #2196f3;
 }
-}
-}
+

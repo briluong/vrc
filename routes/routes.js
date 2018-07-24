@@ -156,6 +156,11 @@ module.exports = function (app, passport) {
             courseID: req.params.id
         });
     })
+
+    app.get("/settings", isLoggedIn, function (req, res) {
+        res.render("settings", {
+            user: req.user,});
+    })
 //
 // // CONTACT US
 // app.get("/contact", function(req, res) {
