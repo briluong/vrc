@@ -45,7 +45,6 @@ app.use(session({
     secret: "vrc",
     resave: false,
     saveUninitialized: true,
-    cookie: {maxAge: 60000}
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -63,6 +62,7 @@ var socketServer = socketIo.listen(webServer, {"log level": 1});
 socketServer.on('connection', function (socket) {
     socket.on('chat message', function (data) {
         var audio = new Questions()
+        console.log(data.questionType)
         if(data.questionType == 'audio') {
             var buf = Buffer.from(data.data, 'base64'); // Ta-da
             console.log(buf)
@@ -101,6 +101,7 @@ socketServer.on('connection', function (socket) {
                     throw err;
                 }
                 else{
+                    console.log(data)
                     data["_id"] = audio._id
                     socketServer.sockets.emit(data.lectureID, data);
                 }

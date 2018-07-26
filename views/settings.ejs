@@ -20,6 +20,15 @@
     <link href="/css/settings.css" rel="stylesheet">
 </head>
 <body>
+<% console.log(errorMessage.length > 0) %>
+<% console.log(errorMessage) %>
+<% if(errorMessage.length > 0){ %>
+<% if(errorMessage[0] == 'Changes were successful!'){ %>
+<p class="flashMessageGood"><%= errorMessage[0] %></p>
+<% } else if(errorMessage[0] == 'Changes were not successful! Please try again.'){ %>
+<p class="flashMessage"><%= errorMessage[0] %></p>
+<% } %>
+<% } %>
 <%- include partials/header.ejs %>
 <div class="main settings">
     <div class="innerMain">
@@ -41,7 +50,8 @@
                     </div>
                 </div>
                 <div class="card-action">
-                    <button href="#edit-personal-modal" class="waves-effect waves-teal btn-flat" type="button" id="confirm-modal-trigger">Change
+                    <button href="#edit-personal-modal" class="waves-effect waves-teal btn-flat modal-trigger"
+                            type="button" id="confirm-modal-trigger">Change
                     </button>
                 </div>
             </form>
@@ -51,12 +61,14 @@
                 <p>Are you sure you want to change your personal information?</p>
             </div>
             <div class="modal-footer">
-                <button class="waves-effect waves-teal btn-flat" type="button" id="confirm-cancel">Cancel</button>
-                <button class="waves-effect waves-teal btn-flat" type="submit" id="confirm-change">Confirm</button>
+                <button class="waves-effect waves-teal btn-flat" type="button" id="confirm-cancel-change">Cancel
+                </button>
+                <button class="waves-effect waves-teal btn-flat" type="button" id="confirm-change">Confirm</button>
             </div>
         </div>
     </div>
 </div>
 <%- include partials/footer.ejs %>
 </body>
+<script src="/js/settings.js"></script>
 </html>
