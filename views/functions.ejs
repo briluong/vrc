@@ -128,7 +128,9 @@
 } %>
 <% embedYoutubeURL = function (url) {
     var splitURL = url.split("watch?v=")
-    return splitURL[0] + "embed/" + splitURL[1]
+    var embedURL = splitURL[0] + "embed/" + splitURL[1]
+    embedURL
+    return embedURL
 } %>
 <% checkYoutubeURL = function (url) {
     let regex = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/;
@@ -157,3 +159,14 @@
     var finalDate = dd+'/'+mm+'/'+yyyy;
     return finalDate
 } %>
+
+<%
+ onVrViewLoad = function(videoURL) {
+    // Selector '#vrview' finds element with id 'vrview'.
+    var vrView = new VRView.Player('#vrview', {
+        video: embedYoutubeURL(videoURL)
+        // video: 'http://localhost/live/testls-lec/index.m3u8',
+        // is_stereo: true
+    });
+}
+ %>

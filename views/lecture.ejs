@@ -16,7 +16,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize//1.0.0-beta/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-
+    <!--<script src="/js/embed.min.js"></script>-->
+    <!--<script src="/js/vrview.min.js"></script>-->
+    <!--<script src="/js/three.min.js"></script>-->
+    <!--<script src="/js/device-motion-sender.min.js"></script>-->
     <script src="https://storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
     <!-- Custom CSS -->
     <link href="/css/main.css" rel="stylesheet">
@@ -87,12 +90,11 @@
                     <% } %>
                     <% if(lecture.active) { %>
                     <% if(lecture.youtube && checkYoutubeURL(lecture.youtube)) { %>
-                    <div class="video-container">
-                        <iframe id="youtube-container" src=<%= embedYoutubeURL(lecture.youtube)%> frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <div id='vrview'></div>
-                    <!--<iframe src="https://storage.googleapis.com/vrview/2.0/embed?video=rtmp://localhost:1935/live/testls-lec1&is_stereo=true">-->
-                    <!--</iframe>-->
+                            <div id='vrview'></div>
+                            <div class="video-container">
+                                <iframe id="youtube-container" src=<%= embedYoutubeURL(lecture.youtube)%> frameborder="0" allowfullscreen></iframe>
+                            </div>
+
                     <% } else { %>
                     <div class="video-container hide">
                         <iframe id="youtube-container" frameborder="0" allowfullscreen></iframe>
@@ -240,12 +242,12 @@
 <script src="/js/lecture.js"></script>
 <script>
     window.addEventListener('load', onVrViewLoad);
-
     function onVrViewLoad() {
-        // Selector '#vrview' finds element with id 'vrview'.
+        // Selector '#vrview' finds element with idi 'vrview'.
         var vrView = new VRView.Player('#vrview', {
-            video: 'http://localhost:1935/live/testls-lec/index.m3u8',
-            is_stereo: true
+            video: 'http://localhost/dash/testls-lec/index.mpd'
+            //video: 'http://localhost/live/testls-lec/index.m3u8',
+            // is_stereo: true
         });
     }
 </script>

@@ -14,7 +14,7 @@ $(document).ready(function () {
         $(audio).attr('src', url)
     }
 });
-
+// window.addEventListener('load', onVrViewLoad);
 /*****************************************************************************/
 /* Event Handlers */
 /*****************************************************************************/
@@ -302,3 +302,14 @@ function getDate() {
     var finalDate = dd + '/' + mm + '/' + yyyy;
     return finalDate
 }
+
+function browserSupported(){
+    if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+
