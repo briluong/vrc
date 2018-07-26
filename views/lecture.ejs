@@ -15,9 +15,9 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize//1.0.0-beta/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
+    <script src="https://storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 
-    <script src="https://storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
     <!-- Custom CSS -->
     <link href="/css/main.css" rel="stylesheet">
 </head>
@@ -106,8 +106,6 @@
                     <p>Lecture is not active, please check again later.</p>
                     <% } %>
                 </div>
-                <% console.log(lecture.groupActive)%>
-                <% console.log(lecture.active)%>
                 <% if(lecture.active && !(lecture.groupActive)) { %>
                 <div id="youtube-enter-stream" class="card-action">
                     <a href="/course/<%= course._id %>/<%= lecture._id %>/stream"
@@ -125,14 +123,14 @@
             <ul class="collection with-header card" id = "questionCard">
                 <li class="collection-header flex-container">
                     <p>Questions</p>
-                    <div class="switch">
-                        <label style="cursor:unset; padding-right:5px;">Notification</label>
-                        <label>Off<input id="instructorNotification" type="checkbox"><span
-                                    class="lever"></span>On</label>
-                    </div>
+                    <!--<div class="switch">-->
+                        <!--<label style="cursor:unset; padding-right:5px;">Notification</label>-->
+                        <!--<label>Off<input id="instructorNotification" type="checkbox"><span-->
+                                    <!--class="lever"></span>On</label>-->
+                    <!--</div>-->
                 </li>
                 <% for(var i = 0; i < question.length; i++){ %>
-                <li class="collection-item avatar">
+                <li id="<%=question[i]._id%>List" class="collection-item avatar">
                     <div class="question">
                         <% if(question[i].questionType == 'audio'){ %>
                         <audio crossorigin="anonymous" class ="audioPlayer" id="<%=question[i]._id%>" data-audio="<%= getArrayBuffer(question[i].data)%>"></audio>
@@ -141,7 +139,9 @@
                         <div class="title flex-container flex-container-mobile">
                             <span class="left-item">Confidence: <%=question[i].confidence%>%</span>
                             <div class="right-item">
-                                <span><%=getDate(question[i].createdAt)%></span>
+                                <span>Student Name: <%=question[i].sentBy%></span>
+                                <span style="margin-left: 1em;"><%=getDate(question[i].createdAt)%></span>
+                                <button href="#delete-question-modal" class="deleteQuestion waves-teal btn-flat modal-trigger" data-question="<%=question[i]._id%>"><i class="medium material-icons">delete</i></button>
                             </div>
                         </div>
                         <p><%=question[i].text%></p>
@@ -181,12 +181,12 @@
                     <% if(lecture.groupActive && lecture.active){ %>
                     <div id="vr-enter-stream" class="card-action"><a
                                 href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
-                                data-value={{group._id}} class="enter-group-stream waves-effect
+                                class="enter-group-stream waves-effect
                                                 waves-teal btn-flat">Enter Stream</a></div>
                     <% } else { %>
                     <div id="vr-enter-stream hide" class="card-action hide"><a
                                 href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
-                                data-value={{group._id}} class="enter-group-stream waves-effect
+                                class="enter-group-stream waves-effect
                                                 waves-teal btn-flat">Enter Stream</a></div>
                     <% } %>
                 </li>
@@ -210,12 +210,12 @@
                     <% if(lecture.groupActive && lecture.active){ %>
                     <div class="vr-enter-stream card-action"><a
                                 href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
-                                data-value={{group._id}} class="enter-group-stream waves-effect
+                                class="enter-group-stream waves-effect
                                                 waves-teal btn-flat">Enter Stream</a></div>
                     <% } else { %>
                     <div class="vr-enter-stream card-action hide"><a
                                 href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
-                                data-value={{group._id}} class="enter-group-stream waves-effect
+                                class="enter-group-stream waves-effect
                                                 waves-teal btn-flat">Enter Stream</a></div>
                     <% } %>
                 </li>
@@ -231,8 +231,21 @@
 
         </div>
     </div>
-
-
+    <div id="delete-question-modal" class="modal">
+        <% if (userIsInstructorOrAdmin()) { %>
+        <div class="modal-content">
+            <h3>Remove Question?</h3>
+            <p>Are you sure you want to remove this question?</p>
+        </div>
+        <div class="modal-footer row button-row">
+            <button class="waves-effect waves-light modal-action btn-flat" type="button" id="delete-question-cancel"
+                    data-dismiss="modal">Cancel
+            </button>
+            <button class="waves-effect waves-light modal-action btn-flat" type="button" id="delete-question-confirm">Confirm
+            </button>
+        </div>
+        <% } %>
+    </div>
     <%- include partials/footer.ejs %>
 </div>
 </body>

@@ -70,7 +70,7 @@ module.exports = function (app, passport) {
 
     // MARKET
     app.get("/create_new_course", isLoggedIn, function (req, res) {
-        res.render("create_new_course", {user: req.user});
+        res.render("create_new_course", {user: req.user, errorMessage: req.flash('create_course')});
     });
 
     app.get("/course/:id", isLoggedIn, function (req, res) {
@@ -159,7 +159,7 @@ module.exports = function (app, passport) {
 
     app.get("/settings", isLoggedIn, function (req, res) {
         res.render("settings", {
-            user: req.user,});
+            user: req.user, errorMessage: req.flash('settings')});
     })
 //
 // // CONTACT US

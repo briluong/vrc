@@ -21,8 +21,10 @@
             available.</h3></div>
     <%}%>
     <a href="/course/<%=courseID%>/<%=lectureID%>" id="exit-group-discussion" class="waves-light btn-flat overlay-btn-left">EXIT</a>
+    <%if(!(userIsInstructorOrAdmin())){%>
     <button data-target="recorder-modal" id="recorder-modal-trigger"
             class="modal-trigger waves-light btn-flat overlay-btn-right"><img src="/icons/stop.svg"></button>
+    <%}%>
     <div id="recorder-modal" class="modal">
         <div class="modal-content">
             <%- include partials/recorder.ejs%>
