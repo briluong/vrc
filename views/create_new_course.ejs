@@ -21,6 +21,9 @@
     <link href="/css/main.css" rel="stylesheet">
 </head>
 <body>
+<% if(errorMessage.length > 0){%>
+<p class="flashMessage"><%=errorMessage[0]%></p>
+<%}%>
 <% include partials/header.ejs %>
 <div class="master-main">
     <div class="create-new-course main">

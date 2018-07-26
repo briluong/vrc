@@ -45,7 +45,7 @@ $("#add-instructor-form").submit(function (event) {
 
 $("#instructorEmail").keyup(function (event) {
     var input = $('#instructorEmail').val()
-    var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(mail.utoronto.ca)$/;
+    var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(cs.toronto.edu)|(mail.utoronto.ca)$/;
     if (regex.test(input)) {
         $('#instructorEmail').addClass("valid")
         $("#instructorEmail").removeClass("invalid")
@@ -53,7 +53,7 @@ $("#instructorEmail").keyup(function (event) {
         $("#instructorEmail").removeClass("valid")
         $("#instructorEmail").addClass("invalid")
         $("#instructorEmail-label").attr("data-error",
-            "Invalid Email (@mail.utoronto.ca required)")
+            "Invalid Email (@mail.utoronto.ca or @cs.toronto.edu required)")
     }
 });
 
@@ -124,15 +124,12 @@ function addInstructor(data){
         data: data,
         success: function (resp) {
             console.log(resp)
-            // window.location.href = "course/" + formData.courseID
+            location.reload();
         },
         error: function (resp) {
             console.log(resp)
-            return alert("Failed to add instructor");
+            M.toast({html: 'Instructor does not exist. Please try again', displayLength: 3000})
         },
-        complete: function () {
-            location.reload();
-        }
     });
 }
 

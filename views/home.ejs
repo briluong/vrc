@@ -16,9 +16,13 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>    <!-- Custom CSS -->
     <link href="/css/main.css" rel="stylesheet">
+    <link href="/css/home.css" rel="stylesheet">
 </head>
 
 <body>
+<% if(errorMessage.length > 0){%>
+<p class="flashMessage"><%=errorMessage[0]%></p>
+<%}%>
 <div class="home">
     <%- include partials/header.ejs %>
     <div class="parallax-container valign-wrapper">
@@ -28,16 +32,12 @@
     <div class="main">
         <div class="innerMain">
             <div class="welcome">
-                <p>As virtual reality (VR) becoming mature, and reasonable priced 360 cameras entering the consumer
-                    market; it is possible to visualize a workspace (classroom, meeting room, office etc.) using 360
-                    cameras to record the space, stream through the Internet and view through a VR headset. This project
-                    explores this idea and will create a prototype by the end of the semester.</p>
+                <p>As virtual reality (VR) becoming mature, and reasonable priced 360 cameras entering the consumer market; it is possible to visualize a workspace (classroom, meeting room, office etc.) using 360 cameras to record the space, stream through the Internet and view through a VR headset. This project explores this idea and will create a prototype by the end of the semester.</p>
             </div>
         </div>
     </div>
     <%- include partials/footer.ejs %>
 </div>
 </body>
-<link href="/css/home.css" rel="stylesheet">
 <script src="/js/home.js"></script>
 </html>

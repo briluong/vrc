@@ -2,7 +2,7 @@ const apiUtil = require('./api_util');
 const User = require('./models/user');
 const Course = require('./models/courses');
 const Lecture = require('./models/lectures');
-const Audio = require('./models/questions');
+const Question = require('./models/questions');
 const Papa = require('papaparse')
 
 module.exports = function (app) {
@@ -12,49 +12,55 @@ module.exports = function (app) {
         if (!req.body) {
             return res.sendStatus(400);
         }
-        var course = new Course();
-        course.ownerId = req.user._id
-        course.instructors = [{email: req.user.email, instructorName: req.user.firstName + " " + req.user.lastName}]
-        course.title = req.body.newCourseName
-        course.code = req.body.newCourseCode
-        course.description = req.body.newCourseDescription
-        course.instructorName = req.user.firstName + " " + req.user.lastName
-        course.lectures = []
-        console.log("file" in req.body)
-        if ("file" in req.body) {
-            let students = req.body.file
-            let enrolledStudents = []
-            let groups = {}
-            for (let i = 0; i < students.length; i++) {
-                let entry = students[i]
-                if (entry.hasOwnProperty('StudentID') && entry.hasOwnProperty('Group')) {
-                    enrolledStudents.push(entry['StudentID'])
-                    console.log(entry['Group'])
-                    if (entry['Group'] in groups) {
-                        groups[entry['Group']].push(entry['StudentID'])
+        Course.findOne({'code': req.body.newCourseCode}, function (err, course) {
+            if(err){
+                return res.sendStatus(500);
+            }
+            if(course){
+                req.flash('create_course', 'There is already a class with this course code. Please try again.')
+                return res.sendStatus(400);
+            }
+            var course = new Course();
+            course.ownerId = req.user._id
+            course.instructors = [{email: req.user.email, instructorName: req.user.firstName + " " + req.user.lastName}]
+            course.title = req.body.newCourseName
+            course.code = req.body.newCourseCode
+            course.description = req.body.newCourseDescription
+            course.instructorName = req.user.firstName + " " + req.user.lastName
+            course.lectures = []
+            if ("file" in req.body) {
+                let students = req.body.file
+                let enrolledStudents = []
+                let groups = {}
+                for (let i = 0; i < students.length; i++) {
+                    let entry = students[i]
+                    if (entry.hasOwnProperty('StudentID') && entry.hasOwnProperty('Group')) {
+                        enrolledStudents.push(entry['StudentID'])
+                        if (entry['Group'] in groups) {
+                            groups[entry['Group']].push(entry['StudentID'])
+                        }
+                        else {
+                            groups[entry['Group']] = [entry['StudentID']]
+                        }
                     }
-                    else {
-                        groups[entry['Group']] = [entry['StudentID']]
+                    else if (entry.hasOwnProperty('StudentID')) {
+                        enrolledStudents.push(entry['StudentID'])
                     }
                 }
-                else if (entry.hasOwnProperty('StudentID')) {
-                    enrolledStudents.push(entry['StudentID'])
+                course.students = enrolledStudents;
+                course.groups = groups
+            }
+            else {
+                course.students = []
+                course.groups = {}
+            }
+            course.save(function (err, data) {
+                if (err) {
+                    throw err;
                 }
-            }
-            course.students = enrolledStudents;
-            course.groups = groups
-        }
-        else {
-            course.students = []
-            course.groups = {}
-        }
-        course.save(function (err, data) {
-            if (err) {
-                throw err;
-            }
-            console.log(data)
-            return res.sendStatus(200);
-        });
+                return res.sendStatus(200);
+            });
+        })
     });
 
     app.post("/api/createLecture", apiUtil.isLoggedIn, (req, res) => {
@@ -78,7 +84,6 @@ module.exports = function (app) {
                 "active": data.active,
                 "createdOn": data.createdOn
             }
-            console.log(lectureData)
             Course.findOneAndUpdate({"_id": data.courseID}, {$push: {'lectures': lectureData}}, function (err, data) {
                 if (err) {
                     return res.sendStatus(500);
@@ -92,30 +97,26 @@ module.exports = function (app) {
 
     app.post("/api/addInstructor", apiUtil.isLoggedIn, (req, res) => {
         if (!req.body) {
-            console.log("Hi1")
             return res.sendStatus(400);
         }
         User.findOne({
             'email': req.body.instructorEmail, $and: [{'accountType': 'instructor'}]
         }, (function (err, data) {
             if (err) {
-                console.log("Hi2")
-                throw err;
-            }
-            if (req.user.email == req.body.instructorEmail) {
-                console.log("Hi3")
                 return res.sendStatus(400);
             }
-            console.log("Hi4")
+            if (req.user.email == req.body.instructorEmail) {
+                return res.sendStatus(400);
+            }
+            if (!data) {
+                return res.sendStatus(400);
+            }
             var instructorData = {
                 "email": data.email,
                 "instructorName": data.firstName + " " + data.lastName
             }
-            console.log("Hi5")
-            console.log(instructorData)
             Course.findOneAndUpdate({"_id": req.body.courseID}, {$push: {'instructors': instructorData}}, function (err, data) {
                 if (err) {
-                    console.log("Hi6")
                     return res.sendStatus(500);
                 }
                 else {
@@ -167,7 +168,6 @@ module.exports = function (app) {
                 let entry = students[i]
                 if (entry.hasOwnProperty('StudentID') && entry.hasOwnProperty('Group')) {
                     enrolledStudents.push(entry['StudentID'])
-                    console.log(entry['Group'])
                     if (entry['Group'] in groups) {
                         groups[entry['Group']].push(entry['StudentID'])
                     }
@@ -246,6 +246,27 @@ module.exports = function (app) {
         })
     });
 
+    app.post("/api/changeSettings", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        User.findOneAndUpdate({"_id": req.user._id}, {
+            $set: {
+                'lastName': req.body.lastName,
+                'firstName': req.body.firstName
+            }
+        }, function (err, user) {
+            if (err) {
+                req.flash('settings', "Changes were not successful! Please try again.")
+                return res.sendStatus(500);
+            }
+            else {
+                req.flash('settings', "Changes were successful!")
+                return res.sendStatus(200);
+            }
+        })
+    });
+
     app.post("/api/updateYoutube", apiUtil.isLoggedIn, (req, res) => {
         if (!req.body) {
             return res.sendStatus(400);
@@ -276,20 +297,40 @@ module.exports = function (app) {
                 return res.sendStatus(500);
             }
             else {
-                console.log("Removing")
-                console.log(course)
-                let lectureIDs = []
-                for (var i = 0; i < course.lectures.length; i++) {
-                    lectureIDs.push(course.lectures[i].lectureID)
+                if(course.lectures.length > 0) {
+                    let lectureIDs = []
+                    for (var i = 0; i < course.lectures.length; i++) {
+                        lectureIDs.push(course.lectures[i].lectureID)
+                    }
+                    Lecture.find({_id: lectureIDs}).remove(function (err) {
+                        if (err) {
+                            return res.sendStatus(500);
+                        }
+                        else {
+                            return res.sendStatus(200);
+                        }
+                    })
                 }
-                Lecture.find({_id: lectureIDs}).remove(function (err) {
-                    if (err) {
-                        return res.sendStatus(500);
-                    }
-                    else {
-                        return res.sendStatus(200);
-                    }
-                })
+                else{
+                    return res.sendStatus(200);
+                }
+            }
+        })
+    });
+
+    app.delete("/api/deleteQuestion", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body.questionID) {
+            // No Course ID
+            return res.sendStatus(400);
+        }
+        console.log(req.body.questionID)
+        // Search user for which to sell the currency.
+        Question.findOneAndRemove({_id: req.body.questionID}, function (err, question) {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            else {
+                return res.sendStatus(200);
             }
         })
     });

@@ -78,6 +78,7 @@ strong {
 }
 .input-field label {
   font-size: 1em;
+  margin-bottom: 0.5em;
   width: 100%;
   text-align: left;
   -webkit-transition: 0.2s ease all;
@@ -89,6 +90,7 @@ strong {
 }
 .input-field label.active {
   font-size: 0.8em;
+  margin-top:0.8em;
   color: #2196f3 !important;
   -webkit-transform: translateY(-110%);
   transform: translateY(-110%);
@@ -99,11 +101,9 @@ strong {
 @media only screen and (max-width: 600px) {
   .input-field label:after {
     font-size: 0.8em;
-    margin-top: -35px;
   }
   .input-field label.active:after {
     font-size: inherit;
-    margin-top: -10px;
   }
 }
 .input-field .select-wrapper {
@@ -447,4 +447,24 @@ table tbody tr td {
 
 .btn-small:hover, .btn-small:focus {
   background-color: #2196f3;
+}
+
+.flashMessage{
+  text-align: center;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0;
+  margin: 0;
+  background-color: #FFCCCC;
+}
+
+.flashMessageGood{
+  background-color: #d4ffce;
+  text-align: center;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0;
+  margin: 0;
 }
