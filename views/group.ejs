@@ -27,6 +27,7 @@
     // if (window.location.protocol == "https:") {
     //   console.log("You are connected with a secure connection.")
     // }
+
     </script>
 
   </head>
@@ -43,6 +44,7 @@
         <img id="slide" src="https://cdn.glitch.com/3ac31fd5-b9c6-4c63-b076-a7d4b243896d%2Fslide.png?1530110254475">
         <img id="clouds" src="https://cdn.glitch.com/3ac31fd5-b9c6-4c63-b076-a7d4b243896d%2Fclouds.jpg?1530201686662">
         <a-asset-item id="body" src="https://cdn.glitch.com/3ac31fd5-b9c6-4c63-b076-a7d4b243896d%2Fbody.obj?1532562754065"></a-asset-item>
+        <img id="wood" src="https://cdn.glitch.com/3ac31fd5-b9c6-4c63-b076-a7d4b243896d%2FFloor%201.jpg?1532616805297">
 
       </a-assets>
 
@@ -53,7 +55,7 @@
         </template>
         <template id="avatar-template">
           <a-entity class="avatar" networked-audio-source>
-            
+
             <a-obj-model class="torso" id="torso" rotation="0 -90 0" scale="0.5 0.5 0.5" src="#body" random_color></a-obj-model>
             <!--<a-sphere class="head"
             color="#5985ff"
@@ -85,7 +87,9 @@
               ></a-sphere>
             </a-sphere>
           </a-entity>
-          <a-text id="name" align="center" value="<%=user%>" position="0 1 0" rotation="0 180 0" look-at="#player"></a-text>
+          <a-entity class="name" id="name"
+          text="value: user0; align:center;" position="0 1 0" rotation="0 180 0" scale="8 8 8"
+          look-at="#player"></a-entity>
 
         </a-entity>
       </template>
@@ -95,7 +99,7 @@
       class="collidable"
       width="10"
       height="10"
-      color="green"
+      src="#wood"
       rotation="-90 0 0"
       teleport2>
     </a-plane>
@@ -126,7 +130,7 @@
     </a-sphere>
 
     <a-image id="board"
-      src="#slide"
+
       width="10"
       height="5"
       color="#ffffff"
@@ -272,6 +276,7 @@
         'line'
       ]
     });
+
   </script>
   </body>
     <a href="/course/<%=courseID%>/<%=lectureID%>" id="exit-group-discussion" class="waves-light btn-flat overlay-btn-left">EXIT</a>

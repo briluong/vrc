@@ -1,3 +1,19 @@
+AFRAME.registerComponent('edit', {
+
+  init: function () {
+    var data = this.data;
+    var el = this.el;
+
+  el.addEventListener('click', function () {
+    console.log("hellllo")
+    el.setAttribute('value', 'test');
+  });
+
+  }
+});
+
+
+
 AFRAME.registerComponent('button_down', {
   schema: {
     text: {default: 'Press For Help'}
@@ -299,7 +315,7 @@ AFRAME.registerComponent('button_down_board', {
         } else if (line_rot.y < 0) {
           line_rot.y = 0;
         }
-        
+
         if (data.start) {
           //console.log(data.doodle_index);
 
