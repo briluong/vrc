@@ -90,9 +90,6 @@
                     <div class="video-container">
                         <iframe id="youtube-container" src=<%= embedYoutubeURL(lecture.youtube)%> frameborder="0" allowfullscreen></iframe>
                     </div>
-                    <div id='vrview'></div>
-                    <!--<iframe src="https://storage.googleapis.com/vrview/2.0/embed?video=rtmp://localhost:1935/live/testls-lec1&is_stereo=true">-->
-                    <!--</iframe>-->
                     <% } else { %>
                     <div class="video-container hide">
                         <iframe id="youtube-container" frameborder="0" allowfullscreen></iframe>
@@ -251,15 +248,4 @@
 </body>
 <link href="/css/lecture.css" rel="stylesheet">
 <script src="/js/lecture.js"></script>
-<script>
-    window.addEventListener('load', onVrViewLoad);
-
-    function onVrViewLoad() {
-        // Selector '#vrview' finds element with id 'vrview'.
-        var vrView = new VRView.Player('#vrview', {
-            video: 'http://localhost:1935/live/testls-lec/index.m3u8',
-            is_stereo: true
-        });
-    }
-</script>
 </html>
