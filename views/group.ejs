@@ -210,7 +210,7 @@
 
         <a-entity id="player" networked="template:#avatar-template;attachTemplateToLocal:false;" camera position="0 1.3 0" look-controls>
           <a-cursor id="cursor"
-            raycaster="objects: .collidable, .name">
+            raycaster="objects: .collidable">
 
             <a-image id="crosshair" src="https://cdn.glitch.com/3ac31fd5-b9c6-4c63-b076-a7d4b243896d%2Fadd_plus-512.png?1530123029481"
               position="0 0 -1"
@@ -274,19 +274,6 @@
         'position',
         'rotation',
         'line'
-      ]
-    });
-
-    NAF.schemas.add({
-      template: '#doodle-template',
-      components: [
-        'position',
-        'rotation',
-          {
-            selector: '.name',
-            component: 'text',
-            property: 'value'
-          }
       ]
     });
 
