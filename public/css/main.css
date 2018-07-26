@@ -448,3 +448,23 @@ table tbody tr td {
 .btn-small:hover, .btn-small:focus {
   background-color: #2196f3;
 }
+
+.flashMessage{
+  text-align: center;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0;
+  margin: 0;
+  background-color: #FFCCCC;
+}
+
+.flashMessageGood{
+  background-color: #d4ffce;
+  text-align: center;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  padding: 0;
+  margin: 0;
+}

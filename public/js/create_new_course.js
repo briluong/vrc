@@ -13,7 +13,12 @@ $("#createCourseForm").submit(function (event) {
     var formdata = $("#createCourseForm").serializeArray();
     var data = {};
     $(formdata).each(function (index, obj) {
-        data[obj.name] = obj.value;
+        if(obj.name == 'newCourseCode'){
+            data[obj.name] = obj.value.toUpperCase();
+        }
+        else{
+            data[obj.name] = obj.value;
+        }
     });
     console.log(event.target[3].files[0])
     var file = event.target[3].files[0]
@@ -53,7 +58,7 @@ function createCourse(formData) {
             window.location.href = 'profile'
         },
         error: function (resp) {
-            return alert("Failed to add a course");
+            location.reload()
         }
     });
 }

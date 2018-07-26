@@ -5,6 +5,7 @@ var typingTimer;                //timer identifier
 var doneTypingInterval = 1200;  //time in ms, 1.2 secs
 let socket = io();
 $(document).ready(function () {
+    $("#delete-question-modal").modal();
     $('.collapsible').collapsible();
     var audios = document.getElementsByClassName("audioPlayer")
     for (var i = 0; i < audios.length; i++) {
@@ -18,6 +19,19 @@ $(document).ready(function () {
 /*****************************************************************************/
 /* Event Handlers */
 /*****************************************************************************/
+$(document).on('click', '.deleteQuestion', function (event) {
+    console.log(event)
+    questionID = $(event.currentTarget).attr('data-question')
+    console.log(questionID)
+    $(document).on('click', '#delete-question-cancel', function (event) {
+        $("#delete-question-modal").modal('close')
+    })
+    $(document).on('click', '#delete-question-confirm', function (event) {
+        deleteQuestion(questionID)
+        delete questionID
+    })
+})
+
 $("#lecture-active-input").on("change", function (event) {
     var data = {}
     if ($("#lecture-active-input").prop("checked")) {
@@ -83,42 +97,33 @@ $('input#youtubeURL').bind("input", function (event) {
     }
 });
 
-$(".play-button").click(function (event) {
+$(document).on('click', '.play-button', function (event) {
     console.log(event)
     var questionID = $(event.target).attr("data-question")
+    var button = $(event.target)
     var player = document.getElementById(questionID)
     if (player.paused) {
-        $(event.target).html('pause')
+        button.html('pause')
         player.play()
     } else {
-        $(event.target).html('play_arrow')
+        button.html('play_arrow')
         player.pause()
     }
     player.addEventListener('ended', function () {
+        button.html('play_arrow')
         console.log("ended!")
     })
 })
 
 socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
-    $(document).on('click', '.play-button', function (event) {
-        console.log(event)
-        var questionID = $(event.target).attr("data-question")
-        var player = document.getElementById(questionID)
-        if (player.paused) {
-            $(event.target).html('pause')
-            player.play()
-        } else {
-            $(event.target).html('play_arrow')
-            player.pause()
-        }
-        player.addEventListener('ended', function () {
-            console.log("ended!")
-        })
-    })
-    if (data.questionType = 'audio') {
+
+    console.log(data)
+    if (data.questionType == 'audio') {
         var url = b64toBlob(data.data, 'audio/webm');
-        var element = "<li class='collection-item avatar'>" +
-            "<div class='question'> <audio crossorigin='anonymous' class ='audioPlayer'" +
+        var element = "<li id=" +
+            data._id +
+            "List class='collection-item avatar'>" +
+            "<div class='question'><audio crossorigin='anonymous' class ='audioPlayer'" +
             " id=" +
             data._id +
             " data-audio=" +
@@ -136,29 +141,51 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
             "%</span> " +
             "<div class='right-item'> " +
             "<span>" +
+            "Student Name: " +
+            data.Username +
+            "</span> " +
+            "<span style='margin-left:1em'>" +
             getDate() +
-            "</span> </div> " +
+            "</span> " +
+            "<button href='#delete-question-modal' class='deleteQuestion waves-teal btn-flat modal-trigger' data-question=" +
+            data._id +
+            ">" +
+            "<i class='medium material-icons'>delete</i></button>" +
+            "</div> " +
             "</div>" +
             "<p>" +
             data.text +
             "</p></div></li>"
-
     }
     else {
-        var element = "<div class='question'>" +
-        "<div class='title flex-container flex-container-mobile'>" +
-        "<span class='left-item'>" +
-        "Confidence: " +
-        data.confidence +
-        "%</span> " +
-        "<div class='right-item'> " +
-        "<span>" +
-        getDate() +
-        "</span> </div> " +
-        "</div>" +
-        "<p>" +
-        data.text +
-        "</p></div></li>"
+        var element =
+            "<li id=" +
+            data._id +
+            "List class='collection-item avatar'>" +
+            "<div class='question'>" +
+            "<div class='title flex-container flex-container-mobile'>" +
+            "<span class='left-item'>" +
+            "Confidence: " +
+            data.confidence +
+            "%</span> " +
+            "<div class='right-item'> " +
+            "<span>" +
+            "Student Name: " +
+            data.Username +
+            "</span> " +
+            "<span style='margin-left:1em'>" +
+            getDate() +
+            "</span> " +
+            "<button href='#delete-question-modal' class='deleteQuestion waves-teal btn-flat modal-trigger' data-question=" +
+            data._id +
+            ">" +
+            "<i class='medium material-icons'>delete</i></button>" +
+            "</div> " +
+            "</div> " +
+            "</div>" +
+            "<p>" +
+            data.text +
+            "</p></div></li>"
     }
     $("#questionCard").append(element)
     M.toast({html: data.Username + " sent you a question!", displayLength: 3000})
@@ -167,7 +194,6 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
 /* Function Handlers */
 /*****************************************************************************/
 function toggleActiveLecture(data) {
-    console.log(data)
     $.ajax({
         url: "/api/toggleActiveLecture",
         type: "POST",
@@ -186,7 +212,6 @@ function toggleActiveLecture(data) {
 }
 
 function toggleGroupActiveLecture(data) {
-    console.log(data)
     $.ajax({
         url: "/api/toggleGroupActiveLecture",
         type: "POST",
@@ -212,7 +237,6 @@ function doneTyping() {
         let data = {}
         data["youtube"] = val
         data["lectureID"] = lectureID
-        console.log("true")
         $.ajax({
             url: "/api/updateYoutube",
             type: "POST",
@@ -235,7 +259,6 @@ function doneTyping() {
     }
     else {
         M.toast({html: "Please enter a valid Youtube URL", displayLength: 3000})
-        console.log("false")
     }
 }
 
@@ -268,7 +291,6 @@ function b64toBlob(b64Data, contentType, sliceSize) {
     }
 
     var blob = new Blob(byteArrays, {type: contentType});
-    console.log(blob)
     var blobUrl = window.URL.createObjectURL(blob);
     return blobUrl
 }
@@ -287,4 +309,22 @@ function getDate() {
     }
     var finalDate = dd + '/' + mm + '/' + yyyy;
     return finalDate
+}
+
+function deleteQuestion(questionID) {
+    console.log("QuestionID: " + questionID)
+    $.ajax({
+        url: "/api/deleteQuestion",
+        type: "DELETE",
+        contentType: 'application/json',
+        data: JSON.stringify({"questionID": questionID}),
+        success: function (resp) {
+            $("#delete-question-modal").modal('close')
+            $('#' + questionID + "List").remove()
+            console.log("Completed Removal")
+        },
+        error: function (resp) {
+            return alert("Failed to delete a question");
+        }
+    });
 }
