@@ -19,6 +19,7 @@
     <!-- Custom CSS -->
     <link href="/css/header.css" rel="stylesheet">
     <link href="/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <!-- Login Modal -->
@@ -88,41 +89,50 @@
         </div>
     </form>
 </div>
-<nav id="nav" style="background-color: #2196f3;">
-    <div class="nav-wrapper">
-        <% if(user){ %>
-        <a href="/profile" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
-        <% } else { %>
-        <a href="/" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
-        <% } %>
 
-        <!--<div class="breadcrumb-container>-->
-            <!--<%/* if(route){%>-->
-            <!--<a href="/course/<%=course._id%>>" class="breadcrumb"><%=route%></a>-->
-            <!--<%}*/%>-->
-            <!--{{#if onLecturePage}}-->
-            <!--<a href="/course/{{onCoursePage}}/{{onLecturePage}}" class="breadcrumb">{{onLecturePage}}</a>-->
-            <!--{{/if}}-->
-            <!--{{#if route_is "/settings"}}-->
-            <!--<a href="/Settings" class="breadcrumb">Settings</a>-->
-            <!--{{/if}}-->
-            <!--</div>-->
-        <div id="nav-links">
-            <% if(user){ %>
-            <ul id="nav-mobile" class="right" style="position:absolute; right:0;">
-                <li><a href="/profile">Home</a></li>
-                <li><a href="/settings">Settings</a></li>
-                <li><a href="/logout" id="logout">Logout</a></li>
-            </ul>
-            <% } else { %>
-            <ul id="nav-mobile" class="right" style="position:absolute; right:0;">
-                <li><a class="modal-trigger" href="#login-modal">Login</a></li>
-                <li><a class="modal-trigger" href="#register-modal">Register</a></li>
-            </ul>
-            <% } %>
-        </div>
+<% if(user){ %>
+<div class="topnav" id="myTopnav" style="overflow:visible;">
+    <div class="brand-logo-wrapper nav-section" id=brand-logo">
+        <a href="/profile" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
     </div>
-</nav>
+    <div class="nav-section" id="nav-links">
+        <a class="nav-link" href="/profile">Home</a>
+        <a class="nav-link" href="/settings">Settings</a>
+        <a class="nav-link" href="/logout" id="logout">Logout</a>
+    </div>
+    <div class="nav-section" id="nav-toggle" style="position:absolute; right:10px;">
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+</div>
+<% } else { %>
+<div class="topnav" id="myTopnav" style="overflow:hidden;">
+    <div class="brand-logo-wrapper nav-section" id=brand-logo">
+         <a href="/" class="brand-logo"><img class="logo" src="/icons/cardboard.png"></a>
+    </div>
+    <div class="nav-section" id="nav-links">
+        <a class="modal-trigger nav-link" href="#login-modal">Login</a>
+        <a class="modal-trigger nav-link" href="#register-modal">Register</a>
+    </div>
+    <div class="nav-section" id="nav-toggle" style="position:absolute; right:10px;">
+        <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+</div>
+<% } %>
+
 </body>
 <script src="/js/header.js"></script>
+<script>
+    function myFunction() {
+        var x = document.getElementById("nav-links");
+        if (x.className === "nav-section") {
+            x.className += " responsive";
+        } else {
+            x.className = "nav-section";
+        }
+    }
+</script>
 </html>
