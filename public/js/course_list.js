@@ -10,13 +10,14 @@ $(document).ready(function () {
 /*****************************************************************************/
 $("button.removeCourse").click(function (event) {
     event.preventDefault()
-    var courseID = $(event.target).attr('data-course')
+    courseID = $(event.target).attr('data-course')
     $("#remove-course-cancel").click(function (event) {
         $("#remove-course-modal").modal('close')
     })
     $("#confirm-remove").click(function (event) {
         console.log("Hello")
         deleteCourse(courseID)
+        delete courseID
     })
 })
 
@@ -36,9 +37,6 @@ function deleteCourse(courseID) {
         },
         error: function (resp) {
             return alert("Failed to add a course");
-        },
-        complete: function () {
-            location.reload();
         }
     });
 }

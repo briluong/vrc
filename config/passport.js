@@ -75,7 +75,7 @@ module.exports = function (passport) {
                             return done(null, false, req.flash('message', "Invalid Email: (@mail.utoronto.ca required)."));
                         }
 
-                        if (passwordRegex.text(password)) {
+                        if (passwordRegex.test(password)) {
                             return done(null, false, req.flash('message', "Password must be minimum eight characters, at least one uppercase letter, one lowercase letter and one number."));
                         }
 

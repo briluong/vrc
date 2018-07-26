@@ -25,13 +25,3 @@
 .home .landing p {
     margin: 0;
 }
-
-.flashMessage{
-    text-align: center;
-    font-size: 12px;
-    height: 20px;
-    line-height: 20px;
-    padding: 0;
-    margin: 0;
-    background-color: #FFCCCC;
-}

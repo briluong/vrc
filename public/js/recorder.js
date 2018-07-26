@@ -24,6 +24,7 @@ $("#recorder-toggle").click(function (event) {
     console.log(recording)
     if (recording == 'inactive') {
         console.log("Activated")
+        final_confidence = 0
         $("#recorder-toggle-img").addClass("active-blink")
         finalURL = false
         resetTranscriptConfidence()
@@ -56,7 +57,7 @@ $("#recorder-submit").click(function (event) {
     } else if (document.getElementById("textBox").value != "") {
         //TODO: Have to implement system where user can submit a typed answer
         console.log("Upload 3")
-        blobToBase64AndUpload(null, $("#recorder-submit").attr("data-lecture"), $("#recorder-submit").attr("data-username"), 100, "text", null, null)
+        blobToBase64AndUpload(null, $("#recorder-submit").attr("data-lecture"), $("#recorder-submit").attr("data-username"), 1, "text", null, null)
         resetTranscriptConfidence()
         $('#recorder-modal').modal('close')
         M.toast({html: 'Message Sent!', displayLength: 3000})
@@ -178,6 +179,8 @@ function setAudioSessions(audioUrl, state) {
 
 function blobToBase64AndUpload(blob, lectureID, senderName, final_confidence, type, name, size) {
     var data;
+    console.log(senderName)
+    console.log(type)
     if (blob != null) {
         var reader = new FileReader();
         reader.readAsDataURL(blob);
