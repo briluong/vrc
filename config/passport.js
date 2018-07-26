@@ -68,14 +68,14 @@ module.exports = function (passport) {
                         if (err) {
                             return done(err);
                         }
-                        var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(mail.utoronto.ca)$/;
+                        var emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@(cs.toronto.edu)|(mail.utoronto.ca)$/;
                         var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
-                        if (emailRegex.test(username)) {
-                            return done(null, false, req.flash('message', "Invalid Email: (@mail.utoronto.ca required)."));
+                        if (!(emailRegex.test(username))) {
+                            return done(null, false, req.flash('message', "Invalid Email: (@mail.utoronto.ca or @cs.toronto.edu required)."));
                         }
 
-                        if (passwordRegex.test(password)) {
+                        if (!(passwordRegex.test(password))) {
                             return done(null, false, req.flash('message', "Password must be minimum eight characters, at least one uppercase letter, one lowercase letter and one number."));
                         }
 
