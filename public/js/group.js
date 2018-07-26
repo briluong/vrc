@@ -27,6 +27,27 @@ AFRAME.registerComponent('button_down', {
   }
 });
 
+AFRAME.registerComponent('random_color', {
+
+  init: function () {
+          var el = this.el;
+   var rand = Math.floor(Math.random() * Math.floor(3));
+        console.log("ayyyyyy");
+
+    console.log(rand);
+
+    if (rand == 0) {
+      el.setAttribute('color', '#ff5050');
+    } else if (rand == 1) {
+      el.setAttribute('color', '#6699ff');
+    } else if (rand == 2) {
+      el.setAttribute('color', '#33cc33');
+
+    }
+  }
+});
+
+
 AFRAME.registerComponent('teleport', {
   schema: {
   },
@@ -266,6 +287,19 @@ AFRAME.registerComponent('button_down_board', {
           z: cameraPos.z - cameraRot.z * mult
         };
 
+
+        if (line_rot.x > 5) {
+          line_rot.x = 5;
+        } else if (line_rot.x < -5) {
+          line_rot.x = -5;
+        }
+
+        if (line_rot.y > 5) {
+          line_rot.y = 5;
+        } else if (line_rot.y < 0) {
+          line_rot.y = 0;
+        }
+        
         if (data.start) {
           //console.log(data.doodle_index);
 
