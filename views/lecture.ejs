@@ -17,7 +17,7 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <!-- Custom CSS -->
     <link href="/css/main.css" rel="stylesheet">
 </head>
@@ -103,6 +103,7 @@
                     <p>Lecture is not active, please check again later.</p>
                     <% } %>
                 </div>
+                <video id="video"></video>
                 <% if(lecture.active && !(lecture.groupActive)) { %>
                 <div id="youtube-enter-stream" class="card-action">
                     <a href="/course/<%= course._id %>/<%= lecture._id %>/stream"
@@ -246,6 +247,16 @@
     <%- include partials/footer.ejs %>
 </div>
 </body>
+<script>
+    var video = document.getElementById('video');
+    if(Hls.isSupported()) {
+        var hls = new Hls();
+        hls.loadSource('http://18.211.18.191/live/test/index.m3u8');
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED,function() {
+            video.play();
+        });
+    }</script>
 <link href="/css/lecture.css" rel="stylesheet">
 <script src="/js/lecture.js"></script>
 </html>

@@ -137,7 +137,7 @@ module.exports = function (app, passport) {
                 console.log(err)
             }
             else {
-                res.render("stream", {
+                res.render("stream360", {
                     user: req.user,
                     groupName: req.params.groupName,
                     lectureID: req.params.lectureID,
