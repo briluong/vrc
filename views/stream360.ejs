@@ -4,12 +4,22 @@
     <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
 
     <!-- Use components defined in separate files. -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
     <script src="/js/stream360.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
 <!-- As if this Glitch were a typical HTML CodePen... -->
 <!-- Specify our scene. -->
+<textarea name="textarea" class="materialize-textarea" id="textBox"></textarea>
+<div class="btn-flat" id="recorder-confidence">Average Confidence: 0.00%</div>
+
+
 <a-scene>
     <!-- The original example also has this 180 degree rotation, to appear to be going forward. -->
     <a-videosphere rotation="0 180 0" src="#video"
@@ -18,7 +28,22 @@
 
     <!-- Define camera with zero user height, movement disabled and arrow key rotation added. -->
     <a-camera user-height="0" wasd-controls-enabled="false" arrow-key-rotation>
+      <a-cursor raycaster="objects: .interactable"></a-cursor>
     </a-camera>
+
+    <!-- Objects in the world -->
+    <a-plane id="recorder-toggle" position="3 -6 0" rotation="-60 -90 0" src="#record" class="interactable"></a-plane>
+
+    <a-text id="recorder-submit" value="submit" align="center" position="2.5 -6.45 0" rotation="-65 -90 0" visible="false"
+            geometry="primitive:plane; height:0.3; width:1.2" material="color:green"
+            data-lecture="<%= lectureID %>"
+            data-username="<%= user.firstName + " " + user.lastName %>"
+            class="interactable">
+    </a-text>
+
+    <a-plane position="5 -5 -2" rotation="-45 -90 0" src="#tdown" send_feedback="message: thumbs down" class="interactable"></a-plane>
+    <a-plane position="5 -5 0" rotation="-45 -90 0" src="#confused" send_feedback="message: confused" class="interactable"></a-plane>
+    <a-plane position="5 -5 2" rotation="-45 -90 0" src="#tup" send_feedback="message: thumbs up" class="interactable"></a-plane>
 
     <!-- Wait for the video to load. -->
     <a-assets>
@@ -26,17 +51,34 @@
         <video id="video" style="display:none"
                autoplay loop crossorigin="anonymous" playsinline webkit-playsinline>
         </video>
+
+        <!-- images for buttons -->
+        <img id="tdown" src="https://cdn.glitch.com/3ac31fd5-b9c6-4c63-b076-a7d4b243896d%2Ftdown.png?1533169153894">
+        <img id="confused" src="https://cdn.glitch.com/3ac31fd5-b9c6-4c63-b076-a7d4b243896d%2Fconfused.png?1533169154058">
+        <img id="tup" src="https://cdn.glitch.com/3ac31fd5-b9c6-4c63-b076-a7d4b243896d%2Ftup.png?1533169154164">
+
+        <img id="record" src="https://cdn.glitch.com/3ac31fd5-b9c6-4c63-b076-a7d4b243896d%2Frecorder.png?1533230954232">
+        <img id="submit" src="https://cdn.glitch.com/3ac31fd5-b9c6-4c63-b076-a7d4b243896d%2Fsubmit.png?1533230954095">
+
+
     </a-assets>
 </a-scene>
 </body>
+<script src="/js/recorder360.js"></script>
+
 <script>
     var video = document.getElementById('video');
     if(Hls.isSupported()) {
         var hls = new Hls();
-        hls.loadSource('http://18.211.18.191/live/test/index.m3u8');
+
+  //      hls.loadSource('http://18.211.18.191/live/demo-lec2/index.m3u8');
+       hls.loadSource('http://18.211.18.191/live/lec1/index.m3u8');
+        // hls.loadSource('http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8');
+        //hls.loadSource('http://18.211.18.191/live/test/index.m3u8');
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED,function() {
             video.play();
         });
-    }</script>
+    }
+</script>
 </html>
