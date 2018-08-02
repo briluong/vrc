@@ -246,6 +246,24 @@ module.exports = function (app) {
         })
     });
 
+    app.post("/api/toggleNotifications", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        Lecture.findOneAndUpdate({"_id": req.body.lectureID}, {
+            $set: {
+                'notifications': req.body.notifications
+            }
+        }, function (err, lecture) {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            else {
+                return res.sendStatus(200);
+            }
+        })
+    });
+
     app.post("/api/changeSettings", apiUtil.isLoggedIn, (req, res) => {
         if (!req.body) {
             return res.sendStatus(400);
@@ -263,6 +281,49 @@ module.exports = function (app) {
             else {
                 req.flash('settings', "Changes were successful!")
                 return res.sendStatus(200);
+            }
+        })
+    });
+
+    app.post("/api/changePassword", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        User.findOne({"_id": req.user._id}, function (err, user) {
+            if(err){
+                req.flash('settings', "Changes were not successful! Please try again.")
+                return res.sendStatus(500);
+            }
+            if(!(user.validPassword(req.body.currentPassword))){
+                req.flash('settings', "Current password did not match")
+                return res.sendStatus(200);
+            }
+            var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+            if(!(passwordRegex.test(req.body.newPassword)) && !(passwordRegex.test(req.body.newPasswordConfirm))){
+                req.flash('settings', "Password must be minimum eight characters, at least one uppercase letter, one lowercase letter and one number.")
+                return res.sendStatus(200);
+            }
+
+            if(req.body.newPassword != req.body.newPasswordConfirm) {
+                req.flash('settings', "New password did not match")
+                return res.sendStatus(200);
+            }
+
+            else{
+                User.findOneAndUpdate({"_id": req.user._id}, {
+                    $set: {
+                        'password': user.generateHash(req.body.newPassword),
+                    }
+                }, function (err, user) {
+                    if (err) {
+                        req.flash('settings', "Changes were not successful! Please try again.")
+                        return res.sendStatus(500);
+                    }
+                    else {
+                        req.flash('settings', "Password Successfully Changed!")
+                        return res.sendStatus(200);
+                    }
+                })
             }
         })
     });

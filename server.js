@@ -18,6 +18,8 @@ var socketIo = require("socket.io");        // web socket external module
 var easyrtc = require("easyrtc");
 var flash = require('connect-flash');
 const dbConfig = require("./config/database.js");
+const Lecture = require('./models/lectures');
+const Course = require('./models/courses');
 
 const app = express();
 
@@ -108,6 +110,48 @@ socketServer.on('connection', function (socket) {
             });
         }
     });
+    socket.on("toggleActiveLecture", function (data) {
+        if("active" in data && "lectureID" in data && "courseID" in data){
+            console.log(data)
+            Course.findOneAndUpdate({"lectures.lectureID": data.lectureID}, {
+                '$set': {
+                    'lectures.$.active': data.active,
+                }
+            }, function (err, course) {
+                if (err) {
+                    throw err;
+                }
+                else {
+                    Lecture.findOneAndUpdate({"_id": data.lectureID}, {
+                        $set: {
+                            'active': data.active
+                        }
+                    }, function (err, lecture) {
+                        if (err) {
+                            throw err;
+                        }
+                        else {
+                            socketServer.sockets.emit(data.lectureID + "-lectureToggle", data);
+                        }
+                    })
+                }
+            })
+        }
+    })
+    socket.on("toggleGroupActiveLecture", function(data){
+        Lecture.findOneAndUpdate({"_id": data.lectureID}, {
+            $set: {
+                'groupActive': data.groupActive
+            }
+        }, function (err, lecture) {
+            if (err) {
+                throw err;
+            }
+            else {
+                socketServer.sockets.emit(data.lectureID + "-groupToggle", data);
+            }
+        })
+    })
 });
 
 var myIceServers = [
@@ -167,7 +211,6 @@ var rtc = easyrtc.listen(app, socketServer, null, function (err, rtcRef) {
 
 
 const Questions = require('./models/questions');
-const apiUtil = require('./api_util');
 
 // // Uploading Questions
 // app.post("/api/uploadAudio", apiUtil.isLoggedIn, (req, res) => {

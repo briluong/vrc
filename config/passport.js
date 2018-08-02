@@ -33,13 +33,11 @@ module.exports = function (passport) {
 
                 // Return if the user does not exist.
                 if (!user) {
-                    console.log('bad username');
                     return done(null, false, req.flash('message', 'Oops! Wrong E-Mail. Please try again.'));
                 }
 
                 // Return if the password is incorrect.
                 if (!user.validPassword(password)) {
-                    console.log('bad password');
                     return done(null, false, req.flash('message', 'Oops! Wrong Password. Please try again.'));
                 }
 
@@ -79,6 +77,9 @@ module.exports = function (passport) {
                             return done(null, false, req.flash('message', "Password must be minimum eight characters, at least one uppercase letter, one lowercase letter and one number."));
                         }
 
+                        if(password != req.body.passwordConfirm){
+                            return done(null, false, req.flash('message', "Passwords do not match, please try again."));
+                        }
                         // Return if a user exists;
                         if (user) {
                             return done(null, false, req.flash('message', 'Oops! This User already Exists. Try a different E-Mail!'));
@@ -122,6 +123,9 @@ module.exports = function (passport) {
                             return done(null, false, req.flash('message', "Password must be minimum eight characters, at least one uppercase letter, one lowercase letter and one number."));
                         }
 
+                        if(password != req.body.passwordConfirm){
+                            return done(null, false, req.flash('message', "Passwords do not match, please try again."));
+                        }
                         // Return if a user exists;
                         if (user) {
                             return done(null, false, req.flash('message', 'Oops! This User already Exists. Try a different Student Number or E-Mail!'));

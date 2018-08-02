@@ -7,7 +7,7 @@
 $(document).ready(function () {
     $('.modal').modal();
     $('#registerAccountType').formSelect();
-    $('#utoridInput').hide()
+    $('#studentID-input').hide()
     // validate_field("#registerEmail");
     // validate_field("#registerUTORID");
     // validate_field("#registerPassword");
@@ -82,13 +82,13 @@ $("#registerCancel").click(function (event) {
 $("#registerAccountType").change(function (event) {
     var accountType = $('#registerAccountType').val()
     if(accountType == "" || accountType == "instructor" ){
-        $('#utoridInput').hide()
-        $('#registerUTORID').val('')
-        $("#registerUTORID").addClass("valid")
-        $("#registerUTORID").removeClass("invalid")
+        $('#studentID-input').hide()
+        $('#registerStudentID').val('')
+        $("#registerStudentID").addClass("valid")
+        $("#registerStudentID").removeClass("invalid")
     }
     else{
-        $('#utoridInput').show()
+        $('#studentID-input').show()
     }
 });
 
@@ -120,15 +120,29 @@ $("#registerEmail").keyup(function (event) {
     }
 });
 
-$("#registerUTORID").keyup(function (event) {
+$("#registerStudentID").keyup(function (event) {
     var input = $('#registerUTORID').val()
     if (input.length == 10) {
-        $('#registerUTORID').addClass("valid")
-        $("#registerUTORID").removeClass("invalid")
+        $('#registerStudentID').addClass("valid")
+        $("#registerStudentID").removeClass("invalid")
     } else {
-        $("#registerUTORID").removeClass("valid")
-        $("#registerUTORID").addClass("invalid")
-        $("#registerUTORID-label").attr("data-error", "Invalid UTORID")
+        $("#registerStudentID").removeClass("valid")
+        $("#registerStudentID").addClass("invalid")
+        $("#registerStudentID-label").attr("data-error", "Invalid UTORID")
+    }
+});
+
+$("#registerPasswordConfirm").keyup(function (event) {
+    var input = $('#registerPasswordConfirm').val()
+    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    if (input == $('#registerPassword').val()) {
+        $('#registerPasswordConfirm').addClass("valid")
+        $("#registerPasswordConfirm").removeClass("invalid")
+    } else {
+        $("#registerPasswordConfirm").removeClass("valid")
+        $("#registerPasswordConfirm").addClass("invalid")
+        $("#registerPasswordConfirm-label").attr("data-error",
+            "Passwords do not match.")
     }
 });
 

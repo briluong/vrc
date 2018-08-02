@@ -23,9 +23,9 @@
 <% console.log(errorMessage.length > 0) %>
 <% console.log(errorMessage) %>
 <% if(errorMessage.length > 0){ %>
-<% if(errorMessage[0] == 'Changes were successful!'){ %>
+<% if(errorMessage[0] == 'Changes were successful!' || errorMessage[0] == "Password Successfully Changed!"){ %>
 <p class="flashMessageGood"><%= errorMessage[0] %></p>
-<% } else if(errorMessage[0] == 'Changes were not successful! Please try again.'){ %>
+<% } else{ %>
 <p class="flashMessage"><%= errorMessage[0] %></p>
 <% } %>
 <% } %>
@@ -51,7 +51,10 @@
                 </div>
                 <div class="card-action">
                     <button href="#edit-personal-modal" class="waves-effect waves-teal btn-flat modal-trigger"
-                            type="button" id="confirm-modal-trigger">Change
+                            type="button" id="confirm-modal-trigger">Update Name
+                    </button>
+                    <button href="#edit-password-modal" class="waves-effect waves-teal btn-flat modal-trigger"
+                            type="button" id="passwordChange-trigger">Change Password
                     </button>
                 </div>
             </form>
@@ -65,6 +68,38 @@
                 </button>
                 <button class="waves-effect waves-teal btn-flat" type="button" id="confirm-change">Confirm</button>
             </div>
+        </div>
+        <div id="edit-password-modal" class="modal">
+            <form id="edit-password-form">
+                <div class="modal-content">
+                    <h3>Change Passworld</h3>
+                    <div class="flex-container">
+                        <div class="input-field">
+                            <input id="currentPassword" name="currentPassword" type="password">
+                            <label id="currentPassword-label" for="currentPassword">Current Password</label>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <div class="input-field">
+                            <input id="newPassword" name="newPassword" type="password">
+                            <label id="newPassword-label" for="newPassword">New Password</label>
+                        </div>
+                    </div>
+                    <div class="flex-container">
+                        <div class="input-field">
+                            <input id="newPasswordConfirm" name="newPasswordConfirm" type="password">
+                            <label id="newPasswordConfirm-label" for="newPasswordConfirm">Confirm New Password</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="waves-effect waves-teal modal-action btn-flat" type="button" id="passwordCancel"
+                            data-dismiss="modal">Cancel
+                    </button>
+                    <button id="passwordSubmit" class="waves-effect waves-teal modal-action btn-flat" type="button">Confirm
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

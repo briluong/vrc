@@ -33,7 +33,7 @@
                 <div class="title">
                     <p><%= lecture.title %></p>
                 </div>
-                <div class="switch toggle-lecture-active-container">
+                <div id="lectureToggle-container" data-groupactive="<%=lecture.groupActive%>" class="switch toggle-lecture-active-container">
                     <% if(lecture.active){ %>
                     <span class="live-now active-blink show" data-active= <%= lecture.active %>>LIVE NOW</span>
                     <% } else{ %>
@@ -84,23 +84,39 @@
                         <label id="youtubeURL-label" for="youtubeURL">YouTube URL</label>
                     </div>
                     <% } %>
-                    <% } %>
+                    <% } else{ %>
+                    <% if(lecture.active) { %>
+                    <div id="youtube-input" class="input-field hide">
+                        <input readonly="readonly" id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off" data-lecture="<%= lecture._id %>"
+                               value="<%= lecture.youtube%>">
+                        <label>YouTube URL</label>
+                    </div>
+                    <%}else { %>
+                    <div id="youtube-input" class="input-field hide">
+                        <input readonly="readonly" id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off" data-lecture="<%= lecture._id %>"
+                               value="<%= lecture.youtube%>">
+                        <label>YouTube URL</label>
+                    </div>
+                    <% }%>
+                    <% }%>
                     <% if(lecture.active) { %>
                     <% if(lecture.youtube && checkYoutubeURL(lecture.youtube)) { %>
                     <div class="video-container">
                         <iframe id="youtube-container" src=<%= embedYoutubeURL(lecture.youtube)%> frameborder="0" allowfullscreen></iframe>
                     </div>
+                    <p id="notActive-warning" class="hide" >Lecture is not active, please check again later.</p>
                     <% } else { %>
                     <div class="video-container hide">
                         <iframe id="youtube-container" frameborder="0" allowfullscreen></iframe>
                     </div>
+                    <p id="notActive-warning" class="hide" >Lecture is not active, please check again later.</p>
                     <p >YouTube stream not available.</p>
                     <% } %>
                     <% } else { %>
                     <div class="video-container hide">
                         <iframe id="youtube-container" frameborder="0" allowfullscreen></iframe>
                     </div>
-                    <p>Lecture is not active, please check again later.</p>
+                    <p id="notActive-warning" >Lecture is not active, please check again later.</p>
                     <% } %>
                 </div>
                 <!--<video id="video"></video>-->
@@ -108,24 +124,42 @@
                 <div id="youtube-enter-stream" class="card-action">
                     <a href="/course/<%= course._id %>/<%= lecture._id %>/stream"
                        class="waves-effect waves-teal btn-flat">Enter Stream</a>
+                    <a href="/course/<%= course._id %>/<%= lecture._id %>/stream360"
+                       class="waves-effect waves-teal btn-flat">Enter VR Stream</a>
                 </div>
                 <% } else{ %>
                 <div id="youtube-enter-stream" class="card-action hide">
                     <a href="/course/<%= course._id %>/<%= lecture._id %>/stream"
                        class="waves-effect waves-teal btn-flat">Enter Stream</a>
+                    <a href="/course/<%= course._id %>/<%= lecture._id %>/stream360"
+                       class="waves-effect waves-teal btn-flat">Enter VR Stream</a>
                 </div>
                 <% } %>
             </div>
 
             <% if(userIsInstructorOrAdmin()){ %>
-            <ul class="collection with-header card" id = "questionCard">
+            <ul class="collection with-header card" id = "questionCard" data-notifications = "<%=lecture.notifications%>">
                 <li class="collection-header flex-container">
                     <p>Questions</p>
-                    <!--<div class="switch">-->
-                        <!--<label style="cursor:unset; padding-right:5px;">Notification</label>-->
-                        <!--<label>Off<input id="instructorNotification" type="checkbox"><span-->
-                                    <!--class="lever"></span>On</label>-->
-                    <!--</div>-->
+                    <% if(lecture.notifications){%>
+                    <div class="switch">
+                        <label style="cursor:unset; padding-right:5px;">Notification</label>
+                        <label id="instructorNotification-toggle" data-course="<%= course._id %>"
+                               data-lecture="<%= lecture._id %>">Off
+                            <input id="instructorNotification-input" type="checkbox" checked="checked">
+                            <span id="instructorNotification-span"
+                                    class="lever"></span>On</label>
+                    </div>
+                    <%} else {%>
+                    <div class="switch">
+                        <label style="cursor:unset; padding-right:5px;">Notification</label>
+                        <label id="instructorNotification-toggle" data-course="<%= course._id %>"
+                               data-lecture="<%= lecture._id %>">Off
+                            <input id="instructorNotification-input" type="checkbox">
+                            <span id="instructorNotification-span"
+                                  class="lever"></span>On</label>
+                    </div>
+                    <%}%>
                 </li>
                 <% for(var i = 0; i < question.length; i++){ %>
                 <li id="<%=question[i]._id%>List" class="collection-item avatar">
@@ -177,12 +211,12 @@
                         </div>
                     </div>
                     <% if(lecture.groupActive && lecture.active){ %>
-                    <div id="vr-enter-stream" class="card-action"><a
+                    <div class="vr-enter-stream card-action"><a
                                 href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
                                 class="enter-group-stream waves-effect
                                                 waves-teal btn-flat">Enter Stream</a></div>
                     <% } else { %>
-                    <div id="vr-enter-stream hide" class="card-action hide"><a
+                    <div class="vr-enter-stream card-action hide"><a
                                 href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
                                 class="enter-group-stream waves-effect
                                                 waves-teal btn-flat">Enter Stream</a></div>

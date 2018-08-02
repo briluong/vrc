@@ -37,31 +37,14 @@ $("#lecture-active-input").on("change", function (event) {
     if ($("#lecture-active-input").prop("checked")) {
         data["active"] = true
         $("#lecture-active-input").removeAttr("checked")
-        $(".live-now").removeClass("hide")
         $("#group-settings").removeClass("hide")
-        if (!($("#lecture-group-input").prop("checked"))) {
-            $("#youtube-enter-stream").removeClass("hide")
-        }
-        console.log($("#card-title"))
-        $("#card-title").html("Live")
         $("#youtube-input").removeClass("hide")
-        if (checkYoutubeURL($('input#youtubeURL').val())) {
-            $(".video-container").removeClass("hide")
-        }
     }
     else {
         data["active"] = false
         $("#lecture-active-input").attr("checked", "true")
-        $(".live-now").addClass("hide")
         $("#group-settings").addClass("hide")
-        $("#youtube-enter-stream").addClass("hide")
-        if (!($(".vr-enter-stream").hasClass("hide"))) {
-            $(".vr-enter-stream").addClass("hide")
-        }
-        $("#card-title").html("Offline")
         $("#youtube-input").addClass("hide")
-        $(".video-container").addClass("hide")
-
     }
     data["lectureID"] = $("#lecture-active-toggle").attr("data-lecture")
     data["courseID"] = $("#lecture-active-toggle").attr("data-course")
@@ -74,20 +57,31 @@ $("#lecture-group-input").on("change", function (event) {
     if ($("#lecture-group-input").prop("checked")) {
         data["groupActive"] = true
         $("#lecture-group-input").removeAttr("checked")
-        $(".vr-enter-stream").removeClass("hide")
         $("#update-clear-group").removeClass("hide")
-        $("#youtube-enter-stream").addClass("hide")
     }
     else {
         data["groupActive"] = false
         $("#lecture-group-input").attr("checked", "true")
-        $(".vr-enter-stream").addClass("hide")
         $("#update-clear-group").addClass("hide")
-        $("#youtube-enter-stream").removeClass("hide")
     }
     data["lectureID"] = $("#lecture-group-toggle").attr("data-lecture")
     data["courseID"] = $("#lecture-group-toggle").attr("data-course")
     toggleGroupActiveLecture(data)
+})
+
+$("#instructorNotification-input").on("change", function (event) {
+    var data = {}
+    if ($("#instructorNotification-input").prop("checked")) {
+        data["notifications"] = true
+        M.toast({html: "Notifications turned on", displayLength: 3000})
+    }
+    else {
+        data["notifications"] = false
+        M.toast({html: "Notifications turned off", displayLength: 3000})
+    }
+    data["lectureID"] = $("#instructorNotification-toggle").attr("data-lecture")
+    data["courseID"] = $("#instructorNotification-toggle").attr("data-course")
+    toggleNotifications(data)
 })
 
 $('input#youtubeURL').bind("input", function (event) {
@@ -116,7 +110,6 @@ $(document).on('click', '.play-button', function (event) {
 })
 
 socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
-
     console.log(data)
     if (data.questionType == 'audio') {
         var url = b64toBlob(data.data, 'audio/webm');
@@ -188,41 +181,116 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
             "</p></div></li>"
     }
     $("#questionCard").append(element)
+    if($("#questionCard").attr("data-notifications") == 'true'){
+        var audio = new Audio('/assets/unconvinced.mp3');
+        audio.play();
+    }
     M.toast({html: data.Username + " sent you a question!", displayLength: 3000})
 });
+
+socket.on($("#lecture-group-toggle").attr("data-lecture") + "-lectureToggle", function (data) {
+    console.log(data)
+    if(data.active){
+        $(".live-now").removeClass("hide")
+        $("#card-title").html("Live")
+        if (($("#lectureToggle-container").attr("data-groupactive")) == 'false') {
+            $("#youtube-enter-stream").removeClass("hide")
+        }
+        else{
+            $(".vr-enter-stream").removeClass("hide")
+        }
+        if (checkYoutubeURL($('input#youtubeURL').val())) {
+            $(".video-container").removeClass("hide")
+        }
+        $("#youtube-container").attr("src", embedYoutubeURL($("#youtubeURL").val()))
+        $("#notActive-warning").addClass("hide")
+    }
+    else{
+        $(".video-container").addClass("hide")
+        $("#card-title").html("Offline")
+        if (!($(".vr-enter-stream").hasClass("hide"))) {
+            $(".vr-enter-stream").addClass("hide")
+        }
+        $("#youtube-enter-stream").addClass("hide")
+        $(".live-now").addClass("hide")
+        if($("#notActive-warning").hasClass("hide")){
+            $("#notActive-warning").removeClass("hide")
+        }
+    }
+})
+
+socket.on($("#lecture-group-toggle").attr("data-lecture") + "-groupToggle", function (data) {
+    console.log(data)
+    if(data.groupActive){
+        $("#youtube-enter-stream").addClass("hide")
+        $("#lectureToggle-container").attr("data-groupActive", 'true')
+        $(".vr-enter-stream").removeClass("hide")
+    }
+    else{
+        $("#youtube-enter-stream").removeClass("hide")
+        $("#lectureToggle-container").attr("data-groupActive", 'false')
+        $(".vr-enter-stream").addClass("hide")
+    }
+})
 /*****************************************************************************/
 /* Function Handlers */
 /*****************************************************************************/
 function toggleActiveLecture(data) {
-    $.ajax({
-        url: "/api/toggleActiveLecture",
-        type: "POST",
-        contentType: 'application/json',
-        data: JSON.stringify(data),
-        success: function (resp) {
-            console.log("Completed Add")
-        },
-        error: function (resp) {
-            console.log(data)
-            return alert("Failed to toggle lecture");
-        },
-        complete: function () {
-        }
-    });
+    socket.emit("toggleActiveLecture", data)
+    // $.ajax({
+    //     url: "/api/toggleActiveLecture",
+    //     type: "POST",
+    //     contentType: 'application/json',
+    //     data: JSON.stringify(data),
+    //     success: function (resp) {
+    //         console.log("Completed Add")
+    //     },
+    //     error: function (resp) {
+    //         console.log(data)
+    //         return alert("Failed to toggle lecture");
+    //     },
+    //     complete: function () {
+    //     }
+    // });
 }
 
 function toggleGroupActiveLecture(data) {
+    socket.emit("toggleGroupActiveLecture", data)
+    // $.ajax({
+    //     url: "/api/toggleGroupActiveLecture",
+    //     type: "POST",
+    //     contentType: 'application/json',
+    //     data: JSON.stringify(data),
+    //     success: function (resp) {
+    //         console.log("Completed Group Active Toggle")
+    //     },
+    //     error: function (resp) {
+    //         console.log(data)
+    //         return alert("Failed to toggle Group");
+    //     },
+    //     complete: function () {
+    //     }
+    // });
+}
+
+function toggleNotifications(data) {
     $.ajax({
-        url: "/api/toggleGroupActiveLecture",
+        url: "/api/toggleNotifications",
         type: "POST",
         contentType: 'application/json',
         data: JSON.stringify(data),
         success: function (resp) {
-            console.log("Completed Group Active Toggle")
+            console.log("Completed Notifications Toggle")
+            if(data.notifications){
+                $("#questionCard").attr("data-notifications", 'true')
+            }
+            else{
+                $("#questionCard").attr("data-notifications", 'false')
+            }
         },
         error: function (resp) {
             console.log(data)
-            return alert("Failed to toggle Group");
+            return alert("Failed to toggle notifications");
         },
         complete: function () {
         }
@@ -327,4 +395,9 @@ function deleteQuestion(questionID) {
             return alert("Failed to delete a question");
         }
     });
+}
+
+function embedYoutubeURL (url) {
+    var splitURL = url.split("watch?v=")
+    return splitURL[0] + "embed/" + splitURL[1]
 }
