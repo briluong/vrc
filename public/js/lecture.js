@@ -111,6 +111,7 @@ $(document).on('click', '.play-button', function (event) {
 
 socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
     console.log(data)
+    if (data.questionType != null) {
     if (data.questionType == 'audio') {
         var url = b64toBlob(data.data, 'audio/webm');
         var element = "<li id=" +
@@ -186,6 +187,17 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
         audio.play();
     }
     M.toast({html: data.Username + " sent you a question!", displayLength: 3000})
+  } else {
+    var element =
+        "<li id=" +
+        data._id +
+        "List class='collection-item avatar'>" +
+        "<div class='feedback'>" +
+        data.value + " by " + data.sentBy +
+        "</div></li>"
+
+      $("#feedbackCard").append(element);
+  }
 });
 
 socket.on($("#lecture-group-toggle").attr("data-lecture") + "-lectureToggle", function (data) {

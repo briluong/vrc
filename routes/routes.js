@@ -1,8 +1,10 @@
 const request = require('request');
 var Course = require('../models/courses.js');
 var Questions = require('../models/questions.js');
+var Feedback = require('../models/feedback.js');
 var Lecture = require('../models/lectures.js');
 var User = require('../models/user.js');
+var Group = require('../models/groups.js');
 module.exports = function (app, passport) {
 
     // LANDING PAGE
@@ -112,14 +114,21 @@ module.exports = function (app, passport) {
                                         console.log(err)
                                     }
                                     else {
-                                        res.render("lecture", {
+                                      Feedback.find({'lectureID': req.params.lectureID}, function (err, feedback) {
+                                        if (err) {
+                                          console.log(err);
+                                        } else {
+                                          res.render("lecture", {
                                             user: req.user,
                                             course: course,
                                             users: users,
                                             route: lecture.title,
                                             lecture: lecture,
-                                            question: questions
-                                        });
+                                            question: questions,
+                                            feedback: feedback
+                                          });
+                                        }
+                                      })
 
                                     }
                                 })
@@ -166,12 +175,19 @@ module.exports = function (app, passport) {
     })
 
     app.get("/course/:id/:lectureID/:groupName", isLoggedIn, function (req, res) {
-        res.render("group", {
-            user: req.user,
-            groupName: req.params.groupName,
-            lectureID: req.params.lectureID,
-            courseID: req.params.id
-        });
+      Course.findOne({'_id': req.params.id}, function (err, group) {
+        if (err) {
+          console.log(err);
+        } else {
+          res.render("group", {
+              user: req.user,
+              groupName: group,
+              lectureID: req.params.lectureID,
+              courseID: req.params.id
+          });
+        }
+      })
+
     })
 
     app.get("/settings", isLoggedIn, function (req, res) {

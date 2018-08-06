@@ -180,7 +180,54 @@
                     </div>
                 </li>
                 <% } %>
+
+
             </ul>
+
+            <!-- feedback stuff -->
+
+            <ul class="collection with-header card" id = "feedbackCard" data-notifications = "<%=lecture.notifications%>">
+                <li class="collection-header flex-container">
+                    <p>Feedback</p>
+                    <% var down = 0; var confused = 0; var up = 0;%>
+                    <% for(var i = 0; i < feedback.length; i++){
+                      if (feedback[i].value == "thumbs down") {
+                        down++;
+                      } else if (feedback[i].value == "thumbs up") {
+                        up++;
+                      } else {
+                        confused++;
+                      }
+
+                    }%>
+
+                    <li id="down" class="collection-item avatar">
+                        <div class="count">
+                          thumbs down = <%=down%>
+                      </div>
+                    </li>
+                    <li id="up" class="collection-item avatar">
+                        <div class="count">
+                          thumbs up = <%=up%>
+                      </div>
+                    </li>
+                    <li id="confused" class="collection-item avatar">
+                        <div class="count">
+                          confused = <%=confused%>
+                      </div>
+                    </li>
+
+                    <% for(var i = 0; i < feedback.length; i++){ %>
+                      <li id="<%=question[i]._id%>List" class="collection-item avatar">
+
+                        <div class="feedback">
+                          <%=feedback[i].value%> by <%=feedback[i].sentBy%> at <%=feedback[i].createdAt.getHours()%>:<%=feedback[i].createdAt.getMinutes()%>:<%=feedback[i].createdAt.getSeconds()%>
+                        </div>
+                      </li>
+                    <% } %>
+                </li>
+            </ul>
+
             <% } %>
 
             <!--surround with another if block if lecture is active-->

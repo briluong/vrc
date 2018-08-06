@@ -22,7 +22,43 @@ $(document).ready(function () {
 /* Event Handlers */
 /*****************************************************************************/
 
+AFRAME.registerComponent('send_feedback', {
+  schema: {
+      message: {default: 'default'},
+      delay: {default: 0}
+  },
 
+  init: function () {
+    var data = this.data;
+    var el = this.el;
+
+    el.addEventListener('mousedown', function (evt) {
+      if (data.delay == 0) {
+        console.log(data.message);
+        data.delay = 1;
+        var feedback = {
+          lectureID: $("#recorder-submit").attr("data-lecture"),
+          value: data.message,
+          sentBy: $("#recorder-submit").attr("data-username")
+        }
+        socket.emit('feedback', feedback);
+      }
+    });
+  },
+
+  tick: function(time, delta) {
+    var data = this.data;
+
+    if (data.delay > 0) {
+      data.delay++;
+    //  console.log(data.delay);
+
+      if (data.delay > 120) {
+        data.delay = 0;
+      }
+    }
+  }
+});
 
 $("#recorder-toggle").click(function (event) {
     console.log(event)
@@ -215,6 +251,8 @@ function blobToBase64AndUpload(blob, lectureID, senderName, final_confidence, ty
                 data: reader.result.split(',')[1]
             }
             socket.emit('chat message', data);
+
+
             document.getElementById("textBox").value = ""
         }
     }

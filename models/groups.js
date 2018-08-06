@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 // group Schema
-var GroupsSchema = new SimpleSchema({
+var GroupsSchema =  mongoose.Schema({
     lectureId: {
         type: String,
         optional: true
@@ -46,13 +46,13 @@ var GroupsSchema = new SimpleSchema({
 // USER METHODS
 
 // base function if one is needed later
-coursesSchema.methods.methodName = function(parameter) {
+GroupsSchema.methods.methodName = function(parameter) {
     return ;
 };
 
 
 // Export the group model.
-module.exports = mongoose.model('vr-classromm-group', groupSchema);
+module.exports = mongoose.model('vr-classromm-group', GroupsSchema);
 
 //from meteor
 //if (Meteor.isServer) {

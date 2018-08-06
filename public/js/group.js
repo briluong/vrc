@@ -1,22 +1,9 @@
-AFRAME.registerComponent('edit', {
 
-  init: function () {
-    var data = this.data;
-    var el = this.el;
-
-  el.addEventListener('click', function () {
-    console.log("hellllo")
-    el.setAttribute('value', 'test');
-  });
-
-  }
-});
-
-
+let socket = io();
 
 AFRAME.registerComponent('button_down', {
   schema: {
-    text: {default: 'Press For Help'}
+    text: {default: 'group'}
   },
 
   init: function () {
@@ -27,6 +14,7 @@ AFRAME.registerComponent('button_down', {
       var ui = document.querySelector('#UI');
       var button = document.querySelector('#buttonText');
 
+      console.log(data.text);
 
       if (ui.getAttribute('visible')) {
         //console.log(ui);
