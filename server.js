@@ -20,6 +20,7 @@ var flash = require('connect-flash');
 const dbConfig = require("./config/database.js");
 const Lecture = require('./models/lectures');
 const Course = require('./models/courses');
+const Help = require('./models/help_request');
 
 const app = express();
 
@@ -62,6 +63,24 @@ var webServer = http.createServer(app)
 var socketServer = socketIo.listen(webServer, {"log level": 1});
 
 socketServer.on('connection', function (socket) {
+  socket.on('help', function (data) {
+      var help = new Help()
+      help.lectureID = data.lectureID;
+      help.value = data.value;
+      help.groupName = data.groupName;
+      console.log("send help");
+      help.save(function (err, feed) {
+          if (err) {
+              throw err;
+          }
+          else{
+              console.log(data)
+              data["_id"] = help._id
+              socketServer.sockets.emit(data.lectureID, data);
+          }
+      });
+
+  });
     socket.on('feedback', function (data) {
         var feed = new Feedback()
         feed.lectureID = data.lectureID;

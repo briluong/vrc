@@ -15,6 +15,8 @@ AFRAME.registerComponent('button_down', {
       var button = document.querySelector('#buttonText');
 
       console.log(data.text);
+    //  window.emit('shake');
+
 
       if (ui.getAttribute('visible')) {
         //console.log(ui);
@@ -25,6 +27,15 @@ AFRAME.registerComponent('button_down', {
         ui.setAttribute('visible', true);
         button.setAttribute('value', 'Press To Cancel');
         //send the message here
+
+        var help = {
+          lectureID: $("#class_info").attr("data-lecture"),
+          groupName: $("#class_info").attr("data-username"),
+          value: true
+        }
+
+        socket.emit('help', help);
+
       }
 
     });
@@ -449,12 +460,27 @@ AFRAME.registerComponent('erase_toggle', {
 
     });
 
+
+
     el.addEventListener('mousedown', function () {
 
       var board = document.querySelector('#board');
 
       board.emit('erase_toggle');
+
+      // var vent = document.createEvent('Event');
+      // vent.initEvent('shake', true, true);
+      // window.dispatchEvent(vent);
     });
+  }
+});
+
+AFRAME.registerComponent('shake_reset', {
+  init: function () {
+    window.addEventListener('shake', shakeEventDidOccur, false);
+    function shakeEventDidOccur () {
+        document.querySelector("#player").setAttribute('rotation', '0 0 0');
+      }
   }
 });
 

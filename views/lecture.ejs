@@ -284,6 +284,7 @@
                             <% for(var k = 0; k < course.groups[groupNames[i]].length; k++){ %>
                             <span style="padding-right:5px;"><%= findStudentName(course.groups[groupNames[i]][k]) %></span>
                             <% } %>
+                            <p> <%=help %></p>
                         </div>
                     </div>
                     <% if(lecture.groupActive && lecture.active){ %>

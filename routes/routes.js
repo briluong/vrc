@@ -5,6 +5,8 @@ var Feedback = require('../models/feedback.js');
 var Lecture = require('../models/lectures.js');
 var User = require('../models/user.js');
 var Group = require('../models/groups.js');
+var Help = require('../models/help_request.js');
+
 module.exports = function (app, passport) {
 
     // LANDING PAGE
@@ -118,15 +120,22 @@ module.exports = function (app, passport) {
                                         if (err) {
                                           console.log(err);
                                         } else {
-                                          res.render("lecture", {
-                                            user: req.user,
-                                            course: course,
-                                            users: users,
-                                            route: lecture.title,
-                                            lecture: lecture,
-                                            question: questions,
-                                            feedback: feedback
-                                          });
+                                          Help.find({'lectureID': req.params.lectureID}, function (err, help) {
+                                            if (err) {
+                                              console.log(err);
+                                            } else {
+                                              res.render("lecture", {
+                                                user: req.user,
+                                                course: course,
+                                                users: users,
+                                                route: lecture.title,
+                                                lecture: lecture,
+                                                question: questions,
+                                                feedback: feedback,
+                                                help: help
+                                              });
+                                            }
+                                          })
                                         }
                                       })
 

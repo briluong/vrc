@@ -71,3 +71,12 @@ AFRAME.registerComponent('play-on-vrdisplayactivate-or-enter-vr', {
         video.play();
     }
 });
+
+AFRAME.registerComponent('shake_reset', {
+  init: function () {
+    window.addEventListener('shake', shakeEventDidOccur, false);
+    function shakeEventDidOccur () {
+        document.querySelector("#player").setAttribute('rotation', '0 0 0');
+      }
+  }
+});
