@@ -37,7 +37,7 @@
   <body>
     <a-scene networked-scene="
       app: myApp;
-      room: group1;
+      room: Group<%=groupName%><%lectureID%>;
       adapter: EasyRTC;
       debug: true;
       audio: true;
@@ -100,7 +100,8 @@
 
     <a-entity id="class_info"
             data-lecture="<%= lectureID %>"
-            data-username="<%= user.firstName + " " + user.lastName %>">
+            data-username="<%= user.firstName + " " + user.lastName %>"
+            data-groupName="<%=groupName%>">
     </a-entity>
 
     <a-plane id="ground"
@@ -128,7 +129,7 @@
       event-set__enter="_event: mouseenter; _target: #buttonText; visible: true"
       event-set__leave="_event: mouseleave; _target: #buttonText; visible: false"
       checkGroup="value: hello"
-      button_down="text: <%=groupName%>"
+      button_down="text: <%=group%>"
       >
       <a-text id="buttonText"
         value="Press For Help"

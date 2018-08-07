@@ -63,24 +63,43 @@ var webServer = http.createServer(app)
 var socketServer = socketIo.listen(webServer, {"log level": 1});
 
 socketServer.on('connection', function (socket) {
-  socket.on('help', function (data) {
-      var help = new Help()
-      help.lectureID = data.lectureID;
-      help.value = data.value;
-      help.groupName = data.groupName;
-      console.log("send help");
-      help.save(function (err, feed) {
-          if (err) {
-              throw err;
-          }
-          else{
-              console.log(data)
-              data["_id"] = help._id
-              socketServer.sockets.emit(data.lectureID, data);
-          }
-      });
+    socket.on('help', function (data) {
+        Help.findOne({'lectureID': data.lectureID, 'groupName': data.groupName}, function (err, help) {
+            // Return any errors.
+            if (err) {
+                throw err;
+            }
 
-  });
+            // Return if the user does not exist.
+            if (!help) {
+                var help = new Help()
+                help.lectureID = data.lectureID;
+                help.value = data.value;
+                help.groupName = data.groupName;
+                help.save(function (err, feed) {
+                    if (err) {
+                        throw err;
+                    }
+                    else {
+                        console.log(data)
+                        data["_id"] = help._id
+                        socketServer.sockets.emit(data.lectureID + "-Help", data);
+                    }
+                });
+            }
+            else {
+                Help.findOneAndRemove({'lectureID': data.lectureID, 'groupName': data.groupName}, function (err, help) {
+                    if (err) {
+                        throw err;
+                    }
+                    else {
+                        socketServer.sockets.emit(data.lectureID + "-DeleteHelp", data);
+                    }
+                })
+            }
+
+        });
+    });
     socket.on('feedback', function (data) {
         var feed = new Feedback()
         feed.lectureID = data.lectureID;
@@ -91,7 +110,7 @@ socketServer.on('connection', function (socket) {
             if (err) {
                 throw err;
             }
-            else{
+            else {
                 console.log(data)
                 data["_id"] = feed._id
                 socketServer.sockets.emit(data.lectureID, data);
@@ -102,7 +121,7 @@ socketServer.on('connection', function (socket) {
     socket.on('chat message', function (data) {
         var audio = new Questions()
         console.log(data.questionType)
-        if(data.questionType == 'audio') {
+        if (data.questionType == 'audio') {
             var buf = Buffer.from(data.data, 'base64'); // Ta-da
             console.log(buf)
             audio = new Questions()
@@ -118,14 +137,14 @@ socketServer.on('connection', function (socket) {
                 if (err) {
                     throw err;
                 }
-                else{
+                else {
                     data["_id"] = audio._id
                     data["createdAt"] = audio.createdAt
                     socketServer.sockets.emit(data.lectureID, data);
                 }
             });
         }
-        else{
+        else {
             audio = new Questions()
             audio.size = null
             audio.confidence = data.confidence
@@ -139,7 +158,7 @@ socketServer.on('connection', function (socket) {
                 if (err) {
                     throw err;
                 }
-                else{
+                else {
                     console.log(data)
                     data["_id"] = audio._id
                     socketServer.sockets.emit(data.lectureID, data);
@@ -148,7 +167,7 @@ socketServer.on('connection', function (socket) {
         }
     });
     socket.on("toggleActiveLecture", function (data) {
-        if("active" in data && "lectureID" in data && "courseID" in data){
+        if ("active" in data && "lectureID" in data && "courseID" in data) {
             console.log(data)
             Course.findOneAndUpdate({"lectures.lectureID": data.lectureID}, {
                 '$set': {
@@ -175,7 +194,7 @@ socketServer.on('connection', function (socket) {
             })
         }
     })
-    socket.on("toggleGroupActiveLecture", function(data){
+    socket.on("toggleGroupActiveLecture", function (data) {
         Lecture.findOneAndUpdate({"_id": data.lectureID}, {
             $set: {
                 'groupActive': data.groupActive
@@ -244,7 +263,6 @@ var rtc = easyrtc.listen(app, socketServer, null, function (err, rtcRef) {
         appObj.events.defaultListeners.roomCreate(appObj, creatorConnectionObj, roomName, roomOptions, callback);
     });
 });
-
 
 
 const Questions = require('./models/questions');

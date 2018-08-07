@@ -259,12 +259,12 @@
                     </div>
                     <% if(lecture.groupActive && lecture.active){ %>
                     <div class="vr-enter-stream card-action"><a
-                                href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
+                                href="/course/<%= course._id %>/<%= lecture._id %>/<%= groupNames[i] %>"
                                 class="enter-group-stream waves-effect
                                                 waves-teal btn-flat">Enter Stream</a></div>
                     <% } else { %>
                     <div class="vr-enter-stream card-action hide"><a
-                                href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
+                                href="/course/<%= course._id %>/<%= lecture._id %>/<%= groupNames[i] %>"
                                 class="enter-group-stream waves-effect
                                                 waves-teal btn-flat">Enter Stream</a></div>
                     <% } %>
@@ -274,9 +274,11 @@
             <% } else if(user.accountType == 'instructor'){ %>
             <ul class="collapsible card" data-collapsible="accordion">
                 <li>
-                    <div class="collapsible-header">
-                        <i class="material-icons">group</i>Group
-                        <%= groupNames[i] %>
+                    <div class="collapsible-header flex-container flex-container-mobile" id="Group<%=groupNames[i]%>">
+                        <div class="left-item"><i class="material-icons">group</i>Group <%= groupNames[i] %></div>
+                        <%if(groupNeedsHelp(groupNames[i], help, lecture._id)){%>
+                        <div class="right-item" id="Group<%=groupNames[i]%>-help" style='color:red;'>[HELP REQUESTED]</div>
+                        <%}%>
                     </div>
                     <div class="collapsible-body">
                         <div class="group-content">
@@ -284,17 +286,17 @@
                             <% for(var k = 0; k < course.groups[groupNames[i]].length; k++){ %>
                             <span style="padding-right:5px;"><%= findStudentName(course.groups[groupNames[i]][k]) %></span>
                             <% } %>
-                            <p> <%=help %></p>
+                            <p> <%=help%></p>
                         </div>
                     </div>
                     <% if(lecture.groupActive && lecture.active){ %>
                     <div class="vr-enter-stream card-action"><a
-                                href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
+                                href="/course/<%= course._id %>/<%= lecture._id %>/<%= groupNames[i] %>"
                                 class="enter-group-stream waves-effect
                                                 waves-teal btn-flat">Enter Stream</a></div>
                     <% } else { %>
                     <div class="vr-enter-stream card-action hide"><a
-                                href="/course/<%= course._id %>/<%= lecture._id %>/Group<%= groupNames[i] %>"
+                                href="/course/<%= course._id %>/<%= lecture._id %>/<%= groupNames[i] %>"
                                 class="enter-group-stream waves-effect
                                                 waves-teal btn-flat">Enter Stream</a></div>
                     <% } %>

@@ -244,6 +244,24 @@ socket.on($("#lecture-group-toggle").attr("data-lecture") + "-groupToggle", func
         $(".vr-enter-stream").addClass("hide")
     }
 })
+
+socket.on($("#lecture-group-toggle").attr("data-lecture") + "-Help", function (data) {
+    console.log(data)
+    var element =
+        "<div class='right-item' id=" +
+        "Group" + data.groupName + "-help"  +
+        " style='color:red;'>" +
+        "[HELP REQUESTED]" +
+        "</div>"
+    $("#Group" + data.groupName).append(element)
+    M.toast({html: "Group " + data.groupName + " requested for help!", displayLength: 3000})
+})
+
+socket.on($("#lecture-group-toggle").attr("data-lecture") + "-DeleteHelp", function (data) {
+    console.log(data)
+    $("#Group" + data.groupName + "-help").remove()
+    M.toast({html: "Group " + data.groupName + " does not need help anymore!", displayLength: 3000})
+})
 /*****************************************************************************/
 /* Function Handlers */
 /*****************************************************************************/

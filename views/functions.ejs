@@ -136,3 +136,17 @@
     var finalDate = dd+'/'+mm+'/'+yyyy;
     return finalDate
 } %>
+
+<% groupNeedsHelp = function (name, help, lectureID) {
+    console.log(help)
+    console.log(name)
+    console.log(lectureID)
+    for(var i = 0; i < help.length; i++){
+        console.log(help[i].groupName)
+        if(help[i].groupName == name && lectureID == help[i].lectureID){
+            console.log(help[i].groupName == name && lectureID == help[i].lectureID)
+            return true
+        }
+    }
+    return false;
+}%>

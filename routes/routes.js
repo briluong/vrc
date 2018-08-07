@@ -190,7 +190,8 @@ module.exports = function (app, passport) {
         } else {
           res.render("group", {
               user: req.user,
-              groupName: group,
+              group: group,
+              groupName: req.params.groupName,
               lectureID: req.params.lectureID,
               courseID: req.params.id
           });
