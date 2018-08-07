@@ -329,8 +329,8 @@ function toggleNotifications(data) {
 
 function doneTyping() {
     let val = $('input#youtubeURL').val()
-    let regex = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/;
-    if (regex.test((val))) {
+
+    if (checkYoutubeURL(val) !=  'false') {
         let lectureID = $("#youtubeURL").attr("data-lecture")
         let data = {}
         data["youtube"] = val
@@ -361,12 +361,18 @@ function doneTyping() {
 }
 
 function checkYoutubeURL(url) {
-    let regex = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/;
-    if (regex.test((url))) {
-        return true
+    let youtubeRegex = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/;
+    let streamFileRegex = /^(http(s)??\:\/\/)?(.+)?(.mpd|.m3u8|.mp4)/;
+    if (youtubeRegex.test((url))) {
+        return "youtube"
+    }
+    else if(streamFileRegex.test((url))){
+        return "other"
     }
     return false
 }
+
+
 
 function b64toBlob(b64Data, contentType, sliceSize) {
     contentType = contentType || '';
@@ -429,5 +435,8 @@ function deleteQuestion(questionID) {
 
 function embedYoutubeURL (url) {
     var splitURL = url.split("watch?v=")
+    if (splitURL.length < 2){
+        return splitURL[0]
+    }
     return splitURL[0] + "embed/" + splitURL[1]
 }

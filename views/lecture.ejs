@@ -71,19 +71,19 @@
                     <div id="card-title" class="card-title">Offline</div>
                     <% } %>
                     <% if(userIsInstructorOrAdmin()) { %>
-                    <% if(lecture.active) { %>
-                    <div id="youtube-input" class="input-field">
-                        <input id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off" data-lecture="<%= lecture._id %>"
-                               value="<%= lecture.youtube%>">
-                        <label id="youtubeURL-label" for="youtubeURL">YouTube URL</label>
-                    </div>
-                    <%}else { %>
-                    <div id="youtube-input" class="input-field hide">
-                        <input id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off" data-lecture="<%= lecture._id %>"
-                               value="<%= lecture.youtube%>">
-                        <label id="youtubeURL-label" for="youtubeURL">YouTube URL</label>
-                    </div>
-                    <% } %>
+                        <% if(lecture.active) { %>
+                        <div id="youtube-input" class="input-field">
+                            <input id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off" data-lecture="<%= lecture._id %>"
+                                   value="<%= lecture.youtube%>">
+                            <label id="youtubeURL-label" for="youtubeURL">YouTube URL</label>
+                        </div>
+                        <%}else { %>
+                        <div id="youtube-input" class="input-field hide">
+                            <input id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off" data-lecture="<%= lecture._id %>"
+                                   value="<%= lecture.youtube%>">
+                            <label id="youtubeURL-label" for="youtubeURL">YouTube URL</label>
+                        </div>
+                        <% } %>
                     <% } else{ %>
                     <% if(lecture.active) { %>
                     <div id="youtube-input" class="input-field hide">
@@ -100,18 +100,18 @@
                     <% }%>
                     <% }%>
                     <% if(lecture.active) { %>
-                    <% if(lecture.youtube && checkYoutubeURL(lecture.youtube)) { %>
-                    <div class="video-container">
-                        <iframe id="youtube-container" src=<%= embedYoutubeURL(lecture.youtube)%> frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <p id="notActive-warning" class="hide" >Lecture is not active, please check again later.</p>
-                    <% } else { %>
-                    <div class="video-container hide">
-                        <iframe id="youtube-container" frameborder="0" allowfullscreen></iframe>
-                    </div>
-                    <p id="notActive-warning" class="hide" >Lecture is not active, please check again later.</p>
-                    <p >YouTube stream not available.</p>
-                    <% } %>
+                        <% if(lecture.youtube && checkYoutubeURL(lecture.youtube)) { %>
+                        <div class="video-container">
+                            <iframe id="youtube-container" src=<%= embedYoutubeURL(lecture.youtube)%> frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <p id="notActive-warning" class="hide" >Lecture is not active, please check again later.</p>
+                        <% } else { %>
+                        <div class="video-container hide">
+                            <iframe id="youtube-container" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                        <p id="notActive-warning" class="hide" >Lecture is not active, please check again later.</p>
+                        <p >YouTube stream not available.</p>
+                        <% } %>
                     <% } else { %>
                     <div class="video-container hide">
                         <iframe id="youtube-container" frameborder="0" allowfullscreen></iframe>
@@ -122,17 +122,23 @@
                 <!--<video id="video"></video>-->
                 <% if(lecture.active && !(lecture.groupActive)) { %>
                 <div id="youtube-enter-stream" class="card-action">
+                    <% if(checkYoutubeURL(lecture.youtube) == "youtube") { %>
                     <a href="/course/<%= course._id %>/<%= lecture._id %>/stream"
                        class="waves-effect waves-teal btn-flat">Enter Stream</a>
+                    <% } else{ %>
                     <a href="/course/<%= course._id %>/<%= lecture._id %>/stream360"
                        class="waves-effect waves-teal btn-flat">Enter VR Stream</a>
+                    <% } %>
                 </div>
                 <% } else{ %>
                 <div id="youtube-enter-stream" class="card-action hide">
+                    <% if(checkYoutubeURL(lecture.youtube) == "youtube") { %>
                     <a href="/course/<%= course._id %>/<%= lecture._id %>/stream"
                        class="waves-effect waves-teal btn-flat">Enter Stream</a>
+                    <% } else{ %>
                     <a href="/course/<%= course._id %>/<%= lecture._id %>/stream360"
                        class="waves-effect waves-teal btn-flat">Enter VR Stream</a>
+                    <% } %>
                 </div>
                 <% } %>
             </div>
