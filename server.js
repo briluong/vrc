@@ -20,6 +20,7 @@ var flash = require('connect-flash');
 const dbConfig = require("./config/database.js");
 const Lecture = require('./models/lectures');
 const Course = require('./models/courses');
+const Help = require('./models/help_request');
 
 const app = express();
 
@@ -62,6 +63,42 @@ var webServer = http.createServer(app)
 var socketServer = socketIo.listen(webServer, {"log level": 1});
 
 socketServer.on('connection', function (socket) {
+  socket.on('help', function (data) {
+      var help = new Help()
+      help.lectureID = data.lectureID;
+      help.value = data.value;
+      help.groupName = data.groupName;
+      console.log("send help");
+      help.save(function (err, feed) {
+          if (err) {
+              throw err;
+          }
+          else{
+              console.log(data)
+              data["_id"] = help._id
+              socketServer.sockets.emit(data.lectureID, data);
+          }
+      });
+
+  });
+    socket.on('feedback', function (data) {
+        var feed = new Feedback()
+        feed.lectureID = data.lectureID;
+        feed.value = data.value;
+        feed.sentBy = data.sentBy;
+        console.log("send feedback");
+        feed.save(function (err, feed) {
+            if (err) {
+                throw err;
+            }
+            else{
+                console.log(data)
+                data["_id"] = feed._id
+                socketServer.sockets.emit(data.lectureID, data);
+            }
+        });
+
+    });
     socket.on('chat message', function (data) {
         var audio = new Questions()
         console.log(data.questionType)
@@ -211,6 +248,7 @@ var rtc = easyrtc.listen(app, socketServer, null, function (err, rtcRef) {
 
 
 const Questions = require('./models/questions');
+const Feedback = require('./models/feedback');
 
 // // Uploading Questions
 // app.post("/api/uploadAudio", apiUtil.isLoggedIn, (req, res) => {

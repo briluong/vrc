@@ -72,34 +72,11 @@ AFRAME.registerComponent('play-on-vrdisplayactivate-or-enter-vr', {
     }
 });
 
-AFRAME.registerComponent('send_feedback', {
-  schema: {
-      message: {default: 'default'},
-      delay: {default: 0}
-  },
-
+AFRAME.registerComponent('shake_reset', {
   init: function () {
-    var data = this.data;
-    var el = this.el;
-
-    el.addEventListener('mousedown', function (evt) {
-      if (data.delay == 0) {
-        console.log(data.message);
-        data.delay = 1;
+    window.addEventListener('shake', shakeEventDidOccur, false);
+    function shakeEventDidOccur () {
+        document.querySelector("#player").setAttribute('rotation', '0 0 0');
       }
-    });
-  },
-
-  tick: function(time, delta) {
-    var data = this.data;
-
-    if (data.delay > 0) {
-      data.delay++;
-    //  console.log(data.delay);
-
-      if (data.delay > 120) {
-        data.delay = 0;
-      }
-    }
   }
 });

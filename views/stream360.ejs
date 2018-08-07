@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
 
     <script src="/js/stream360.js"></script>
+    <script src="/js/shake.js"> </script>
+
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
@@ -28,7 +30,7 @@
     </a-videosphere>
 
     <!-- Define camera with zero user height, movement disabled and arrow key rotation added. -->
-    <a-camera user-height="0" wasd-controls-enabled="false" arrow-key-rotation>
+    <a-camera user-height="0" wasd-controls-enabled="false" arrow-key-rotation shake_reset>
       <a-cursor raycaster="objects: .interactable"></a-cursor>
     </a-camera>
 
@@ -68,6 +70,17 @@
 <script src="/js/recorder360.js"></script>
 
 <script>
+window.onload = function() {
+//create a new instance of shake.js.
+var myShakeEvent = new Shake({
+    threshold: 15
+});
+// start listening to device motion
+myShakeEvent.start();
+// register a shake event
+
+};
+
     var video = document.getElementById('video');
     if(Hls.isSupported()) {
         var hls = new Hls();
