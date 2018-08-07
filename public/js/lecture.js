@@ -112,112 +112,113 @@ $(document).on('click', '.play-button', function (event) {
 socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
     console.log(data)
     if (data.questionType != null) {
-    if (data.questionType == 'audio') {
-        var url = b64toBlob(data.data, 'audio/webm');
-        var element = "<li id=" +
-            data._id +
-            "List class='collection-item avatar'>" +
-            "<div class='question'><audio crossorigin='anonymous' class ='audioPlayer'" +
-            " id=" +
-            data._id +
-            " data-audio=" +
-            data.data +
-            " src=" +
-            url +
-            ">" +
-            "</audio><i data-question=" +
-            data._id +
-            " class='play-button material-icons circle'>play_arrow</i>" +
-            "<div class='title flex-container flex-container-mobile'>" +
-            "<span class='left-item'>" +
-            "Confidence: " +
-            data.confidence +
-            "%</span> " +
-            "<div class='right-item'> " +
-            "<span>" +
-            "Student Name: " +
-            data.Username +
-            "</span> " +
-            "<span style='margin-left:1em'>" +
-            getDate() +
-            "</span> " +
-            "<button href='#delete-question-modal' class='deleteQuestion waves-teal btn-flat modal-trigger' data-question=" +
-            data._id +
-            ">" +
-            "<i class='medium material-icons'>delete</i></button>" +
-            "</div> " +
-            "</div>" +
-            "<p>" +
-            data.text +
-            "</p></div></li>"
-    }
-    else {
+        if (data.questionType == 'audio') {
+            var url = b64toBlob(data.data, 'audio/webm');
+            var element = "<li id=" +
+                data._id +
+                "List class='collection-item avatar'>" +
+                "<div class='question'><audio crossorigin='anonymous' class ='audioPlayer'" +
+                " id=" +
+                data._id +
+                " data-audio=" +
+                data.data +
+                " src=" +
+                url +
+                ">" +
+                "</audio><i data-question=" +
+                data._id +
+                " class='play-button material-icons circle'>play_arrow</i>" +
+                "<div class='title flex-container flex-container-mobile'>" +
+                "<span class='left-item'>" +
+                "Confidence: " +
+                data.confidence +
+                "%</span> " +
+                "<div class='right-item'> " +
+                "<span>" +
+                "Student Name: " +
+                data.Username +
+                "</span> " +
+                "<span style='margin-left:1em'>" +
+                getDate() +
+                "</span> " +
+                "<button href='#delete-question-modal' class='deleteQuestion waves-teal btn-flat modal-trigger' data-question=" +
+                data._id +
+                ">" +
+                "<i class='medium material-icons'>delete</i></button>" +
+                "</div> " +
+                "</div>" +
+                "<p>" +
+                data.text +
+                "</p></div></li>"
+        }
+        else {
+            var element =
+                "<li id=" +
+                data._id +
+                "List class='collection-item avatar'>" +
+                "<div class='question'>" +
+                "<div class='title flex-container flex-container-mobile'>" +
+                "<span class='left-item'>" +
+                "Confidence: " +
+                data.confidence +
+                "%</span> " +
+                "<div class='right-item'> " +
+                "<span>" +
+                "Student Name: " +
+                data.Username +
+                "</span> " +
+                "<span style='margin-left:1em'>" +
+                getDate() +
+                "</span> " +
+                "<button href='#delete-question-modal' class='deleteQuestion waves-teal btn-flat modal-trigger' data-question=" +
+                data._id +
+                ">" +
+                "<i class='medium material-icons'>delete</i></button>" +
+                "</div> " +
+                "</div> " +
+                "</div>" +
+                "<p>" +
+                data.text +
+                "</p></div></li>"
+        }
+        $("#questionCard").append(element)
+        if ($("#questionCard").attr("data-notifications") == 'true') {
+            var audio = new Audio('/assets/unconvinced.mp3');
+            audio.play();
+        }
+        M.toast({html: data.Username + " sent you a question!", displayLength: 3000})
+    } else {
         var element =
             "<li id=" +
             data._id +
             "List class='collection-item avatar'>" +
-            "<div class='question'>" +
-            "<div class='title flex-container flex-container-mobile'>" +
-            "<span class='left-item'>" +
-            "Confidence: " +
-            data.confidence +
-            "%</span> " +
-            "<div class='right-item'> " +
-            "<span>" +
-            "Student Name: " +
-            data.Username +
-            "</span> " +
-            "<span style='margin-left:1em'>" +
-            getDate() +
-            "</span> " +
-            "<button href='#delete-question-modal' class='deleteQuestion waves-teal btn-flat modal-trigger' data-question=" +
-            data._id +
-            ">" +
-            "<i class='medium material-icons'>delete</i></button>" +
-            "</div> " +
-            "</div> " +
-            "</div>" +
-            "<p>" +
-            data.text +
-            "</p></div></li>"
-    }
-    $("#questionCard").append(element)
-    if($("#questionCard").attr("data-notifications") == 'true'){
-        var audio = new Audio('/assets/unconvinced.mp3');
-        audio.play();
-    }
-    M.toast({html: data.Username + " sent you a question!", displayLength: 3000})
-  } else {
-    var element =
-        "<li id=" +
-        data._id +
-        "List class='collection-item avatar'>" +
-        "<div class='feedback'>" +
-        data.value + " by " + data.sentBy +
-        "</div></li>"
+            "<div class='feedback'>" +
+            data.value + " by " + data.sentBy +
+            "</div></li>"
 
-      $("#feedbackCard").append(element);
-  }
+        $("#feedbackCard").append(element);
+    }
 });
 
-socket.on($("#lecture-group-toggle").attr("data-lecture") + "-lectureToggle", function (data) {
+socket.on($("#lectureToggle-container").attr("data-lecture") + "-lectureToggle", function (data) {
     console.log(data)
-    if(data.active){
+    if (data.active) {
         $(".live-now").removeClass("hide")
         $("#card-title").html("Live")
         if (($("#lectureToggle-container").attr("data-groupactive")) == 'false') {
             $("#youtube-enter-stream").removeClass("hide")
         }
-        else{
+        else {
             $(".vr-enter-stream").removeClass("hide")
         }
-        if (checkYoutubeURL($('input#youtubeURL').val())) {
+        if (checkYoutubeURL($('input#youtubeURL').val()) != false &&
+            $("#enter-stream-button").attr("href") == $("#enter-stream-button").attr("data-stream")) {
             $(".video-container").removeClass("hide")
         }
         $("#youtube-container").attr("src", embedYoutubeURL($("#youtubeURL").val()))
         $("#notActive-warning").addClass("hide")
     }
-    else{
+    else {
         $(".video-container").addClass("hide")
         $("#card-title").html("Offline")
         if (!($(".vr-enter-stream").hasClass("hide"))) {
@@ -225,31 +226,31 @@ socket.on($("#lecture-group-toggle").attr("data-lecture") + "-lectureToggle", fu
         }
         $("#youtube-enter-stream").addClass("hide")
         $(".live-now").addClass("hide")
-        if($("#notActive-warning").hasClass("hide")){
+        if ($("#notActive-warning").hasClass("hide")) {
             $("#notActive-warning").removeClass("hide")
         }
     }
 })
 
-socket.on($("#lecture-group-toggle").attr("data-lecture") + "-groupToggle", function (data) {
+socket.on($("#lectureToggle-container").attr("data-lecture") + "-groupToggle", function (data) {
     console.log(data)
-    if(data.groupActive){
+    if (data.groupActive) {
         $("#youtube-enter-stream").addClass("hide")
         $("#lectureToggle-container").attr("data-groupActive", 'true')
         $(".vr-enter-stream").removeClass("hide")
     }
-    else{
+    else {
         $("#youtube-enter-stream").removeClass("hide")
         $("#lectureToggle-container").attr("data-groupActive", 'false')
         $(".vr-enter-stream").addClass("hide")
     }
 })
 
-socket.on($("#lecture-group-toggle").attr("data-lecture") + "-Help", function (data) {
+socket.on($("#lecture-group-toggle").attr("data-lecture")+ "-Help", function (data) {
     console.log(data)
     var element =
         "<div class='right-item' id=" +
-        "Group" + data.groupName + "-help"  +
+        "Group" + data.groupName + "-help" +
         " style='color:red;'>" +
         "[HELP REQUESTED]" +
         "</div>"
@@ -261,6 +262,23 @@ socket.on($("#lecture-group-toggle").attr("data-lecture") + "-DeleteHelp", funct
     console.log(data)
     $("#Group" + data.groupName + "-help").remove()
     M.toast({html: "Group " + data.groupName + " does not need help anymore!", displayLength: 3000})
+})
+
+socket.on($("#lectureToggle-container").attr("data-lecture") + "-updateYoutube", function (data) {
+    console.log(data)
+    if (checkYoutubeURL(data.youtube) == "youtube") {
+        $(".video-container").removeClass("hide")
+        var splitURL = data.youtube.split("watch?v=")
+        var youtubeURL = splitURL[0] + "embed/" + splitURL[1]
+        $("#youtube-container").attr("src", youtubeURL)
+        $(".video-container").removeClass("hide")
+        $("#enter-stream-button").attr("href", $("#enter-stream-button").attr("data-stream"))
+    }
+    else if (checkYoutubeURL(data.youtube) == "other") {
+        $(".video-container").addClass("hide")
+        $("#enter-stream-button").attr("href", $("#enter-stream-button").attr("data-stream360"))
+    }
+    M.toast({html: "The stream link has bene updated!", displayLength: 3000})
 })
 /*****************************************************************************/
 /* Function Handlers */
@@ -311,10 +329,10 @@ function toggleNotifications(data) {
         data: JSON.stringify(data),
         success: function (resp) {
             console.log("Completed Notifications Toggle")
-            if(data.notifications){
+            if (data.notifications) {
                 $("#questionCard").attr("data-notifications", 'true')
             }
-            else{
+            else {
                 $("#questionCard").attr("data-notifications", 'false')
             }
         },
@@ -329,31 +347,31 @@ function toggleNotifications(data) {
 
 function doneTyping() {
     let val = $('input#youtubeURL').val()
-
-    if (checkYoutubeURL(val) !=  'false') {
+    if (checkYoutubeURL(val) != false) {
         let lectureID = $("#youtubeURL").attr("data-lecture")
         let data = {}
         data["youtube"] = val
         data["lectureID"] = lectureID
-        $.ajax({
-            url: "/api/updateYoutube",
-            type: "POST",
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function (resp) {
-                var splitURL = val.split("watch?v=")
-                var youtubeURL = splitURL[0] + "embed/" + splitURL[1]
-                $("#youtube-container").attr("src", youtubeURL)
-                $(".video-container").removeClass("hide")
-                console.log("Completed updating Youtube Link")
-            },
-            error: function (resp) {
-                console.log(data)
-                return alert("Failed to update Youtube Link");
-            },
-            complete: function () {
-            }
-        });
+        socket.emit("updateYoutube", data)
+        // $.ajax({
+        //     url: "/api/updateYoutube",
+        //     type: "POST",
+        //     contentType: 'application/json',
+        //     data: JSON.stringify(data),
+        //     success: function (resp) {
+        //         var splitURL = val.split("watch?v=")
+        //         var youtubeURL = splitURL[0] + "embed/" + splitURL[1]
+        //         $("#youtube-container").attr("src", youtubeURL)
+        //         $(".video-container").removeClass("hide")
+        //         console.log("Completed updating Youtube Link")
+        //     },
+        //     error: function (resp) {
+        //         console.log(data)
+        //         return alert("Failed to update Youtube Link");
+        //     },
+        //     complete: function () {
+        //     }
+        // });
     }
     else {
         M.toast({html: "Please enter a valid Youtube URL", displayLength: 3000})
@@ -366,12 +384,11 @@ function checkYoutubeURL(url) {
     if (youtubeRegex.test((url))) {
         return "youtube"
     }
-    else if(streamFileRegex.test((url))){
+    else if (streamFileRegex.test((url))) {
         return "other"
     }
     return false
 }
-
 
 
 function b64toBlob(b64Data, contentType, sliceSize) {
@@ -433,9 +450,9 @@ function deleteQuestion(questionID) {
     });
 }
 
-function embedYoutubeURL (url) {
+function embedYoutubeURL(url) {
     var splitURL = url.split("watch?v=")
-    if (splitURL.length < 2){
+    if (splitURL.length < 2) {
         return splitURL[0]
     }
     return splitURL[0] + "embed/" + splitURL[1]

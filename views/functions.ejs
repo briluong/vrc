@@ -111,9 +111,13 @@
     return splitURL[0] + "embed/" + splitURL[1]
 } %>
 <% checkYoutubeURL = function (url) {
-    let regex = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/;
-    if (regex.test((url))) {
-        return true
+    let youtubeRegex = /^(http(s)??\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(youtu.be\/))([a-zA-Z0-9\-_])+/;
+    let streamFileRegex = /^(http(s)??\:\/\/)?(.+)?(.mpd|.m3u8|.mp4)/;
+    if (youtubeRegex.test((url))) {
+        return "youtube"
+    }
+    else if(streamFileRegex.test((url))){
+        return "other"
     }
     return false
 } %>

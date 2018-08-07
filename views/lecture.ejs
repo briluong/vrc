@@ -13,7 +13,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize//1.0.0-beta/css/materialize.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/materialize//1.0.0-beta/css/materialize.min.css">
     <!-- Compiled and minified JavaScript -->
     <script src="https://storage.googleapis.com/vrview/2.0/build/vrview.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
@@ -33,7 +34,8 @@
                 <div class="title">
                     <p><%= lecture.title %></p>
                 </div>
-                <div id="lectureToggle-container" data-groupactive="<%=lecture.groupActive%>" class="switch toggle-lecture-active-container">
+                <div data-lecture="<%= lecture._id %>" id="lectureToggle-container" data-groupactive="<%= lecture.groupActive %>"
+                     class="switch toggle-lecture-active-container">
                     <% if(lecture.active){ %>
                     <span class="live-now active-blink show" data-active= <%= lecture.active %>>LIVE NOW</span>
                     <% } else{ %>
@@ -71,92 +73,104 @@
                     <div id="card-title" class="card-title">Offline</div>
                     <% } %>
                     <% if(userIsInstructorOrAdmin()) { %>
-                        <% if(lecture.active) { %>
-                        <div id="youtube-input" class="input-field">
-                            <input id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off" data-lecture="<%= lecture._id %>"
-                                   value="<%= lecture.youtube%>">
-                            <label id="youtubeURL-label" for="youtubeURL">YouTube URL</label>
-                        </div>
-                        <%}else { %>
-                        <div id="youtube-input" class="input-field hide">
-                            <input id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off" data-lecture="<%= lecture._id %>"
-                                   value="<%= lecture.youtube%>">
-                            <label id="youtubeURL-label" for="youtubeURL">YouTube URL</label>
-                        </div>
-                        <% } %>
+                    <% if(lecture.active) { %>
+                    <div id="youtube-input" class="input-field">
+                        <input id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off"
+                               data-lecture="<%= lecture._id %>"
+                               value="<%= lecture.youtube %>">
+                        <label id="youtubeURL-label" for="youtubeURL">URL</label>
+                    </div>
+                    <% }else { %>
+                    <div id="youtube-input" class="input-field hide">
+                        <input id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off"
+                               data-lecture="<%= lecture._id %>"
+                               value="<%= lecture.youtube %>">
+                        <label id="youtubeURL-label" for="youtubeURL">URL</label>
+                    </div>
+                    <% } %>
                     <% } else{ %>
                     <% if(lecture.active) { %>
                     <div id="youtube-input" class="input-field hide">
-                        <input readonly="readonly" id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off" data-lecture="<%= lecture._id %>"
-                               value="<%= lecture.youtube%>">
-                        <label>YouTube URL</label>
+                        <input readonly="readonly" id="youtubeURL" name="youtubeURL" type="text" class="validate"
+                               autocomplete="off" data-lecture="<%= lecture._id %>"
+                               value="<%= lecture.youtube %>">
+                        <label>URL</label>
                     </div>
-                    <%}else { %>
+                    <% }else { %>
                     <div id="youtube-input" class="input-field hide">
-                        <input readonly="readonly" id="youtubeURL" name="youtubeURL" type="text" class="validate" autocomplete="off" data-lecture="<%= lecture._id %>"
-                               value="<%= lecture.youtube%>">
-                        <label>YouTube URL</label>
+                        <input readonly="readonly" id="youtubeURL" name="youtubeURL" type="text" class="validate"
+                               autocomplete="off" data-lecture="<%= lecture._id %>"
+                               value="<%= lecture.youtube %>">
+                        <label>URL</label>
                     </div>
-                    <% }%>
-                    <% }%>
+                    <% } %>
+                    <% } %>
                     <% if(lecture.active) { %>
-                        <% if(lecture.youtube && checkYoutubeURL(lecture.youtube)) { %>
-                        <div class="video-container">
-                            <iframe id="youtube-container" src=<%= embedYoutubeURL(lecture.youtube)%> frameborder="0" allowfullscreen></iframe>
-                        </div>
-                        <p id="notActive-warning" class="hide" >Lecture is not active, please check again later.</p>
-                        <% } else { %>
-                        <div class="video-container hide">
-                            <iframe id="youtube-container" frameborder="0" allowfullscreen></iframe>
-                        </div>
-                        <p id="notActive-warning" class="hide" >Lecture is not active, please check again later.</p>
-                        <p >YouTube stream not available.</p>
-                        <% } %>
+                    <% if(lecture.youtube && checkYoutubeURL(lecture.youtube) == "youtube") { %>
+                    <div class="video-container">
+                        <iframe id="youtube-container" src=<%= embedYoutubeURL(lecture.youtube) %> frameborder="0"
+                                allowfullscreen></iframe>
+                    </div>
+                    <p id="notActive-warning" class="hide">Lecture is not active, please check again later.</p>
                     <% } else { %>
                     <div class="video-container hide">
                         <iframe id="youtube-container" frameborder="0" allowfullscreen></iframe>
                     </div>
-                    <p id="notActive-warning" >Lecture is not active, please check again later.</p>
+                    <p id="notActive-warning" class="hide">Lecture is not active, please check again later.</p>
+                    <% } %>
+                    <% } else { %>
+                    <div class="video-container hide">
+                        <iframe id="youtube-container" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <p id="notActive-warning">Lecture is not active, please check again later.</p>
                     <% } %>
                 </div>
                 <!--<video id="video"></video>-->
                 <% if(lecture.active && !(lecture.groupActive)) { %>
                 <div id="youtube-enter-stream" class="card-action">
                     <% if(checkYoutubeURL(lecture.youtube) == "youtube") { %>
-                    <a href="/course/<%= course._id %>/<%= lecture._id %>/stream"
+                    <a id="enter-stream-button" href="/course/<%= course._id %>/<%= lecture._id %>/stream"
+                       data-stream="/course/<%= course._id %>/<%= lecture._id %>/stream"
+                       data-stream360="/course/<%= course._id %>/<%= lecture._id %>/stream360"
                        class="waves-effect waves-teal btn-flat">Enter Stream</a>
-                    <% } else{ %>
-                    <a href="/course/<%= course._id %>/<%= lecture._id %>/stream360"
-                       class="waves-effect waves-teal btn-flat">Enter VR Stream</a>
+                    <% } else if(checkYoutubeURL(lecture.youtube) == "other"){ %>
+                    <a id="enter-stream-button" href="/course/<%= course._id %>/<%= lecture._id %>/stream360"
+                       data-stream="/course/<%= course._id %>/<%= lecture._id %>/stream"
+                       data-stream360="/course/<%= course._id %>/<%= lecture._id %>/stream360"
+                       class="waves-effect waves-teal btn-flat">Enter Stream</a>
                     <% } %>
                 </div>
                 <% } else{ %>
                 <div id="youtube-enter-stream" class="card-action hide">
                     <% if(checkYoutubeURL(lecture.youtube) == "youtube") { %>
-                    <a href="/course/<%= course._id %>/<%= lecture._id %>/stream"
+                    <a id="enter-stream-button" href="/course/<%= course._id %>/<%= lecture._id %>/stream"
+                       data-stream="/course/<%= course._id %>/<%= lecture._id %>/stream"
+                       data-stream360="/course/<%= course._id %>/<%= lecture._id %>/stream360"
                        class="waves-effect waves-teal btn-flat">Enter Stream</a>
-                    <% } else{ %>
-                    <a href="/course/<%= course._id %>/<%= lecture._id %>/stream360"
-                       class="waves-effect waves-teal btn-flat">Enter VR Stream</a>
+                    <% } else if(checkYoutubeURL(lecture.youtube) == "other"){ %>
+                    <a id="enter-stream-button" href="/course/<%= course._id %>/<%= lecture._id %>/stream360"
+                       data-stream="/course/<%= course._id %>/<%= lecture._id %>/stream"
+                       data-stream360="/course/<%= course._id %>/<%= lecture._id %>/stream360"
+                       class="waves-effect waves-teal btn-flat">Enter Stream</a>
                     <% } %>
                 </div>
                 <% } %>
             </div>
 
             <% if(userIsInstructorOrAdmin()){ %>
-            <ul class="collection with-header card" id = "questionCard" data-notifications = "<%=lecture.notifications%>">
+            <ul class="collection with-header card" id="questionCard" data-notifications="<%= lecture.notifications %>">
                 <li class="collection-header flex-container">
                     <p>Questions</p>
-                    <% if(lecture.notifications){%>
+                    <% if(lecture.notifications){ %>
                     <div class="switch">
                         <label style="cursor:unset; padding-right:5px;">Notification</label>
                         <label id="instructorNotification-toggle" data-course="<%= course._id %>"
                                data-lecture="<%= lecture._id %>">Off
                             <input id="instructorNotification-input" type="checkbox" checked="checked">
                             <span id="instructorNotification-span"
-                                    class="lever"></span>On</label>
+                                  class="lever"></span>On</label>
                     </div>
-                    <%} else {%>
+                    <% } else { %>
                     <div class="switch">
                         <label style="cursor:unset; padding-right:5px;">Notification</label>
                         <label id="instructorNotification-toggle" data-course="<%= course._id %>"
@@ -165,72 +179,77 @@
                             <span id="instructorNotification-span"
                                   class="lever"></span>On</label>
                     </div>
-                    <%}%>
+                    <% } %>
                 </li>
                 <% for(var i = 0; i < question.length; i++){ %>
-                <li id="<%=question[i]._id%>List" class="collection-item avatar">
+                <li id="<%= question[i]._id %>List" class="collection-item avatar">
                     <div class="question">
                         <% if(question[i].questionType == 'audio'){ %>
-                        <audio crossorigin="anonymous" class ="audioPlayer" id="<%=question[i]._id%>" data-audio="<%= getArrayBuffer(question[i].data)%>"></audio>
-                        <i data-question="<%=question[i]._id%>" class="play-button material-icons circle">play_arrow</i>
+                        <audio crossorigin="anonymous" class="audioPlayer" id="<%= question[i]._id %>"
+                               data-audio="<%= getArrayBuffer(question[i].data) %>"></audio>
+                        <i data-question="<%= question[i]._id %>"
+                           class="play-button material-icons circle">play_arrow</i>
                         <% } %>
                         <div class="title flex-container flex-container-mobile">
-                            <span class="left-item">Confidence: <%=question[i].confidence%>%</span>
+                            <span class="left-item">Confidence: <%= question[i].confidence %>%</span>
                             <div class="right-item">
-                                <span>Student Name: <%=question[i].sentBy%></span>
-                                <span style="margin-left: 1em;"><%=getDate(question[i].createdAt)%></span>
-                                <button href="#delete-question-modal" class="deleteQuestion waves-teal btn-flat modal-trigger" data-question="<%=question[i]._id%>"><i class="medium material-icons">delete</i></button>
+                                <span>Student Name: <%= question[i].sentBy %></span>
+                                <span style="margin-left: 1em;"><%= getDate(question[i].createdAt) %></span>
+                                <button href="#delete-question-modal"
+                                        class="deleteQuestion waves-teal btn-flat modal-trigger"
+                                        data-question="<%= question[i]._id %>"><i
+                                            class="medium material-icons">delete</i></button>
                             </div>
                         </div>
-                        <p><%=question[i].text%></p>
+                        <p><%= question[i].text %></p>
                     </div>
                 </li>
                 <% } %>
-
 
             </ul>
 
             <!-- feedback stuff -->
 
-            <ul class="collection with-header card" id = "feedbackCard" data-notifications = "<%=lecture.notifications%>">
+            <ul class="collection with-header card" id="feedbackCard" data-notifications="<%= lecture.notifications %>">
                 <li class="collection-header flex-container">
                     <p>Feedback</p>
-                    <% var down = 0; var confused = 0; var up = 0;%>
-                    <% for(var i = 0; i < feedback.length; i++){
-                      if (feedback[i].value == "thumbs down") {
-                        down++;
-                      } else if (feedback[i].value == "thumbs up") {
-                        up++;
-                      } else {
-                        confused++;
-                      }
+                    <% var down = 0; var confused = 0; var up = 0; %>
+                    <% for (var i = 0; i < feedback.length; i++) {
+                        if (feedback[i].value == "thumbs down") {
+                            down++;
+                        } else if (feedback[i].value == "thumbs up") {
+                            up++;
+                        } else {
+                            confused++;
+                        }
 
-                    }%>
+                    } %>
 
-                    <li id="down" class="collection-item avatar">
-                        <div class="count">
-                          thumbs down = <%=down%>
-                      </div>
-                    </li>
-                    <li id="up" class="collection-item avatar">
-                        <div class="count">
-                          thumbs up = <%=up%>
-                      </div>
-                    </li>
-                    <li id="confused" class="collection-item avatar">
-                        <div class="count">
-                          confused = <%=confused%>
-                      </div>
-                    </li>
+                <li id="down" class="collection-item avatar">
+                    <div class="count">
+                        thumbs down = <%= down %>
+                    </div>
+                </li>
+                <li id="up" class="collection-item avatar">
+                    <div class="count">
+                        thumbs up = <%= up %>
+                    </div>
+                </li>
+                <li id="confused" class="collection-item avatar">
+                    <div class="count">
+                        confused = <%= confused %>
+                    </div>
+                </li>
 
-                    <% for(var i = 0; i < feedback.length; i++){ %>
-                      <li id="<%=question[i]._id%>List" class="collection-item avatar">
+                <% for(var i = 0; i < feedback.length; i++){ %>
+                <li id="<%= question[i]._id %>List" class="collection-item avatar">
 
-                        <div class="feedback">
-                          <%=feedback[i].value%> by <%=feedback[i].sentBy%> at <%=feedback[i].createdAt.getHours()%>:<%=feedback[i].createdAt.getMinutes()%>:<%=feedback[i].createdAt.getSeconds()%>
-                        </div>
-                      </li>
-                    <% } %>
+                    <div class="feedback">
+                        <%= feedback[i].value %> by <%= feedback[i].sentBy %> at <%= feedback[i].createdAt.getHours() %>
+                        :<%= feedback[i].createdAt.getMinutes() %>:<%= feedback[i].createdAt.getSeconds() %>
+                    </div>
+                </li>
+                <% } %>
                 </li>
             </ul>
 
@@ -259,7 +278,7 @@
                         <div class="group-content">
                             <p class="group-label">Members</p>
                             <% for(var k = 0; k < course.groups[groupNames[i]].length; k++){ %>
-                            <span style="padding-right:5px;"><%= findStudentName(course.groups[groupNames[i]][k])%></span>
+                            <span style="padding-right:5px;"><%= findStudentName(course.groups[groupNames[i]][k]) %></span>
                             <% } %>
                         </div>
                     </div>
@@ -280,11 +299,13 @@
             <% } else if(user.accountType == 'instructor'){ %>
             <ul class="collapsible card" data-collapsible="accordion">
                 <li>
-                    <div class="collapsible-header flex-container flex-container-mobile" id="Group<%=groupNames[i]%>">
+                    <div class="collapsible-header flex-container flex-container-mobile" id="Group<%= groupNames[i] %>">
                         <div class="left-item"><i class="material-icons">group</i>Group <%= groupNames[i] %></div>
-                        <%if(groupNeedsHelp(groupNames[i], help, lecture._id)){%>
-                        <div class="right-item" id="Group<%=groupNames[i]%>-help" style='color:red;'>[HELP REQUESTED]</div>
-                        <%}%>
+                        <% if(groupNeedsHelp(groupNames[i], help, lecture._id)){ %>
+                        <div class="right-item" id="Group<%= groupNames[i] %>-help" style='color:red;'>[HELP
+                            REQUESTED]
+                        </div>
+                        <% } %>
                     </div>
                     <div class="collapsible-body">
                         <div class="group-content">
@@ -292,7 +313,7 @@
                             <% for(var k = 0; k < course.groups[groupNames[i]].length; k++){ %>
                             <span style="padding-right:5px;"><%= findStudentName(course.groups[groupNames[i]][k]) %></span>
                             <% } %>
-                            <p> <%=help%></p>
+                            <p> <%= help %></p>
                         </div>
                     </div>
                     <% if(lecture.groupActive && lecture.active){ %>
@@ -329,7 +350,8 @@
             <button class="waves-effect waves-light modal-action btn-flat" type="button" id="delete-question-cancel"
                     data-dismiss="modal">Cancel
             </button>
-            <button class="waves-effect waves-light modal-action btn-flat" type="button" id="delete-question-confirm">Confirm
+            <button class="waves-effect waves-light modal-action btn-flat" type="button" id="delete-question-confirm">
+                Confirm
             </button>
         </div>
         <% } %>
@@ -338,15 +360,15 @@
 </div>
 </body>
 <!--<script>-->
-    <!--var video = document.getElementById('video');-->
-    <!--if(Hls.isSupported()) {-->
-        <!--var hls = new Hls();-->
-        <!--hls.loadSource('http://18.211.18.191/live/test/index.m3u8');-->
-        <!--hls.attachMedia(video);-->
-        <!--hls.on(Hls.Events.MANIFEST_PARSED,function() {-->
-            <!--video.play();-->
-        <!--});-->
-    <!--}</script>-->
+<!--var video = document.getElementById('video');-->
+<!--if(Hls.isSupported()) {-->
+<!--var hls = new Hls();-->
+<!--hls.loadSource('http://18.211.18.191/live/test/index.m3u8');-->
+<!--hls.attachMedia(video);-->
+<!--hls.on(Hls.Events.MANIFEST_PARSED,function() {-->
+<!--video.play();-->
+<!--});-->
+<!--}</script>-->
 <link href="/css/lecture.css" rel="stylesheet">
 <script src="/js/lecture.js"></script>
 </html>

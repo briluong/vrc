@@ -63,6 +63,21 @@ var webServer = http.createServer(app)
 var socketServer = socketIo.listen(webServer, {"log level": 1});
 
 socketServer.on('connection', function (socket) {
+    socket.on("updateYoutube", function (data) {
+        Lecture.findOneAndUpdate({"_id": data.lectureID}, {
+            $set: {
+                'youtube': data.youtube
+            }
+        }, function (err, lecture) {
+            if (err) {
+                throw err;
+            }
+            else {
+                socket.emit(data.lectureID + "-updateYoutube", data)
+            }
+        })
+    })
+
     socket.on('help', function (data) {
         Help.findOne({'lectureID': data.lectureID, 'groupName': data.groupName}, function (err, help) {
             // Return any errors.

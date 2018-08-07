@@ -23,7 +23,7 @@
 <div class="btn-flat" id="recorder-confidence">Average Confidence: 0.00%</div>
 -->
 
-<a-scene>
+<a-scene id="vr-container" data-streamLink="<%=youtube%>">
     <!-- The original example also has this 180 degree rotation, to appear to be going forward. -->
     <a-videosphere rotation="0 180 0" src="#video"
                    play-on-vrdisplayactivate-or-enter-vr>
@@ -86,7 +86,7 @@ myShakeEvent.start();
         var hls = new Hls();
 
   //      hls.loadSource('http://18.211.18.191/live/demo-lec2/index.m3u8');
-       hls.loadSource('http://18.211.18.191/live/lec1/index.m3u8');
+       hls.loadSource($("#vr-container").attr("data-streamLink"));
         // hls.loadSource('http://qthttp.apple.com.edgesuite.net/1010qwoeiuryfg/sl.m3u8');
         //hls.loadSource('http://18.211.18.191/live/test/index.m3u8');
         hls.attachMedia(video);
