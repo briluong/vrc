@@ -71,16 +71,49 @@ $("#lecture-group-input").on("change", function (event) {
     if ($("#lecture-group-input").prop("checked")) {
         data["groupActive"] = true
         $("#lecture-group-input").removeAttr("checked")
-        $("#update-clear-group").removeClass("hide")
+        $("#update-group").removeClass("hide")
     }
     else {
         data["groupActive"] = false
         $("#lecture-group-input").attr("checked", "true")
-        $("#update-clear-group").addClass("hide")
+        $("#update-group").addClass("hide")
     }
     data["lectureID"] = $("#lecture-group-toggle").attr("data-lecture")
     data["courseID"] = $("#lecture-group-toggle").attr("data-course")
     toggleGroupActiveLecture(data)
+})
+
+$("#clear-group-settings").on('click', function (event) {
+    console.log(event)
+    console.log($("#group-file"))
+    $("#group-file").val("")
+    $("#displayQuestion").val("")
+    clearBoardAndDelete(lectureID)
+    console.log($("#group-file"))
+})
+
+$("#update-group-settings").on('click', function (event) {
+    console.log(event)
+    if ($("#displayQuestion").val() == "" && $("#group-file").val() == "" &&
+        document.getElementById("group-file").files.length == 0) {
+        var lectureID = $("#lectureToggle-container").attr("data-lecture")
+        clearBoardAndDelete(lectureID)
+    }
+    else if($("#displayQuestion").val() != "" && $("#group-file").val() != "" &&
+        document.getElementById("group-file").files.length != 0){
+        M.toast({html: "Cannot upload file and question at the same time. Clear and try again!", displayLength: 3000})
+    }
+    else if($("#displayQuestion").val() != ""){
+        $("#group-file").val("")
+        var lectureID = $("#lectureToggle-container").attr("data-lecture")
+        sendQuestionToGroup($("#displayQuestion").val(), lectureID)
+    }
+    else if($("#group-file").val() != ""){
+        $("#displayQuestion").val("")
+        var lectureID = $("#lectureToggle-container").attr("data-lecture")
+        sendFileToGroup(document.getElementById("group-file").files[0], lectureID)
+    }
+    console.log($("#group-file"))
 })
 
 $("#instructorNotification-input").on("change", function (event) {
@@ -195,7 +228,7 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
                 data.text +
                 "</p></div></div>"
         }
-        $("#questionCard").append(element)
+        $("#questionCard-collection").append(element)
         if ($("#questionCard").attr("data-notifications") == 'true') {
             var audio = new Audio('/assets/unconvinced.mp3');
             audio.play();
@@ -260,7 +293,7 @@ socket.on($("#lectureToggle-container").attr("data-lecture") + "-groupToggle", f
     }
 })
 
-socket.on($("#lecture-group-toggle").attr("data-lecture")+ "-Help", function (data) {
+socket.on($("#lecture-group-toggle").attr("data-lecture") + "-Help", function (data) {
     console.log(data)
     var element =
         "<div class='right-item' id=" +
@@ -292,7 +325,7 @@ socket.on($("#lectureToggle-container").attr("data-lecture") + "-updateYoutube",
         $(".video-container").addClass("hide")
         $("#enter-stream-button").attr("href", $("#enter-stream-button").attr("data-stream360"))
     }
-    M.toast({html: "The stream link has bene updated!", displayLength: 3000})
+    M.toast({html: "The stream link has been updated!", displayLength: 3000})
 })
 /*****************************************************************************/
 /* Function Handlers */
@@ -443,21 +476,43 @@ function embedYoutubeURL(url) {
     return splitURL[0] + "embed/" + splitURL[1]
 }
 
-function updateFeedbackCount(feedbackType){
+function updateFeedbackCount(feedbackType) {
     var count = 0
     var allFeedback = $(".feedbackType")
-    for(let i = 0; i < allFeedback.length; i++){
-        if($(allFeedback[i]).attr("data-feedbackType") == feedbackType){
+    for (let i = 0; i < allFeedback.length; i++) {
+        if ($(allFeedback[i]).attr("data-feedbackType") == feedbackType) {
             count++;
         }
     }
-    if(feedbackType == "TDown"){
+    if (feedbackType == "TDown") {
         $("#countDown").html(count)
     }
-    else if(feedbackType == "TUp"){
+    else if (feedbackType == "TUp") {
         $("#countUp").html(count)
     }
-    else if(feedbackType == "Confused"){
+    else if (feedbackType == "Confused") {
         $("#countConfused").html(count)
     }
+}
+
+function sendQuestionToGroup(question ,lectureID) {
+    var data = {question: question, lectureID: lectureID}
+    socket.emit("instructorQuestion", data)
+}
+
+function sendFileToGroup(file, lectureID) {
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+        var data = {file: reader.result, lectureID: lectureID}
+        socket.emit("instructorFile", data)
+    };
+    reader.onerror = function (error) {
+        console.log('Error: ', error);
+    };
+}
+
+function clearBoardAndDelete(lectureID) {
+    var data = {lectureID: lectureID}
+    socket.emit("instructorClear", data)
 }

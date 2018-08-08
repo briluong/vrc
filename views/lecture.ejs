@@ -184,7 +184,7 @@
                         </div>
                         <% } %>
                     </div>
-                    <div class="collapsible-body collection collapsible-collection" style="padding:0;">
+                    <div class="collapsible-body collection collapsible-collection" id="questionCard-collection" style="padding:0;">
                         <% for(var i = 0; i < question.length; i++){ %>
                         <div id="<%= question[i]._id %>List" class="collection-item avatar">
                             <div class="question">
@@ -214,7 +214,6 @@
             </ul>
 
             <!-- feedback stuff -->
-
             <ul data-collapsible="accordion" class="collapsible card" id="feedbackCard"
                 data-notifications="<%= lecture.notifications %>">
                 <li>

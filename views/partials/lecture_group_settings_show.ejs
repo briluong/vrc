@@ -18,39 +18,35 @@
 
             </div>
         </div>
-        <p style="color:grey">Class size: <%= course.students.length %> | Online
-            Students: <%= getNumberOnlineStudents() %></p>
-        <div class="group-settings-form">
-            <div class="group-range-field">
-                <div class="range-field">
-                    <label class="range-field-label">Group size</label>
-                    <input
-                            <% disableGroupSizeRange() %>
-                            type="range" id="group-size-range" value="<%= lecture.groupSize %>" min="2"
-                            max=<%= course.students.length %>
-                    />
-                    <label>Note: group size cannot be changed while group mode is enabled.</label>
-                </div>
-            </div>
-        </div>
+        <p style="color:grey">Class size: <%= course.students.length %></p>
         <div class="input-field">
                         <textarea id="displayQuestion" name="displayQuestion"
                                   class="materialize-textarea"><%= lecture.displayQuestion %></textarea>
-            <label id="displayQuestion-label" for="displayQuestion-label">Question</label>
+            <label id="displayQuestion-label" for="displayQuestion-label" style="margin-bottom: 2px">Question</label>
+        </div>
+        <div id="group-file-container" class="input-field file-field">
+            <span id="group-file-label" class="label">Upload a file to the student white board. Note that you can only upload a file or a question one at a time.</span>
+            <div class="btn">
+                <span>File</span>
+                <input id="group-file" type="file">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+            </div>
         </div>
     </div>
     <% if(lecture.groupActive){ %>
-    <div id="update-clear-group" class="card-action">
-        <button id="update-display-question" class="waves-effect waves-teal btn-flat" type="button">Update
+    <div id="update-group" class="card-action">
+        <button id="update-group-settings" class="waves-effect waves-teal btn-flat" type="button">Update
         </button>
-        <button id="clear-display-question" class="waves-effect waves-teal btn-flat" type="button">Clear
+        <button id="clear-group-settings" class="waves-effect waves-teal btn-flat" type="button">Clear Group Board
         </button>
     </div>
     <% } else { %>
-    <div id="update-clear-group" class="card-action hide">
-        <button id="update-display-question" class="waves-effect waves-teal btn-flat" type="button">Update
+    <div id="update-group" class="card-action hide">
+        <button id="update-group-settings" class="waves-effect waves-teal btn-flat" type="button">Update
         </button>
-        <button id="clear-display-question" class="waves-effect waves-teal btn-flat" type="button">Clear
+        <button id="clear-group-settings" class="waves-effect waves-teal btn-flat" type="button">Clear Group Board
         </button>
     </div>
     <% } %>

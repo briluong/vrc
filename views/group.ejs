@@ -299,7 +299,13 @@
     // register a shake event
 
 };
-
+//    var socket = io();
+    socket.on($("#class_info").attr("data-lecture") + "-instructorQuestion", function (data) {
+        console.log(data)
+        console.log(data.question)
+        console.log("The professor sent this question: " + data.question)
+        M.toast({html: "The professor sent this question: " + data.question, displayLength: 3000})
+    })
   </script>
   </body>
     <a href="/course/<%=courseID%>/<%=lectureID%>" id="exit-group-discussion" class="waves-light btn-flat overlay-btn-left">EXIT</a>

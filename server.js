@@ -21,6 +21,8 @@ const dbConfig = require("./config/database.js");
 const Lecture = require('./models/lectures');
 const Course = require('./models/courses');
 const Help = require('./models/help_request');
+const InstructorQuestion = require('./models/instructor_question');
+const InstructorFile = require('./models/instructor_file');
 
 const app = express();
 
@@ -63,6 +65,35 @@ var webServer = http.createServer(app)
 var socketServer = socketIo.listen(webServer, {"log level": 1});
 
 socketServer.on('connection', function (socket) {
+    socket.on("instructorQuestion", function (data) {
+        InstructorQuestion.findOneAndUpdate({"lectureID": data.lectureID}, {
+            '$set': {
+                'question': data.question,
+            }
+        }, function (err, question) {
+            if (err) {
+                throw err;
+            }
+            else if (question) {
+                socketServer.sockets.emit(data.lectureID + "-instructorQuestion", data)
+            }
+            else {
+                var instructorQuestion = new InstructorQuestion();
+                instructorQuestion.lectureID = data.lectureID
+                instructorQuestion.question = data.question
+                instructorQuestion.save(function (err, instructorQuestion) {
+                    if (err) {
+                        throw err;
+                    }
+                    else {
+                        console.log(instructorQuestion)
+                        socketServer.sockets.emit(data.lectureID + "-instructorQuestion", data)
+                    }
+                })
+            }
+        })
+    })
+
     socket.on("updateYoutube", function (data) {
         Lecture.findOneAndUpdate({"_id": data.lectureID}, {
             $set: {

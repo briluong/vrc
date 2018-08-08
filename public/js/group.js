@@ -40,7 +40,6 @@ AFRAME.registerComponent('button_down', {
     }
 });
 
-
 AFRAME.registerComponent('random_color', {
 
     init: function () {
