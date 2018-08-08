@@ -34,7 +34,8 @@
                 <div class="title">
                     <p><%= lecture.title %></p>
                 </div>
-                <div data-lecture="<%= lecture._id %>" id="lectureToggle-container" data-groupactive="<%= lecture.groupActive %>"
+                <div data-lecture="<%= lecture._id %>" id="lectureToggle-container"
+                     data-groupactive="<%= lecture.groupActive %>"
                      class="switch toggle-lecture-active-container">
                     <% if(lecture.active){ %>
                     <span class="live-now active-blink show" data-active= <%= lecture.active %>>LIVE NOW</span>
@@ -158,99 +159,123 @@
             </div>
 
             <% if(userIsInstructorOrAdmin()){ %>
-            <ul class="collection with-header card" id="questionCard" data-notifications="<%= lecture.notifications %>">
-                <li class="collection-header flex-container">
-                    <p>Questions</p>
-                    <% if(lecture.notifications){ %>
-                    <div class="switch">
-                        <label style="cursor:unset; padding-right:5px;">Notification</label>
-                        <label id="instructorNotification-toggle" data-course="<%= course._id %>"
-                               data-lecture="<%= lecture._id %>">Off
-                            <input id="instructorNotification-input" type="checkbox" checked="checked">
-                            <span id="instructorNotification-span"
-                                  class="lever"></span>On</label>
-                    </div>
-                    <% } else { %>
-                    <div class="switch">
-                        <label style="cursor:unset; padding-right:5px;">Notification</label>
-                        <label id="instructorNotification-toggle" data-course="<%= course._id %>"
-                               data-lecture="<%= lecture._id %>">Off
-                            <input id="instructorNotification-input" type="checkbox">
-                            <span id="instructorNotification-span"
-                                  class="lever"></span>On</label>
-                    </div>
-                    <% } %>
-                </li>
-                <% for(var i = 0; i < question.length; i++){ %>
-                <li id="<%= question[i]._id %>List" class="collection-item avatar">
-                    <div class="question">
-                        <% if(question[i].questionType == 'audio'){ %>
-                        <audio crossorigin="anonymous" class="audioPlayer" id="<%= question[i]._id %>"
-                               data-audio="<%= getArrayBuffer(question[i].data) %>"></audio>
-                        <i data-question="<%= question[i]._id %>"
-                           class="play-button material-icons circle">play_arrow</i>
+            <ul data-collapsible="accordion" class="collapsible card" id="questionCard"
+                data-notifications="<%= lecture.notifications %>">
+                <li>
+                    <div class="collapsible-header flex-container">
+                        <div class="left-item">Questions</div>
+                        <% if(lecture.notifications){ %>
+                        <div class="switch right-item">
+                            <label style="cursor:unset; padding-right:5px;">Notification</label>
+                            <label id="instructorNotification-toggle" data-course="<%= course._id %>"
+                                   data-lecture="<%= lecture._id %>">Off
+                                <input id="instructorNotification-input" type="checkbox" checked="checked">
+                                <span id="instructorNotification-span"
+                                      class="lever"></span>On</label>
+                        </div>
+                        <% } else { %>
+                        <div class="switch">
+                            <label style="cursor:unset; padding-right:5px;">Notification</label>
+                            <label id="instructorNotification-toggle" data-course="<%= course._id %>"
+                                   data-lecture="<%= lecture._id %>">Off
+                                <input id="instructorNotification-input" type="checkbox">
+                                <span id="instructorNotification-span"
+                                      class="lever"></span>On</label>
+                        </div>
                         <% } %>
-                        <div class="title flex-container flex-container-mobile">
-                            <span class="left-item">Confidence: <%= question[i].confidence %>%</span>
-                            <div class="right-item">
-                                <span>Student Name: <%= question[i].sentBy %></span>
-                                <span style="margin-left: 1em;"><%= getDate(question[i].createdAt) %></span>
-                                <button href="#delete-question-modal"
-                                        class="deleteQuestion waves-teal btn-flat modal-trigger"
-                                        data-question="<%= question[i]._id %>"><i
-                                            class="medium material-icons">delete</i></button>
+                    </div>
+                    <div class="collapsible-body collection collapsible-collection" style="padding:0;">
+                        <% for(var i = 0; i < question.length; i++){ %>
+                        <div id="<%= question[i]._id %>List" class="collection-item avatar">
+                            <div class="question">
+                                <% if(question[i].questionType == 'audio'){ %>
+                                <audio crossorigin="anonymous" class="audioPlayer" id="<%= question[i]._id %>"
+                                       data-audio="<%= getArrayBuffer(question[i].data) %>"></audio>
+                                <i data-question="<%= question[i]._id %>"
+                                   class="play-button material-icons circle">play_arrow</i>
+                                <% } %>
+                                <div class="title flex-container flex-container-mobile">
+                                    <span class="left-item">Confidence: <%= question[i].confidence %>%</span>
+                                    <div class="right-item">
+                                        <span>Student Name: <%= question[i].sentBy %></span>
+                                        <span style="margin-left: 1em;"><%= getDate(question[i].createdAt) %></span>
+                                        <button href="#delete-question-modal"
+                                                class="deleteQuestion waves-teal btn-flat modal-trigger"
+                                                data-question="<%= question[i]._id %>"><i
+                                                    class="medium material-icons">delete</i></button>
+                                    </div>
+                                </div>
+                                <p><%= question[i].text %></p>
                             </div>
                         </div>
-                        <p><%= question[i].text %></p>
+                        <% } %>
                     </div>
                 </li>
-                <% } %>
-
             </ul>
 
             <!-- feedback stuff -->
 
-            <ul class="collection with-header card" id="feedbackCard" data-notifications="<%= lecture.notifications %>">
-                <li class="collection-header flex-container">
-                    <p>Feedback</p>
-                    <% var down = 0; var confused = 0; var up = 0; %>
-                    <% for (var i = 0; i < feedback.length; i++) {
-                        if (feedback[i].value == "thumbs down") {
-                            down++;
-                        } else if (feedback[i].value == "thumbs up") {
-                            up++;
-                        } else {
-                            confused++;
-                        }
+            <ul data-collapsible="accordion" class="collapsible card" id="feedbackCard"
+                data-notifications="<%= lecture.notifications %>">
+                <li>
+                    <div class="collapsible-header collection-header flex-container">
+                        <div class="left-item">Feedback</div>
+                        <% var down = 0; var confused = 0; var up = 0; %>
+                        <% for (var i = 0; i < feedback.length; i++) {
+                            if (feedback[i].value == "thumbs down") {
+                                down++;
+                            } else if (feedback[i].value == "thumbs up") {
+                                up++;
+                            } else {
+                                confused++;
+                            }
 
-                    } %>
+                        } %>
+                    </div>
+                    <div class="collapsible-body collection collapsible-collection" style="padding:0;">
+                        <div class="collection-item avatar flex-container flex-container-mobile"
+                             style="padding-left:8rem; padding-right: 8rem; padding-bottom: 0; padding-top: 0">
+                            <div id="up" class="count">
+                                <i
+                                        class="small material-icons">thumb_up</i>
+                                <p id="countUp" style="text-align: center"><%= up %></p>
 
-                <li id="down" class="collection-item avatar">
-                    <div class="count">
-                        thumbs down = <%= down %>
+                            </div>
+                            <div id="down" class="count"><i
+                                        class="small material-icons">thumb_down</i>
+                                <p id="countDown" style="text-align: center"><%= down %></p>
+                            </div>
+                            <div id="confused" class="count">
+                                <i
+                                        class="small material-icons">sentiment_dissatisfied</i>
+                                <p id="countConfused" style="text-align: center"><%= confused %></p>
+                            </div>
+                        </div>
+                        <% for(var i = 0; i < feedback.length; i++){ %>
+                        <div id="<%= feedback[i]._id %>List" class="collection-item avatar" style="padding-left:2rem; padding-right: 2rem; padding-bottom: 0; padding-top: 0">
+                            <div class="title flex-container flex-container-mobile feedback">
+                                <span class="left-item"></span>
+                                <div class="right-item">
+                                    <span>Student Name: <%= feedback[i].sentBy %></span>
+                                    <span style="margin-left: 1em;"><%= feedback[i].createdAt.toLocaleTimeString();%></span>
+                                    <button href="#delete-feedback-modal"
+                                            class="deleteFeedback waves-teal btn-flat modal-trigger"
+                                            data-feedback="<%= feedback[i]._id %>"><i
+                                                class="medium material-icons">delete</i></button>
+                                </div>
+                            </div>
+                            <%if(feedback[i].value == "thumbs down") {%>
+                            <p class="vertical-align feedbackType" data-feedbackType="TDown">You got a <i class="small material-icons">thumb_down</i> from <%= feedback[i].sentBy %></p>
+                            <%} else if(feedback[i].value == "thumbs up"){%>
+                            <p class="vertical-align feedbackType" data-feedbackType="TUp">You got a <i class="small material-icons">thumb_up</i> from <%= feedback[i].sentBy %></p>
+                            <%} else if(feedback[i].value == "confused"){%>
+                            <p class="vertical-align feedbackType" data-feedbackType="Confused">You got a <i class="small material-icons">sentiment_dissatisfied</i> from <%= feedback[i].sentBy %></p>
+                            <%}%>
+                        </div>
+                        <% } %>
                     </div>
                 </li>
-                <li id="up" class="collection-item avatar">
-                    <div class="count">
-                        thumbs up = <%= up %>
-                    </div>
-                </li>
-                <li id="confused" class="collection-item avatar">
-                    <div class="count">
-                        confused = <%= confused %>
-                    </div>
-                </li>
 
-                <% for(var i = 0; i < feedback.length; i++){ %>
-                <li id="<%= question[i]._id %>List" class="collection-item avatar">
-
-                    <div class="feedback">
-                        <%= feedback[i].value %> by <%= feedback[i].sentBy %> at <%= feedback[i].createdAt.getHours() %>
-                        :<%= feedback[i].createdAt.getMinutes() %>:<%= feedback[i].createdAt.getSeconds() %>
-                    </div>
-                </li>
-                <% } %>
-                </li>
             </ul>
 
             <% } %>
@@ -351,6 +376,23 @@
                     data-dismiss="modal">Cancel
             </button>
             <button class="waves-effect waves-light modal-action btn-flat" type="button" id="delete-question-confirm">
+                Confirm
+            </button>
+        </div>
+        <% } %>
+    </div>
+
+    <div id="delete-feedback-modal" class="modal">
+        <% if (userIsInstructorOrAdmin()) { %>
+        <div class="modal-content">
+            <h3>Remove Feedback?</h3>
+            <p>Are you sure you want to remove this feedback?</p>
+        </div>
+        <div class="modal-footer row button-row">
+            <button class="waves-effect waves-light modal-action btn-flat" type="button" id="delete-feedback-cancel"
+                    data-dismiss="modal">Cancel
+            </button>
+            <button class="waves-effect waves-light modal-action btn-flat" type="button" id="delete-feedback-confirm">
                 Confirm
             </button>
         </div>

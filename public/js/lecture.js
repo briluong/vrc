@@ -32,6 +32,20 @@ $(document).on('click', '.deleteQuestion', function (event) {
     })
 })
 
+
+$(document).on('click', '.deleteFeedback', function (event) {
+    console.log(event)
+    feedbackID = $(event.currentTarget).attr('data-feedback')
+    console.log(feedbackID)
+    $(document).on('click', '#delete-feedback-cancel', function (event) {
+        $("#delete-feedback-modal").modal('close')
+    })
+    $(document).on('click', '#delete-feedback-confirm', function (event) {
+        deleteFeedback(feedbackID)
+        delete feedbackID
+    })
+})
+
 $("#lecture-active-input").on("change", function (event) {
     var data = {}
     if ($("#lecture-active-input").prop("checked")) {
@@ -114,7 +128,7 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
     if (data.questionType != null) {
         if (data.questionType == 'audio') {
             var url = b64toBlob(data.data, 'audio/webm');
-            var element = "<li id=" +
+            var element = "<div id=" +
                 data._id +
                 "List class='collection-item avatar'>" +
                 "<div class='question'><audio crossorigin='anonymous' class ='audioPlayer'" +
@@ -149,11 +163,11 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
                 "</div>" +
                 "<p>" +
                 data.text +
-                "</p></div></li>"
+                "</p></div></div>"
         }
         else {
             var element =
-                "<li id=" +
+                "<div id=" +
                 data._id +
                 "List class='collection-item avatar'>" +
                 "<div class='question'>" +
@@ -179,7 +193,7 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
                 "</div>" +
                 "<p>" +
                 data.text +
-                "</p></div></li>"
+                "</p></div></div>"
         }
         $("#questionCard").append(element)
         if ($("#questionCard").attr("data-notifications") == 'true') {
@@ -189,12 +203,12 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
         M.toast({html: data.Username + " sent you a question!", displayLength: 3000})
     } else {
         var element =
-            "<li id=" +
+            "<div id=" +
             data._id +
             "List class='collection-item avatar'>" +
             "<div class='feedback'>" +
             data.value + " by " + data.sentBy +
-            "</div></li>"
+            "</div></div>"
 
         $("#feedbackCard").append(element);
     }
@@ -285,40 +299,10 @@ socket.on($("#lectureToggle-container").attr("data-lecture") + "-updateYoutube",
 /*****************************************************************************/
 function toggleActiveLecture(data) {
     socket.emit("toggleActiveLecture", data)
-    // $.ajax({
-    //     url: "/api/toggleActiveLecture",
-    //     type: "POST",
-    //     contentType: 'application/json',
-    //     data: JSON.stringify(data),
-    //     success: function (resp) {
-    //         console.log("Completed Add")
-    //     },
-    //     error: function (resp) {
-    //         console.log(data)
-    //         return alert("Failed to toggle lecture");
-    //     },
-    //     complete: function () {
-    //     }
-    // });
 }
 
 function toggleGroupActiveLecture(data) {
     socket.emit("toggleGroupActiveLecture", data)
-    // $.ajax({
-    //     url: "/api/toggleGroupActiveLecture",
-    //     type: "POST",
-    //     contentType: 'application/json',
-    //     data: JSON.stringify(data),
-    //     success: function (resp) {
-    //         console.log("Completed Group Active Toggle")
-    //     },
-    //     error: function (resp) {
-    //         console.log(data)
-    //         return alert("Failed to toggle Group");
-    //     },
-    //     complete: function () {
-    //     }
-    // });
 }
 
 function toggleNotifications(data) {
@@ -353,25 +337,6 @@ function doneTyping() {
         data["youtube"] = val
         data["lectureID"] = lectureID
         socket.emit("updateYoutube", data)
-        // $.ajax({
-        //     url: "/api/updateYoutube",
-        //     type: "POST",
-        //     contentType: 'application/json',
-        //     data: JSON.stringify(data),
-        //     success: function (resp) {
-        //         var splitURL = val.split("watch?v=")
-        //         var youtubeURL = splitURL[0] + "embed/" + splitURL[1]
-        //         $("#youtube-container").attr("src", youtubeURL)
-        //         $(".video-container").removeClass("hide")
-        //         console.log("Completed updating Youtube Link")
-        //     },
-        //     error: function (resp) {
-        //         console.log(data)
-        //         return alert("Failed to update Youtube Link");
-        //     },
-        //     complete: function () {
-        //     }
-        // });
     }
     else {
         M.toast({html: "Please enter a valid Youtube URL", displayLength: 3000})
@@ -450,10 +415,49 @@ function deleteQuestion(questionID) {
     });
 }
 
+function deleteFeedback(feedbackID) {
+    console.log("FeedbackID: " + feedbackID)
+    $.ajax({
+        url: "/api/deleteFeedback",
+        type: "DELETE",
+        contentType: 'application/json',
+        data: JSON.stringify({"feedbackID": feedbackID}),
+        success: function (resp) {
+            $("#delete-feedback-modal").modal('close')
+            var feedbackType = $('#' + feedbackID + "List").find('p').attr("data-feedbackType")
+            $('#' + feedbackID + "List").remove()
+            updateFeedbackCount(feedbackType)
+            console.log("Completed Removal")
+        },
+        error: function (resp) {
+            return alert("Failed to delete a Feedback");
+        }
+    });
+}
+
 function embedYoutubeURL(url) {
     var splitURL = url.split("watch?v=")
     if (splitURL.length < 2) {
         return splitURL[0]
     }
     return splitURL[0] + "embed/" + splitURL[1]
+}
+
+function updateFeedbackCount(feedbackType){
+    var count = 0
+    var allFeedback = $(".feedbackType")
+    for(let i = 0; i < allFeedback.length; i++){
+        if($(allFeedback[i]).attr("data-feedbackType") == feedbackType){
+            count++;
+        }
+    }
+    if(feedbackType == "TDown"){
+        $("#countDown").html(count)
+    }
+    else if(feedbackType == "TUp"){
+        $("#countUp").html(count)
+    }
+    else if(feedbackType == "Confused"){
+        $("#countConfused").html(count)
+    }
 }

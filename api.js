@@ -3,6 +3,7 @@ const User = require('./models/user');
 const Course = require('./models/courses');
 const Lecture = require('./models/lectures');
 const Question = require('./models/questions');
+const Feedback = require('./models/feedback');
 const Papa = require('papaparse')
 
 module.exports = function (app) {
@@ -387,6 +388,23 @@ module.exports = function (app) {
         console.log(req.body.questionID)
         // Search user for which to sell the currency.
         Question.findOneAndRemove({_id: req.body.questionID}, function (err, question) {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            else {
+                return res.sendStatus(200);
+            }
+        })
+    });
+
+    app.delete("/api/deleteFeedback", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body.feedbackID) {
+            // No Course ID
+            return res.sendStatus(400);
+        }
+        console.log(req.body.feedbackID)
+        // Search user for which to sell the currency.
+        Feedback.findOneAndRemove({_id: req.body.feedbackID}, function (err, feedback) {
             if (err) {
                 return res.sendStatus(500);
             }

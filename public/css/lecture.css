@@ -66,3 +66,9 @@
 .question .play-button:hover {
     cursor: pointer;
 }
+
+.feedback span {
+    font-size: 14px;
+    color: grey;
+    font-weight: 400;
+}

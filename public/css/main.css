@@ -468,3 +468,19 @@ table tbody tr td {
   padding: 0;
   margin: 0;
 }
+
+.collapsible-collection{
+  padding:0;
+}
+
+.collapsible-header{
+  outline: none;
+}
+
+.vertical-align {
+  position: relative;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+}

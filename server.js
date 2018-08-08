@@ -73,7 +73,7 @@ socketServer.on('connection', function (socket) {
                 throw err;
             }
             else {
-                socket.emit(data.lectureID + "-updateYoutube", data)
+                socketServer.sockets.emit(data.lectureID + "-updateYoutube", data)
             }
         })
     })
