@@ -441,10 +441,13 @@ module.exports = function (app) {
         if (!req.body) {
             return res.sendStatus(400);
         }
+        console.log("TEST")
+        console.log(req.body.courseID)
+        console.log(req.body.courseDescription)
 
-        Course.findOneAndUpdate({"code": req.body.courseID}, {
+        Course.findOneAndUpdate({"_id": req.body.courseID}, {
             $set: {
-                'description': req.body.data
+                'description': req.body.courseDescription
             },
             function (err, course) {
             if (err) {
