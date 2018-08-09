@@ -347,6 +347,30 @@ module.exports = function (app) {
         })
     });
 
+    //edit the course description
+    app.post("/api/course/editDescription", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        console.log("TEST")
+        console.log(req.body.courseID)
+        console.log(req.body.courseDescription)
+
+        Course.findOneAndUpdate({"_id": req.body.courseID}, {
+            $set: {
+                'description': req.body.courseDescription
+            }
+
+            }, function (err, course) {
+                if (err) {
+                    return res.sendStatus(500);
+                }
+                else {
+                    return res.sendStatus(200);
+                }
+        })
+    });
+
     // API call to delete a course
     app.delete("/api/deleteCourse", apiUtil.isLoggedIn, (req, res) => {
         if (!req.body.courseID) {
@@ -436,29 +460,5 @@ module.exports = function (app) {
         console.log(csvData)
     }
 
-    //edit the course description
-    app.post("/api/course/editDescription", apiUtil.isLoggedIn, (req, res) => {
-        if (!req.body) {
-            return res.sendStatus(400);
-        }
-        console.log("TEST")
-        console.log(req.body.courseID)
-        console.log(req.body.courseDescription)
-
-        Course.findOneAndUpdate({"_id": req.body.courseID}, {
-            $set: {
-                'description': req.body.courseDescription
-            },
-            function (err, course) {
-            if (err) {
-                return res.sendStatus(500);
-            }
-            else {
-                return res.sendStatus(200);
-            }
-        }
-        })
-
-    });
 
 };

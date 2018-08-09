@@ -65,6 +65,39 @@ var webServer = http.createServer(app)
 var socketServer = socketIo.listen(webServer, {"log level": 1});
 
 socketServer.on('connection', function (socket) {
+    socket.on("instructorClear", function (data) {
+        InstructorQuestion.findOneAndRemove({"lectureID": data.lectureID}, function (err, question) {
+            if (err) {
+                throw err;
+            }
+            else if (question) {
+                InstructorFile.findOneAndRemove({"lectureID": data.lectureID}, function (err, file) {
+                    if (err) {
+                        throw err;
+                    }
+                    else if (file) {
+                        socketServer.sockets.emit(data.lectureID + "-instructorClear", {question: true, file: true})
+                    }
+                    else {
+                        socketServer.sockets.emit(data.lectureID + "-instructorClear", {question: true, file: false})
+                    }
+                })            }
+            else {
+                InstructorFile.findOneAndRemove({"lectureID": data.lectureID}, function (err, file) {
+                    if (err) {
+                        throw err;
+                    }
+                    else if (file) {
+                        socketServer.sockets.emit(data.lectureID + "-instructorClear", {question: false, file: true})
+                    }
+                    else {
+                        socketServer.sockets.emit(data.lectureID + "-instructorClear", {question: false, file: false})
+                    }
+                })
+            }
+        })
+    })
+
     socket.on("instructorQuestion", function (data) {
         InstructorQuestion.findOneAndUpdate({"lectureID": data.lectureID}, {
             '$set': {
@@ -101,11 +134,11 @@ socketServer.on('connection', function (socket) {
                 'data': buf,
                 'fileType': data.fileType
             }
-        }, function (err, question) {
+        }, function (err, file) {
             if (err) {
                 throw err;
             }
-            else if (question) {
+            else if (file) {
                 socketServer.sockets.emit(data.lectureID + "-instructorFile", data)
             }
             else {
