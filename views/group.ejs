@@ -33,11 +33,11 @@
     </script>
       <%- include functions.ejs %>
   </head>
-  <%var source; %>
+  <!-- <%var source; %>
   <%if(instructorFile != null){%>
   <%console.log(getArrayBufferImage(instructorFile.data, instructorFile.fileType))%>
   <% source = getArrayBufferImage(instructorFile.data, instructorFile.fileType) %>
-  <%} else { console.log("no image found") } %>
+  <%} else { console.log("no image found") } %> -->
 
   <% var question; %>
   <% if (instructorQuestion != null) { %>
@@ -151,16 +151,34 @@
       </a-text>
     </a-sphere>
 
+
+
+    <% var source; %>
+    <% if(instructorFile != null){%>
+        <% source = getArrayBufferImage(instructorFile.data, instructorFile.fileType); %>
+      <a-image id="board"
+        width="10"
+        height="5"
+        color="#ffffff"
+        src="url(<%=source%>)"
+        rotation="180 0 180"
+        position="0 2.5 7"
+        button_down_board="index: 0; doodle_index: 0; delay: 2"
+        class="collidable">
+      </a-image>
+
+    <%} else { console.log("no image found") %>
     <a-image id="board"
       width="10"
       height="5"
       color="#ffffff"
-      src="url(<%=source%> )"
       rotation="180 0 180"
       position="0 2.5 7"
       button_down_board="index: 0; doodle_index: 0; delay: 2"
       class="collidable">
     </a-image>
+
+    <% } %>
 
     <a-text id="question"
       value="<%=question%>"
@@ -333,6 +351,14 @@
         console.log("The professor sent this file: " + data.file)
         M.toast({html: "The professor sent this file: " + data.fileType, displayLength: 3000})
         document.querySelector('#board').setAttribute('src', 'url(' + data.file + ')');
+    })
+
+    socket.on($("#class_info").attr("data-lecture") + "-instructorClear", function (data) {
+        console.log(data)
+        console.log("The professor cleared the board")
+        M.toast({html: "The professor cleared the board", displayLength: 3000})
+        document.querySelector('#board').removeAttribute('src');
+        document.querySelector('#question').setAttribute('value', "Instructor's Question");
     })
   </script>
   </body>
