@@ -191,6 +191,7 @@ socketServer.on('connection', function (socket) {
             else {
                 console.log(data)
                 data["_id"] = feed._id
+                data['createdAt'] = feed.createdAt
                 socketServer.sockets.emit(data.lectureID, data);
             }
         });

@@ -99,16 +99,16 @@ $("#update-group-settings").on('click', function (event) {
         var lectureID = $("#lectureToggle-container").attr("data-lecture")
         clearBoardAndDelete(lectureID)
     }
-    else if($("#displayQuestion").val() != "" && $("#group-file").val() != "" &&
-        document.getElementById("group-file").files.length != 0){
+    else if ($("#displayQuestion").val() != "" && $("#group-file").val() != "" &&
+        document.getElementById("group-file").files.length != 0) {
         M.toast({html: "Cannot upload file and question at the same time. Clear and try again!", displayLength: 3000})
     }
-    else if($("#displayQuestion").val() != ""){
+    else if ($("#displayQuestion").val() != "") {
         $("#group-file").val("")
         var lectureID = $("#lectureToggle-container").attr("data-lecture")
         sendQuestionToGroup($("#displayQuestion").val(), lectureID)
     }
-    else if($("#group-file").val() != ""){
+    else if ($("#group-file").val() != "") {
         $("#displayQuestion").val("")
         var lectureID = $("#lectureToggle-container").attr("data-lecture")
         sendFileToGroup(document.getElementById("group-file").files[0], lectureID)
@@ -235,15 +235,17 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
         }
         M.toast({html: data.Username + " sent you a question!", displayLength: 3000})
     } else {
-        var element =
-            "<div id=" +
+        var element = "<div id=" +
             data._id +
-            "List class='collection-item avatar'>" +
-            "<div class='feedback'>" +
-            data.value + " by " + data.sentBy +
-            "</div></div>"
+            "List class='collection-item avatar' style='padding-left:2rem; padding-right: 2rem; padding-bottom: 0; padding-top:0'><div class='title flex-container flex-container-mobile feedback'><span class='left-item'></span><div class='right-item'><span>Student Name:" +
+            data.sentBy +
+            "<span style='margin-left: 1em;'>" + data.createdAt.toLocaleTimeString()
+            + "</span><button href='#delete-feedback-modal' class='deleteFeedback waves-teal btn-flat modal-trigger' data-feedback="
+            + data._id +
+            "><i class='medium material-icons'>delete</i></button></div></div>"+
+            feedbackFormatting(type, sentBy) + "</div>"
 
-        $("#feedbackCard").append(element);
+        $(".feedback-collection").append(element);
     }
 });
 
@@ -495,7 +497,7 @@ function updateFeedbackCount(feedbackType) {
     }
 }
 
-function sendQuestionToGroup(question ,lectureID) {
+function sendQuestionToGroup(question, lectureID) {
     var data = {question: question, lectureID: lectureID}
     socket.emit("instructorQuestion", data)
 }
@@ -505,7 +507,7 @@ function sendFileToGroup(file, lectureID) {
     var fileTypes = ['jpg', 'jpeg', 'png', 'gif'];  //acceptable file types
     var extension = file.name.split('.').pop().toLowerCase()  //file extension from input file
     var isSuccess = fileTypes.indexOf(extension) > -1;  //is extension in acceptable types
-    if(isSuccess){
+    if (isSuccess) {
         reader.readAsDataURL(file);
         reader.onload = function () {
             console.log(reader.result)
@@ -516,7 +518,7 @@ function sendFileToGroup(file, lectureID) {
             console.log('Error: ', error);
         };
     }
-    else{
+    else {
         M.toast({html: "Please submit a image with the extension jpg, jpeg, png or gif.", displayLength: 3000})
     }
 
@@ -525,4 +527,20 @@ function sendFileToGroup(file, lectureID) {
 function clearBoardAndDelete(lectureID) {
     var data = {lectureID: lectureID}
     socket.emit("instructorClear", data)
+}
+
+function feedbackFormatting(type, sentBy) {
+    if (type == "thumbs down") {
+        return "<p class='vertical-align feedbackType' data-feedbackType='TDown'>You got a <i class='small material-icons'>thumb_down</i> from " +
+            sentBy +
+            '</p>'
+    } else if (type == "thumbs up") {
+        return "<p class='vertical-align feedbackType' data-feedbackType='TUp'>You got a <i class='small material-icons'>thumb_up</i> from " +
+            sentBy +
+            '</p>'
+    } else if (type == "confused") {
+        return "<p class='vertical-align feedbackType' data-feedbackType='Confused'>You got a <i class='small material-icons'>sentiment_dissatisfied</i> from " +
+            sentBy +
+            '</p>'
+    }
 }
