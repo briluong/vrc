@@ -157,6 +157,31 @@ module.exports = function (app) {
         }))
     });
 
+    app.delete("/api/deleteLecture", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+        Lecture.findOneAndRemove({_id: req.body.lectureID}, function (err, lecture) {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            else {
+                Course.findOneAndUpdate({ _id: req.body.courseID },
+                    { "$pull": { "lectures": { "lectureID": req.body.lectureID }}},
+                    { safe: true, multi:true }, function(err, course) {
+                    if (err) {
+                        req.flash('lecture', "Lecture was not successfully deleted!")
+                        return res.sendStatus(500);
+                    }
+                    else {
+                        req.flash('lecture', "Lecture was successfully deleted!")
+                        return res.sendStatus(200);
+                    }
+                })
+            }
+        })
+    })
+
     app.post("/api/enrollStudents", apiUtil.isLoggedIn, (req, res) => {
         if (!req.body) {
             return res.sendStatus(400);

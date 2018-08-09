@@ -32,6 +32,20 @@ $(document).on('click', '.deleteQuestion', function (event) {
     })
 })
 
+$(document).on('click', '.deleteLecture', function (event) {
+    console.log(event)
+    var lectureID =  $(event.currentTarget).attr('data-lecture')
+    var courseID =  $(event.currentTarget).attr('data-course')
+    $(document).on('click', '#delete-lecture-cancel', function (event) {
+        $("#delete-lecture-modal").modal('close')
+    })
+    $(document).on('click', '#delete-lecture-confirm', function (event) {
+        var data = {}
+        data['lectureID'] = lectureID
+        data['courseID'] = courseID
+        deleteLecture(data)
+    })
+})
 
 $(document).on('click', '.deleteFeedback', function (event) {
     console.log(event)
@@ -336,6 +350,21 @@ socket.on($("#lectureToggle-container").attr("data-lecture") + "-updateYoutube",
 /*****************************************************************************/
 /* Function Handlers */
 /*****************************************************************************/
+function deleteLecture(data) {
+    $.ajax({
+        url: "/api/deleteLecture",
+        type: "DELETE",
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (resp) {
+            window.location.href = '/profile'
+        },
+        error: function (resp) {
+            return alert("Failed to add a course");
+        }
+    });
+}
+
 function toggleActiveLecture(data) {
     socket.emit("toggleActiveLecture", data)
 }

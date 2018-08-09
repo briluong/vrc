@@ -61,7 +61,10 @@
                         <span id="lecture-active-span" class="lever"></span>ON
                     </label>
                     <% } %>
-
+                    <button href="#delete-lecture-modal"
+                            class="deleteLecture waves-teal btn-flat modal-trigger"
+                            data-lecture="<%= lecture._id %>" data-course="<%= course._id %>"><i
+                                class="medium material-icons">delete</i></button>
                     <% } %>
                 </div>
             </div>
@@ -392,6 +395,23 @@
                     data-dismiss="modal">Cancel
             </button>
             <button class="waves-effect waves-light modal-action btn-flat" type="button" id="delete-feedback-confirm">
+                Confirm
+            </button>
+        </div>
+        <% } %>
+    </div>
+
+    <div id="delete-lecture-modal" class="modal">
+        <% if (userIsInstructorOrAdmin()) { %>
+        <div class="modal-content">
+            <h3>Remove Lecture?</h3>
+            <p>Are you sure you want to remove this lecture?</p>
+        </div>
+        <div class="modal-footer row button-row">
+            <button class="waves-effect waves-light modal-action btn-flat" type="button" id="delete-lecture-cancel"
+                    data-dismiss="modal">Cancel
+            </button>
+            <button class="waves-effect waves-light modal-action btn-flat" type="button" id="delete-lecture-confirm">
                 Confirm
             </button>
         </div>

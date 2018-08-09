@@ -19,6 +19,13 @@
 </head>
 
 <body>
+<% if(errorMessage.length > 0){ %>
+<% if(errorMessage[0] == 'Lecture was successfully deleted!'){ %>
+<p class="flashMessageGood"><%= errorMessage[0] %></p>
+<% } else{ %>
+<p class="flashMessage"><%= errorMessage[0] %></p>
+<% } %>
+<% } %>
 <%- include partials/header.ejs %>
 <div class="master-main">
     <div class="main">
