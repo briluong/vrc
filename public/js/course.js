@@ -30,7 +30,7 @@ $("#create-lecture-form").submit(function (event) {
 })
 
 $("#edit-course-description-form").submit(function (event) {
-    var formdata = $("#edit-course-description-form").serializeArray();
+    var formdata = $ ('#edit-course-description-form').serializeArray();
     console.log(formdata)
     var courseData = {"name": "courseID", "value": $(".edit-course-description").attr("data-course")}
     formdata.push(courseData)
@@ -137,7 +137,7 @@ function createLecture(data) {
 
 function editDescription(data){
     $.ajax({
-        url: "/api/editDescription",
+        url: "/api/course/editDescription",
         type: "POST",
         data: data,
         success: function (resp) {
