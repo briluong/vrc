@@ -88,6 +88,7 @@ $("#clear-group-settings").on('click', function (event) {
     console.log($("#group-file"))
     $("#group-file").val("")
     $("#displayQuestion").val("")
+    var lectureID = $("#lectureToggle-container").attr("data-lecture")
     clearBoardAndDelete(lectureID)
     console.log($("#group-file"))
 })
