@@ -6,6 +6,8 @@ $(document).ready(function () {
     $("#create-lecture-modal").modal()
     $("#add-instructor-modal").modal()
     $("#remove-instructor-modal").modal()
+    $("#edit-course-description-modal").modal()
+
 });
 
 /*****************************************************************************/
@@ -27,12 +29,28 @@ $("#create-lecture-form").submit(function (event) {
     createLecture(formdata)
 })
 
+$("#edit-course-description-form").submit(function (event) {
+    var formdata = $("#edit-course-description-form").serializeArray();
+    console.log(formdata)
+    var courseData = {"name": "courseID", "value": $(".edit-course-description").attr("data-course")}
+    formdata.push(courseData)
+    editDescription(formdata)
+})
+
 $("#cancel-add-instructor").click(function (event) {
     $("#add-instructor-modal").modal('close')
     $('#instructorEmail').val('')
     $("#instructorEmail").addClass("valid")
     $("#instructorEmail").removeClass("invalid")
     $("#instructorEmail-label").removeClass('active')
+})
+
+$("#cancel-edit-course-description").click(function (event) {
+    $("#edit-course-description-modal").modal('close')
+    $('#courseDescription').val('')
+    $("#courseDescription").addClass("valid")
+    $("#courseDescription").removeClass("invalid")
+    $("#courseDescription-label").removeClass('active')
 })
 
 $("#add-instructor-form").submit(function (event) {
@@ -104,6 +122,22 @@ $("#student-group-form").submit(function (event) {
 function createLecture(data) {
     $.ajax({
         url: "/api/createLecture",
+        type: "POST",
+        data: data,
+        success: function (resp) {
+        },
+        error: function (resp) {
+            console.log(resp)
+        },
+        complete: function () {
+            location.reload();
+        }
+    });
+}
+
+function editDescription(data){
+    $.ajax({
+        url: "/api/editDescription",
         type: "POST",
         data: data,
         success: function (resp) {

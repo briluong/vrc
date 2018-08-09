@@ -70,7 +70,10 @@
                 </ul>
 
                 <div class="card-panel course-info">
-                    <span class="panel-title">Course coordinator: <%= course.instructorName %></span><p>Instructors:
+                    <span class="panel-title">Course coordinator: <%= course.instructorName %>  <button href="#edit-course-description-modal"
+                                                                                                        class="edit-course-description waves-teal btn-flat modal-trigger"
+                                                                                                        data-course="<%= course._id %>" style="float:right;"><i
+                                    class="medium material-icons">edit</i></button></span><p>Instructors:
                         <% for(var i = 0; i < course.instructors.length; i++){ %><span style="padding-right:10px"><%= course.instructors[i].instructorName %></span>
                         <% } %></p>
                     <p><%= course.description %></p>
@@ -142,6 +145,26 @@
         </div>
     </div>
 </div>
+<% if(userIsCourseOwner()){%>
+<div id="edit-course-description-modal" class="modal">
+    <form id="edit-course-description-form">
+        <div class="modal-content">
+            <h3>Edit Course Description</h3>
+            <div class="input-field">
+                <input id="courseDescription" name="courseDescription" type="text" class="validate"
+                       autocomplete="off">
+                <label id="courseDescription-label" for="courseDescription">Course Description</label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="waves-effect waves-teal btn-flat" id="cancel-edit-course-description"
+                    type="button" data-dismiss="modal">Cancel
+            </button>
+            <button class="waves-effect waves-teal btn-flat" type="submit">Create</button>
+        </div>
+    </form>
+</div>
+<%}%>
 <%- include partials/footer.ejs %>
 </body>
 <script src="/js/course.js"></script>
