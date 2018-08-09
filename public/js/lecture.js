@@ -235,11 +235,13 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
         }
         M.toast({html: data.Username + " sent you a question!", displayLength: 3000})
     } else {
+      console.log(typeof data.createdAt)
+      var date = new Date(data.createdAt);
         var element = "<div id=" +
             data._id +
             "List class='collection-item avatar' style='padding-left:2rem; padding-right: 2rem; padding-bottom: 0; padding-top:0'><div class='title flex-container flex-container-mobile feedback'><span class='left-item'></span><div class='right-item'><span>Student Name:" +
             data.sentBy +
-            "<span style='margin-left: 1em;'>" + data.createdAt.toLocaleTimeString()
+            "<span style='margin-left: 1em;'>" + date.toLocaleTimeString()
             + "</span><button href='#delete-feedback-modal' class='deleteFeedback waves-teal btn-flat modal-trigger' data-feedback="
             + data._id +
             "><i class='medium material-icons'>delete</i></button></div></div>"+
@@ -251,7 +253,7 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
 });
 
 socket.on($("#lectureToggle-container").attr("data-lecture") + "-lectureToggle", function (data) {
-    console.log(data)
+
     if (data.active) {
         $(".live-now").removeClass("hide")
         $("#card-title").html("Live")
@@ -480,6 +482,14 @@ function embedYoutubeURL(url) {
 }
 
 function updateFeedbackCount(feedbackType) {
+    if (feedbackType == "thumbs down") {
+      feedbackType = "TDown"
+    } else if (feedbackType == "thumbs up") {
+      feedbackType = "TUp"
+    } else if (feedbackType == "confused") {
+      feedbackType = "Confused"
+    }
+
     var count = 0
     var allFeedback = $(".feedbackType")
     for (let i = 0; i < allFeedback.length; i++) {
@@ -496,26 +506,27 @@ function updateFeedbackCount(feedbackType) {
     else if (feedbackType == "Confused") {
         $("#countConfused").html(count)
     }
+
 }
 
-function updateFeedbackCount(feedbackType) {
-    var count = 0
-    var allFeedback = $(".feedbackType")
-    for (let i = 0; i < allFeedback.length; i++) {
-        if ($(allFeedback[i]).attr("data-feedbackType") == feedbackType) {
-            count++;
-        }
-    }
-    if (feedbackType == "TDown" || feedbackType == 'thumbs down') {
-        $("#countDown").html(count)
-    }
-    else if (feedbackType == "TUp" || feedbackType == 'thumbs up') {
-        $("#countUp").html(count)
-    }
-    else if (feedbackType == "Confused" || feedbackType == 'confused') {
-        $("#countConfused").html(count)
-    }
-}
+// function updateFeedbackCount(feedbackType) {
+//     var count = 0
+//     var allFeedback = $(".feedbackType")
+//     for (let i = 0; i < allFeedback.length; i++) {
+//         if ($(allFeedback[i]).attr("data-feedbackType") == feedbackType) {
+//             count++;
+//         }
+//     }
+//     if (feedbackType == "TDown" || feedbackType == 'thumbs down') {
+//         $("#countDown").html(count)
+//     }
+//     else if (feedbackType == "TUp" || feedbackType == 'thumbs up') {
+//         $("#countUp").html(count)
+//     }
+//     else if (feedbackType == "Confused" || feedbackType == 'confused') {
+//         $("#countConfused").html(count)
+//     }
+// }
 
 function sendQuestionToGroup(question, lectureID) {
     var data = {question: question, lectureID: lectureID}

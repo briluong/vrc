@@ -33,9 +33,16 @@
     </script>
       <%- include functions.ejs %>
   </head>
+  <%var source; %>
   <%if(instructorFile != null){%>
   <%console.log(getArrayBufferImage(instructorFile.data, instructorFile.fileType))%>
-  <%}%>
+  <% source = getArrayBufferImage(instructorFile.data, instructorFile.fileType) %>
+  <%} else { console.log("no image found") } %>
+
+  <% var question; %>
+  <% if (instructorQuestion != null) { %>
+  <% question = instructorQuestion.question %>
+  <% } else { question = "Instructor's Question" }%>
   <div class="stream">
   <body>
     <a-scene networked-scene="
@@ -148,11 +155,22 @@
       width="10"
       height="5"
       color="#ffffff"
+      src="url(<%=source%> )"
       rotation="180 0 180"
       position="0 2.5 7"
       button_down_board="index: 0; doodle_index: 0; delay: 2"
       class="collidable">
     </a-image>
+
+    <a-text id="question"
+      value="<%=question%>"
+      align="center"
+      visible="true"
+      rotation="180 0 180"
+      position="0 6 7"
+      geometry="primitive: plane; width: 10; height: 2"
+      material="color: #848484">
+    </a-text>
 
     <a-box id="red_box"
       position="6 4 7"
@@ -307,12 +325,14 @@
         console.log(data.question)
         console.log("The professor sent this question: " + data.question)
         M.toast({html: "The professor sent this question: " + data.question, displayLength: 3000})
+        document.querySelector('#question').setAttribute('value', data.question);
     })
 
     socket.on($("#class_info").attr("data-lecture") + "-instructorFile", function (data) {
         console.log(data)
         console.log("The professor sent this file: " + data.file)
         M.toast({html: "The professor sent this file: " + data.fileType, displayLength: 3000})
+        document.querySelector('#board').setAttribute('src', 'url(' + data.file + ')');
     })
   </script>
   </body>

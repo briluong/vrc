@@ -2,6 +2,7 @@
 <html>
 <head>
     <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
+    <link href="/css/main.css" rel="stylesheet">
 
     <!-- Use components defined in separate files. -->
     <script src="/socket.io/socket.io.js"></script>
@@ -18,10 +19,10 @@
 <body>
 <!-- As if this Glitch were a typical HTML CodePen... -->
 <!-- Specify our scene. -->
-<!--
-<textarea name="textarea" class="materialize-textarea" id="textBox"></textarea>
-<div class="btn-flat" id="recorder-confidence">Average Confidence: 0.00%</div>
--->
+
+<textarea class="hide" name="textarea" class="materialize-textarea" id="textBox"></textarea>
+<div class="hide" id="recorder-confidence">Average Confidence: 0.00%</div>
+
 
 <a-scene id="vr-container" data-streamLink="<%=youtube%>">
     <!-- The original example also has this 180 degree rotation, to appear to be going forward. -->

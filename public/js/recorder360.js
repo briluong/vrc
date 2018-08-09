@@ -65,8 +65,8 @@ $("#recorder-toggle").click(function (event) {
     console.log(recording)
     if (recording == 'inactive') {
         console.log("Activated")
-        final_confidence = 0
-        $("#recorder-toggle-img").addClass("active-blink")
+        final_confidence = 0;
+      //  $("#recorder-toggle-img").addClass("active-blink")
         document.querySelector("#recorder-submit").setAttribute("visible", false);
 
 
@@ -181,6 +181,7 @@ function recorder() {
             }
 
             recognition.onresult = function (event) {
+
                 let interim_transcript = '';
                 for (var i = event.resultIndex; i < event.results.length; i++) {
                     if (event.results[i].isFinal) {
@@ -224,7 +225,7 @@ function resetTranscriptConfidence() {
     average_confidence = 0
     finalURL = false
     $("#player").addClass("hide")
-//    document.getElementById("recorder-confidence").innerHTML = "Average Confidence: 0.00%"
+    document.getElementById("recorder-confidence").innerHTML = "Average Confidence: 0.00%"
 }
 function setAudioSessions(audioUrl, state) {
     if (audioUrl != null) finalURL = audioUrl
