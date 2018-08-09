@@ -66,7 +66,7 @@ module.exports = function (app, passport) {
                         console.log(err);
                     } else {
                         // pass matched documents to template
-                        res.render("profile", {user: req.user, course: course, route: null});
+                        res.render("profile", {user: req.user, course: course, route: null, errorMessage: req.flash('lecture')});
                     }
                 })
             }
