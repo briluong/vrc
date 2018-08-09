@@ -436,4 +436,26 @@ module.exports = function (app) {
         console.log(csvData)
     }
 
+    //edit the course description
+    app.post("/api/course/editDescription", apiUtil.isLoggedIn, (req, res) => {
+        if (!req.body) {
+            return res.sendStatus(400);
+        }
+
+        Course.findOneAndUpdate({"code": req.body.courseID}, {
+            $set: {
+                'description': req.body.data
+            },
+            function (err, course) {
+            if (err) {
+                return res.sendStatus(500);
+            }
+            else {
+                return res.sendStatus(200);
+            }
+        }
+        })
+
+    });
+
 };
