@@ -6,6 +6,8 @@ var Lecture = require('../models/lectures.js');
 var User = require('../models/user.js');
 var Group = require('../models/groups.js');
 var Help = require('../models/help_request.js');
+var InstructorQuestion = require('../models/instructor_question');
+var InstructorFile = require('../models/instructor_file');
 
 module.exports = function (app, passport) {
 
@@ -116,28 +118,28 @@ module.exports = function (app, passport) {
                                         console.log(err)
                                     }
                                     else {
-                                      Feedback.find({'lectureID': req.params.lectureID}, function (err, feedback) {
-                                        if (err) {
-                                          console.log(err);
-                                        } else {
-                                          Help.find({'lectureID': req.params.lectureID}, function (err, help) {
+                                        Feedback.find({'lectureID': req.params.lectureID}, function (err, feedback) {
                                             if (err) {
-                                              console.log(err);
+                                                console.log(err);
                                             } else {
-                                              res.render("lecture", {
-                                                user: req.user,
-                                                course: course,
-                                                users: users,
-                                                route: lecture.title,
-                                                lecture: lecture,
-                                                question: questions,
-                                                feedback: feedback,
-                                                help: help
-                                              });
+                                                Help.find({'lectureID': req.params.lectureID}, function (err, help) {
+                                                    if (err) {
+                                                        console.log(err);
+                                                    } else {
+                                                        res.render("lecture", {
+                                                            user: req.user,
+                                                            course: course,
+                                                            users: users,
+                                                            route: lecture.title,
+                                                            lecture: lecture,
+                                                            question: questions,
+                                                            feedback: feedback,
+                                                            help: help
+                                                        });
+                                                    }
+                                                })
                                             }
-                                          })
-                                        }
-                                      })
+                                        })
 
                                     }
                                 })
@@ -184,25 +186,41 @@ module.exports = function (app, passport) {
     })
 
     app.get("/course/:id/:lectureID/:groupName", isLoggedIn, function (req, res) {
-      Course.findOne({'_id': req.params.id}, function (err, group) {
-        if (err) {
-          console.log(err);
-        } else {
-          res.render("group", {
-              user: req.user,
-              group: group,
-              groupName: req.params.groupName,
-              lectureID: req.params.lectureID,
-              courseID: req.params.id
-          });
-        }
-      })
-
+        Course.findOne({'_id': req.params.id}, function (err, group) {
+            if (err) {
+                console.log(err);
+            } else {
+                InstructorQuestion.findOne({'lectureID': req.params.lectureID}, function (err, instructorQuestion) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    else {
+                        InstructorFile.findOne({'lectureID': req.params.lectureID}, function (err, instructorFile) {
+                            if(err){
+                                console.log(err)
+                            }
+                            else{
+                                res.render("group", {
+                                    user: req.user,
+                                    group: group,
+                                    groupName: req.params.groupName,
+                                    lectureID: req.params.lectureID,
+                                    courseID: req.params.id,
+                                    instructorQuestion: instructorQuestion,
+                                    instructorFile: instructorFile
+                                });
+                            }
+                        })
+                    }
+                })
+            }
+        })
     })
 
     app.get("/settings", isLoggedIn, function (req, res) {
         res.render("settings", {
-            user: req.user, errorMessage: req.flash('settings')});
+            user: req.user, errorMessage: req.flash('settings')
+        });
     })
 //
 // // CONTACT US

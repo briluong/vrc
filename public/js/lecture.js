@@ -502,14 +502,24 @@ function sendQuestionToGroup(question ,lectureID) {
 
 function sendFileToGroup(file, lectureID) {
     var reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-        var data = {file: reader.result, lectureID: lectureID}
-        socket.emit("instructorFile", data)
-    };
-    reader.onerror = function (error) {
-        console.log('Error: ', error);
-    };
+    var fileTypes = ['jpg', 'jpeg', 'png', 'gif'];  //acceptable file types
+    var extension = file.name.split('.').pop().toLowerCase()  //file extension from input file
+    var isSuccess = fileTypes.indexOf(extension) > -1;  //is extension in acceptable types
+    if(isSuccess){
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log(reader.result)
+            var data = {file: reader.result, lectureID: lectureID, fileType: extension}
+            socket.emit("instructorFile", data)
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+    else{
+        M.toast({html: "Please submit a image with the extension jpg, jpeg, png or gif.", displayLength: 3000})
+    }
+
 }
 
 function clearBoardAndDelete(lectureID) {

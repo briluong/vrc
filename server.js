@@ -94,6 +94,38 @@ socketServer.on('connection', function (socket) {
         })
     })
 
+    socket.on("instructorFile", function (data) {
+        var buf = Buffer.from(data.file, 'base64');
+        InstructorFile.findOneAndUpdate({"lectureID": data.lectureID}, {
+            '$set': {
+                'data': buf,
+                'fileType': data.fileType
+            }
+        }, function (err, question) {
+            if (err) {
+                throw err;
+            }
+            else if (question) {
+                socketServer.sockets.emit(data.lectureID + "-instructorFile", data)
+            }
+            else {
+                var instructorFile = new InstructorFile();
+                instructorFile.lectureID = data.lectureID
+                instructorFile.data = buf
+                instructorFile.fileType = data.fileType
+                instructorFile.save(function (err, instructorFile) {
+                    if (err) {
+                        throw err;
+                    }
+                    else {
+                        console.log(instructorFile)
+                        socketServer.sockets.emit(data.lectureID + "-instructorFile", data)
+                    }
+                })
+            }
+        })
+    })
+
     socket.on("updateYoutube", function (data) {
         Lecture.findOneAndUpdate({"_id": data.lectureID}, {
             $set: {

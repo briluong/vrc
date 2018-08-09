@@ -126,6 +126,13 @@
     var base64 = buf.toString('base64')
     return base64;
 } %>
+
+<% getArrayBufferImage = function(buf, instructorFileType){
+    var base64 = buf.toString('base64')
+    var newBase64 = base64.replace(/^dataimage\/(png|gif|jpeg|jpq)base64\//, "data:image/" + instructorFileType + ";base64,/")
+    return newBase64;
+} %>
+
 <% getDate = function (date) {
     var dd = date.getDate();
     var mm = date.getMonth()+1;

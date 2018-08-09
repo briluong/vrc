@@ -19,7 +19,8 @@ var InstructorFileSchema = mongoose.Schema({
     },
     data:{
         type: Buffer,
-    }
+    },
+    fileType: String
 });
 
 // Export the audio model.

@@ -31,8 +31,11 @@
     // }
 
     </script>
-
+      <%- include functions.ejs %>
   </head>
+  <%if(instructorFile != null){%>
+  <%console.log(getArrayBufferImage(instructorFile.data, instructorFile.fileType))%>
+  <%}%>
   <div class="stream">
   <body>
     <a-scene networked-scene="
@@ -142,7 +145,6 @@
     </a-sphere>
 
     <a-image id="board"
-
       width="10"
       height="5"
       color="#ffffff"
@@ -305,6 +307,12 @@
         console.log(data.question)
         console.log("The professor sent this question: " + data.question)
         M.toast({html: "The professor sent this question: " + data.question, displayLength: 3000})
+    })
+
+    socket.on($("#class_info").attr("data-lecture") + "-instructorFile", function (data) {
+        console.log(data)
+        console.log("The professor sent this file: " + data.file)
+        M.toast({html: "The professor sent this file: " + data.fileType, displayLength: 3000})
     })
   </script>
   </body>
