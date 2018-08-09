@@ -243,9 +243,10 @@ socket.on($("#lecture-group-toggle").attr("data-lecture"), function (data) {
             + "</span><button href='#delete-feedback-modal' class='deleteFeedback waves-teal btn-flat modal-trigger' data-feedback="
             + data._id +
             "><i class='medium material-icons'>delete</i></button></div></div>"+
-            feedbackFormatting(type, sentBy) + "</div>"
+            feedbackFormatting(data.value, data.sentBy) + "</div>"
 
         $(".feedback-collection").append(element);
+        updateFeedbackCount(data.value)
     }
 });
 
@@ -493,6 +494,25 @@ function updateFeedbackCount(feedbackType) {
         $("#countUp").html(count)
     }
     else if (feedbackType == "Confused") {
+        $("#countConfused").html(count)
+    }
+}
+
+function updateFeedbackCount(feedbackType) {
+    var count = 0
+    var allFeedback = $(".feedbackType")
+    for (let i = 0; i < allFeedback.length; i++) {
+        if ($(allFeedback[i]).attr("data-feedbackType") == feedbackType) {
+            count++;
+        }
+    }
+    if (feedbackType == "TDown" || feedbackType == 'thumbs down') {
+        $("#countDown").html(count)
+    }
+    else if (feedbackType == "TUp" || feedbackType == 'thumbs up') {
+        $("#countUp").html(count)
+    }
+    else if (feedbackType == "Confused" || feedbackType == 'confused') {
         $("#countConfused").html(count)
     }
 }
